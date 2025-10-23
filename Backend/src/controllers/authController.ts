@@ -7,12 +7,11 @@ import {Request, Response, NextFunction } from 'express';
 //Generate access Token
 const generateAccessToken = (user: IUser) => {
   return jwt.sign(
-    { userId: user.id, username: user.email, role: user.role },
+    { id: user.id, name: user.email, role: user.role },
     config.JWT_SECRET as Secret,
     { expiresIn: "4h" }
   )
 }
-
 // user Signup
 const signup = async (req:Request, res:Response, next:NextFunction) =>{
     try{
@@ -34,12 +33,9 @@ const signup = async (req:Request, res:Response, next:NextFunction) =>{
         })
         await newUser.save()
 
-        const token = generateAccessToken(newUser.id.toString())
-
         res.status(201).json({
             success: true,
             message: 'Librarian registered successfully',
-            token,
             user: {
                 id: newUser.id,
                 name: newUser.name,
@@ -62,13 +58,13 @@ const login = async (req:Request, res:Response, next:NextFunction) =>{
             throw error;
         }
         const isPasswordValid = await bcrypt.compare(password, user.password)
-        if(isPasswordValid){
+        if(!isPasswordValid){
             const error = new Error('Invalid credentials');
             (error as any).statusCode = 401;
             throw error;
         }
 
-        const token = generateAccessToken(user.id.toString())
+        const token = generateAccessToken(user)
 
         res.status(200).json({
             success: true,

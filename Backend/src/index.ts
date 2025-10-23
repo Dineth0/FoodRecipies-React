@@ -3,6 +3,8 @@ import express, { Application, Request, Response } from "express"
 import mongoose from "mongoose"
 import cors from "cors"
 import authRoute from "../src/routes/authRoute"
+import dotenv from "dotenv";
+dotenv.config();
 
 
 
