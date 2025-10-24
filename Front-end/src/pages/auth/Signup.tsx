@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { showErrorAlert } from '../../utils/SweetAlerts';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -7,6 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const { signup, loading, error } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,8 +66,7 @@ const Signup = () => {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-400 transition-colors"
-                placeholder="Enter your full name"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Enter your full name"
               />
             </div>
 
@@ -80,8 +82,7 @@ const Signup = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-400 transition-colors"
-                placeholder="Enter your email"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Enter your email"
               />
             </div>
 
@@ -97,8 +98,7 @@ const Signup = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-400 transition-colors"
-                placeholder="Create a password"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Create a password"
               />
             </div>
 
@@ -114,8 +114,7 @@ const Signup = () => {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-gray-400 transition-colors"
-                placeholder="Confirm your password"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Confirm your password"
               />
             </div>
 

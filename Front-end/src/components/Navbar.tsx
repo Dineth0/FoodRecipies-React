@@ -12,9 +12,7 @@ export const Navbar: React.FC = () =>{
                         </div>
 
                         <div className="hidden md:flex space-x-4 ml-auto">
-                            <Link to="/dashboard" className="px-4 py-1 rounded-full bg-green-600 text-white text-sm hover:bg-green-700 transition">
-                                Dashboard
-                            </Link>
+                            
                             <Link to="/login" className="px-4 py-1 rounded-full border border-red-400 text-red-400 text-sm hover:bg-red-600 hover:text-white transition">
                                 Login
                             </Link>
