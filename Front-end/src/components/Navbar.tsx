@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const Navbar: React.FC = () =>{
     return(
-        <nav className="bg-blue-950 shadow-md fixed top-0 left-0 w-full z-50 h-15">
+        <nav className="bg-blue-950 shadow-md  top-0 left-0 w-full z-50 h-15">
                 <div>
                         <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-6 text-gray-300 font-medium">
                                 <Link to="/" className="hover:text-indigo-400 transition">HOME</Link>
