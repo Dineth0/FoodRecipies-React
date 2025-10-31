@@ -15,26 +15,26 @@ const App = () =>{
     <Router>
       <AuthProvider>
         <Routes>
-          {/* 🟢 Public routes (no Navbar / layout) */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
-          {/* 🔒 Protected routes (with Navbar + layout) */}
           <Route element={<ProtectedRoute/>}>
             <Route
-            element={
-              <>
-                <Navbar />
-                    <Outlet />
-                
-               
-              </>
-            }
-          >
+              element={
+                <>
+                  <Navbar />
+                      <Outlet />
+                </>
+              }
+            >
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+             
           </Route>
+           <Route element={<ProtectedRoute/>}>
+                            <Route path="/dashboard" element={<Dashboard />} />
+
+            </Route>
           
           </Route>
           
