@@ -43,7 +43,23 @@ export default function Dashboard() {
         )}
 
         {activeTab === 'foods' && (
-          <div className="text-center text-gray-300 py-10">  tab content here...</div>
+          <div className="text-center text-gray-300 py-10">  
+          
+              <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Enter your email"
+              />
+            </div>
+          </div>
         )}
         {activeTab === 'users' && (
           <div className="text-center text-gray-300 py-10">Users tab content here...</div>
