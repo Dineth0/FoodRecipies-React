@@ -4,7 +4,7 @@ type navButtonProps ={
     onClick: ()=> void
 }
 
-export default function navButton({label,active,onClick}: navButtonProps){
+export default function NavButton({label,active,onClick}: navButtonProps){
     return(
         <button
         onClick={onClick}
@@ -14,9 +14,9 @@ export default function navButton({label,active,onClick}: navButtonProps){
         >
             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mb-1">
 
-            {label}
+            {label[0].toUpperCase()}
             </div>
-
+            {label}
         </button>
     )
 }
