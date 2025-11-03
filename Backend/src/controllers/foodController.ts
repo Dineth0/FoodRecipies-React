@@ -1,11 +1,11 @@
 import {Request, Response, NextFunction } from "express";
-import { Food } from "../models/Food";
+import { Food } from "../models/FoodModel";
 import bucket from "../config/firebase";
 
 
 export const addFood = async (req:Request, res:Response, next:NextFunction) => {
     try{
-        const {name, category, description} = req.body
+        const {name, category,cuisines, description} = req.body
         const files = req.files as Express.Multer.File[]
 
         if(!files || files.length === 0){
@@ -27,6 +27,7 @@ export const addFood = async (req:Request, res:Response, next:NextFunction) => {
         const newFood = new Food({
             name,
             category,
+            cuisines,
             description,
             images:imageUrls
         })
