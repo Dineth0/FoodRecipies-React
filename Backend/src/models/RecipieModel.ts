@@ -5,7 +5,7 @@ interface IRecipie extends Document{
     userId: mongoose.Types.ObjectId
     foodId: mongoose.Types.ObjectId
     title:string
-    ingredients: string
+    ingredients: string[]
     step: string
     date: Date
     images: string[]
@@ -44,7 +44,7 @@ const recipieSchema = new Schema<IRecipie>({
     },
     images:[{
                 type:String, 
-                required:true
+                required:false
     }]
    
 },{timestamps:true})

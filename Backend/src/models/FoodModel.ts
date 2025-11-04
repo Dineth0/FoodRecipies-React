@@ -14,7 +14,7 @@ const foodSchema = new Schema<IFood>({
             type:String, 
             required:[true, "Name is Required"],
             minlength:[1,"Name must be at least 1 characters"]
-        },
+    },
 
     category: {
                 type:String, 
