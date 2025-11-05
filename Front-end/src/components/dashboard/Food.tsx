@@ -2,7 +2,7 @@ import { useState } from 'react';
 import images from '../../assets/milkrice01.png'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { IoMdAdd } from "react-icons/io";
-import {FoodForm} from "../dashboard/FoodForm"
+import FoodForm from "../dashboard/FoodForm"
 
 
 export  default function Foods(){
@@ -16,6 +16,7 @@ export  default function Foods(){
         setFoods([...foods, newFood])
     }
     return(
+        <>
         <div className="text-center text-gray-300 py-10">
             <div className='flex justify-end mb-4'>
                 <button className='flex items-center gap-1 text-green-400 hover:text-green-600 font-medium'
@@ -55,12 +56,14 @@ export  default function Foods(){
                     ))}
                 </tbody>
             </table>
-            {showForm &&(
+            
+        </div>
+        {showForm &&(
                 <FoodForm
                 onClose={()=>setShowForm(false)}
                 onSave={handleAddFood}
                 />
             )}
-        </div>
+        </>
     )
 }

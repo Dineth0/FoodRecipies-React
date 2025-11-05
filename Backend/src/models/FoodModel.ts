@@ -3,7 +3,7 @@ import mongoose, {Schema, Document} from "mongoose"
 interface IFood extends Document{
     name:string
     category:string
-    cuisines :string
+    cuisine :string
     description:string
     images: string[]
 }
@@ -21,7 +21,7 @@ const foodSchema = new Schema<IFood>({
                 required:[true, "category is Required"],
                 minlength:[1,"category must be at least 1 characters"]
     },
-    cuisines:{
+    cuisine:{
                 type:String,
                 required:[true, "cuisines is Required"],
                 minlength:[1,"cuisines must be at least 1 characters"]

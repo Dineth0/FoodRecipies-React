@@ -1,24 +1,116 @@
 
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom'
+import { addFood } from '../../services/FoodAPI';
+import { showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
 
 interface FoodsFormProps {
   onClose: () => void;
   onSave: (player: {
     id: string;
     name: string;
-    age: number;
-    country: string;
-    main_role: string;
-    batting: string;
-    balling: string;
+    category: string;
+    cuisine: string;
+    description: string;
+    images: string[];
+  
   }) => void;
+}
+
+interface FormData{
+  name: string
+  category: string;
+    cuisine: string;
+    description: string;
 }
 
 export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
   
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    category: '',
+    cuisine: '',
+    description: ''
+  })
 
+  const [files, setFiles] = useState<FileList | null>(null)
+
+  const[loading, setLoading] =useState(false)
+  const[error, setError] = useState<string | null> (null)
+
+  const handleChange =(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  )=>{
+    const {name, value} = e.target
+    setFormData((prevData) =>({
+      ...prevData,
+      [name] : value
+    }))
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+    if(e.target.files){
+      setFiles(e.target.files)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+
+    if(
+      !formData.name ||
+      !formData.category ||
+      !formData.cuisine ||
+      !formData.description ||
+      !files ||
+      files.length === 0
+    ){
+      setError("Fill All Fields")
+      return
+    }
+    if(files.length > 5){
+      setError("You can only upload 5 Images")
+    }
+    setLoading(true)
+    setError(null)
+
+    const data = new FormData()
+    data.append('name', formData.name)
+    data.append('category', formData.category)
+    data.append('cuisine', formData.cuisine)
+    data.append('description', formData.description)
+
+    for(let i= 0; i < files.length; i++){
+      data.append('images', files[i])
+    }
+
+    try{
+      await addFood(data)
+
+      setLoading(false)
+      showSuccessAlert('Succes', 'Food added Successfully')
+      onClose()
+
+    }catch(error: any){
+      setLoading(false)
+      let errorMessage = 'Faild to add food. Please try again.';
+            if (error.response?.data?.message) {
+              errorMessage = typeof error.response.data.message === 'object'
+                ? JSON.stringify(error.response.data.message)
+                : String(error.response.data.message);
+            }
+            setError(errorMessage);
+            showErrorAlert('Food Add Failed', errorMessage);
+            console.error(' error:', error);
+
+    }
+
+
+  }
   
 
-  return (
+
+  return ReactDOM.createPortal (
    
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-start z-50 overflow-y-auto p-6 transition-opacity duration-300">
       {/* Modal Card */}
@@ -27,61 +119,114 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
           Add New Player
         </h2>
 
-        <form  className="space-y-4">
-          <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Player ID</label>
-            <input
-              name="id"
-              placeholder="P001"
-              
-              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+        <form onSubmit={handleSubmit}  className="space-y-4">
+          
 
           <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Player Name</label>
+            <label className="text-gray-300 text-sm">Food Title</label>
             <input
               name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Enter name"
-              
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Age</label>
+            <label className="text-gray-300 text-sm">Category</label>
             <input
-              name="age"
-              type="file"
-             
-             
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              type="text"
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
-          
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Cuisines</label>
+            <select
+              name="cuisine"
+              value={formData.cuisine}
+              onChange={handleChange}
+              id="cuisines"
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+            >
+               <option value="">-- Select Cuisine --</option>
+                <option value="sri_lankan">Sri Lankan</option>
+                <option value="indian">Indian</option>
+                <option value="korean">Korean</option>
+                <option value="chinese">Chinese</option>
+                <option value="japanese">Japanese</option>
+                <option value="italian">Italian</option>
+                <option value="thai">Thai</option>
+                <option value="mexican">Mexican</option>
+                <option value="american">American</option>
+                <option value="other">Other</option>
+
+            </select>
+
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Description</label>
+            <textarea
+              name="description"
+             value={formData.description}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Images</label>
+            <input
+              name="images"
+              type="file"
+              onChange={handleFileChange}
+              multiple
+              accept='image/png, image/jpeg, image/webp'
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-800">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           
 
-          {/* Buttons */}
           <div className="flex justify-end space-x-3 pt-4">
             <button
               type="button"
               onClick={onClose}
+              disabled={loading}
               className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
+              disabled={loading}
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md transition"
             >
-              Save
+              {loading ? 'Saving...': 'Save'}
             </button>
           </div>
         </form>
 
-        {/* Close Button (optional top-right “X”) */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
@@ -89,7 +234,8 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
           ✕
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
