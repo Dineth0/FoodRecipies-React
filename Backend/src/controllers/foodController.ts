@@ -134,3 +134,24 @@ export const deleteFood = async (req:Request, res:Response, next:NextFunction)=>
     }
 }
 
+export const getFoodsById = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id} = req.params
+        const food = await Food.findById(id)
+        if(!food){
+            return res.status(404).json({
+                success: false,
+                data:null,
+                message:"Food Not Found"
+            })
+        }
+        res.status(200).json({
+        success: true,
+        data: { food },
+        message: "Food fetched successfully",
+    });
+    }catch(error){
+        next(error)
+    }
+}
+

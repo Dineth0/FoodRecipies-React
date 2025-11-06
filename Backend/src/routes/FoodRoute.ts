@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addFood, deleteFood, getAllFoods, updateFood } from "../controllers/foodController";
+import { addFood, deleteFood, getAllFoods, getFoodsById, updateFood } from "../controllers/foodController";
 import upload from "../middleware/upload";
 import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
@@ -14,5 +14,6 @@ router.post("/addFood",
 router.get("/getAllFoods", getAllFoods)
 router.put("/updateFood/:id", upload.array("images", 5), updateFood)
 router.delete("/deleteFood/:id", deleteFood)
+router.get("/getFoodsById/:id", getFoodsById)
 
 export default router
