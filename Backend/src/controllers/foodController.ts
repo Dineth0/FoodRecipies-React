@@ -1,6 +1,8 @@
 import {Request, Response, NextFunction } from "express";
 import { Food } from "../models/FoodModel";
 import bucket from "../config/firebase";
+import { error } from 'console';
+import cloudinary from "../config/cloudinary";
 
 
 export const addFood = async (req:Request, res:Response, next:NextFunction) => {
@@ -41,3 +43,63 @@ export const addFood = async (req:Request, res:Response, next:NextFunction) => {
         next(error)
     }
 }
+
+export const getAllFoods = async(req:Request, res:Response, next: NextFunction)=>{
+    try{
+        const foods = await Food.find()
+        res.status(200).json({
+            success: true,
+            data: { foods },
+            message: "Foods fetched successfully",
+        });
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            data: null,
+            message: "Error fetching Foods",
+            error,
+    });
+    }
+}
+
+export const updateFood = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id} = req.params
+        const {name, category,cuisine, description} = req.body
+        const files = req.files as Express.Multer.File[]
+
+        const existingFood = await Food.findById(id)
+        if(!existingFood){
+            return res.status(404).json({
+                success: false,
+                message: "Food not found"
+            })
+        }
+
+        let updatedImages = existingFood.images
+        if(files && files.length > 0){
+            const newImagesUrls = files.map((file) => (file as any).path)
+            updatedImages = [...existingFood.images, ...newImagesUrls]
+
+        }
+
+        existingFood.name = name || existingFood.name  
+        existingFood.category = category || existingFood.category  
+        existingFood.cuisine = cuisine || existingFood.cuisine  
+        existingFood.description = description || existingFood.description  
+        existingFood.images = updatedImages  
+
+        await existingFood.save()
+
+        res.status(200).json({
+            success: true,
+            data: {food: existingFood},
+            message: "Food updated successflly"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+
+
