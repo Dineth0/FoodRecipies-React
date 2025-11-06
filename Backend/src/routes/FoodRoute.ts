@@ -13,5 +13,6 @@ router.post("/addFood",
 
 router.get("/getAllFoods", getAllFoods)
 router.put("/updateFood/:id", upload.array("images", 5), updateFood)
+router.delete("/deleteFood/:id", deleteFood)
 
 export default router

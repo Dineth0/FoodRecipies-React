@@ -101,5 +101,36 @@ export const updateFood = async(req:Request, res:Response, next:NextFunction)=>{
     }
 }
 
+export const deleteFood = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id} = req.params
 
+        const existingFood = await Food.findById(id)
+        if(!existingFood){
+            return res.status(404).json({
+                success: false,
+                message: "Food not found"
+            })
+        }
+
+        for(const imageUrl of existingFood.images){
+            try{
+                const parts = imageUrl.split("/")
+                const filename = parts[parts.length - 1]
+                const publicId = `foods/${filename.split(".")[0]}`
+                await cloudinary.uploader.destroy(publicId)
+            }catch(error){
+                console.error(error)
+            }
+        }
+
+        await Food.findByIdAndDelete(id)
+        res.status(200).json({
+            success: true,
+            message:"Food deleted successfully" 
+        })
+    }catch(error){
+        next(error)
+    }
+}
 
