@@ -84,12 +84,15 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
       !formData.name ||
       !formData.category ||
       !formData.cuisine ||
-      !formData.description ||
-      !files ||
-      files.length === 0
+      !formData.description 
+      
     ){
       setError("Fill All Fields")
       return
+    }
+    if (existingImageUrls.length === 0 && (!files || files.length === 0)) {
+      setError("Please add at least one image");
+      return;
     }
     const totalImage = existingImageUrls.length + (files ? files.length : 0)
     if(totalImage > 5){
@@ -209,6 +212,24 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
+          {existingImageUrls.length > 0 && (
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Current Images</label>
+            <div className="flex flex-wrap gap-2 p-2 bg-gray-800 rounded-lg border border-gray-700">
+              {existingImageUrls.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Existing food ${index + 1}`}
+                  className="w-20 h-20 object-cover rounded-md"
+                />
+              ))}
+            </div>
+            <p className="text-xs text-gray-400">
+              You can add more images below.
+            </p>
+          </div>
+        )}
 
           <div className="flex flex-col space-y-1">
             <label className="text-gray-300 text-sm">Images</label>
@@ -220,7 +241,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
               accept='image/png, image/jpeg, image/webp'
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
-          </div>
+          </div> 
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">

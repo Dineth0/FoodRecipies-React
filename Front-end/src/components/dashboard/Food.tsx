@@ -90,13 +90,16 @@ export  default function Foods(){
                             <td className='py-2 px-4'>{food.cuisine}</td>
                             <td className='py-2 px-4'>{food.description}</td>
 
-                            <td className="py-2 px-4">
+                            <td className="py-2 px-4 flex gap-2 justify-center">
                                 {food.images && food.images.length > 0 ? (
+                                    food.images.map((imgUrl, idx) => (
                                     <img
-                                    src={food.images[0]}
-                                    alt={food.name}
-                                    className="w-16 h-16 object-cover rounded-md mx-auto"
+                                        key={idx}
+                                        src={imgUrl}
+                                        alt={`${food.name} ${idx + 1}`}
+                                        className="w-16 h-16 object-cover rounded-md"
                                     />
+                                    ))
                                 ) : (
                                     <span>No Image</span>
                                 )}
