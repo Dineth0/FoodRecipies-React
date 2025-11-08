@@ -1,20 +1,23 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom'
 import { addFood } from '../../services/FoodAPI';
 import { showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
+import { updateFood } from '../../services/FoodAPI'
+
+interface FoodItem{
+  _id:string
+  name:string
+  category:string
+  cuisine:string
+  description:string
+  images: string[]
+}
 
 interface FoodsFormProps {
   onClose: () => void;
-  onSave: (player: {
-    id: string;
-    name: string;
-    category: string;
-    cuisine: string;
-    description: string;
-    images: string[];
-  
-  }) => void;
+  onSave: (food : FoodItem) => void
+  selectedFood:FoodItem | null
 }
 
 interface FormData{
@@ -24,19 +27,39 @@ interface FormData{
     description: string;
 }
 
-export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
+export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFood }) => {
   
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    category: '',
-    cuisine: '',
-    description: ''
+    name: selectedFood?.name || '',
+    category: selectedFood?.category || '',
+    cuisine: selectedFood?.cuisine || '',
+    description: selectedFood?.description || ''
   })
-
+  const [existingImageUrls, setExsitingImageUrls] = useState<string[]>(selectedFood?.images || [])
   const [files, setFiles] = useState<FileList | null>(null)
 
   const[loading, setLoading] =useState(false)
   const[error, setError] = useState<string | null> (null)
+
+  useEffect(() => {
+    if(selectedFood){
+      setFormData({
+        name:selectedFood.name,
+        category:selectedFood.category,
+        cuisine:selectedFood.cuisine,
+        description:selectedFood.description
+      })
+      setExsitingImageUrls(selectedFood.images || [])
+    }else{
+      setFormData({
+        name : '',
+        category : '',
+        cuisine : '',
+        description : ''
+      })
+      setExsitingImageUrls([])
+    }
+  }, [selectedFood])
 
   const handleChange =(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -68,7 +91,8 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
       setError("Fill All Fields")
       return
     }
-    if(files.length > 5){
+    const totalImage = existingImageUrls.length + (files ? files.length : 0)
+    if(totalImage > 5){
       setError("You can only upload 5 Images")
     }
     setLoading(true)
@@ -80,16 +104,22 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
     data.append('cuisine', formData.cuisine)
     data.append('description', formData.description)
 
+    if(files){
     for(let i= 0; i < files.length; i++){
       data.append('images', files[i])
     }
+  }
 
     try{
-      await addFood(data)
-
-      setLoading(false)
-      showSuccessAlert('Succes', 'Food added Successfully')
-      onClose()
+      let response;
+      if(selectedFood) {
+        response = await updateFood(selectedFood._id!, data)
+        showSuccessAlert('Success','Food Successfully Updated')
+      }else{
+        response = await addFood(data)
+        showSuccessAlert('success', "Food Added Successfully")
+      }
+      onSave(response.data.data.food)
 
     }catch(error: any){
       setLoading(false)
@@ -108,7 +138,8 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
 
   }
   
-
+  const formTitle = selectedFood ? "Edit Food" : "Add Food"
+  const saveButtonText = selectedFood ? "Update" : 'Save'
 
   return ReactDOM.createPortal (
    
@@ -116,7 +147,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
       {/* Modal Card */}
       <div className="relative bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-100 hover:scale-[1.01] my-auto">
         <h2 className="text-2xl font-bold text-center mb-6 border-b border-gray-700 pb-2">
-          Add New Player
+          {formTitle}
         </h2>
 
         <form onSubmit={handleSubmit}  className="space-y-4">
@@ -222,7 +253,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose }) => {
               disabled={loading}
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md transition"
             >
-              {loading ? 'Saving...': 'Save'}
+              {loading ? 'Saving...': saveButtonText}
             </button>
           </div>
         </form>

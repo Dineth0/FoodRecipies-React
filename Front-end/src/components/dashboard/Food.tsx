@@ -1,26 +1,72 @@
-import { useState } from 'react';
-import images from '../../assets/milkrice01.png'
+import { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { IoMdAdd } from "react-icons/io";
 import FoodForm from "../dashboard/FoodForm"
+import { getAllFoods } from '../../services/FoodAPI';
+import { showErrorAlert } from '../../utils/SweetAlerts';
+
+interface FoodItem{
+    _id:string
+    name:string
+    category:string
+    cuisine:string
+    description:string
+    images:string[]
+}
 
 
 export  default function Foods(){
 
-    const [foods,setFoods] =useState([
-        {name:'Milk rice', catogory:'Srilankan', images:images}
-    ])
+    const [foods,setFoods] =useState<FoodItem[]>([])
     const [showForm,setShowForm] = useState(false)
+    const [selectedFood, setSeletedFood] = useState<FoodItem | null>(null)
 
-    const handleAddFood = (newFood:any) =>{
-        setFoods([...foods, newFood])
+    useEffect(() =>{
+        const fetchFoods = async () =>{
+            try{
+                const response = await getAllFoods()
+                setFoods(response.data.data.foods)
+            }catch(error){
+                console.error(error)
+                showErrorAlert('error', "Can not load data")
+            }
+        }
+        fetchFoods()
+    },[])
+
+    const handleSavedFood = (savedFood: FoodItem) =>{
+        if(savedFood._id){
+            setFoods(prevFoods =>prevFoods.map(food=>
+                food._id === savedFood._id ? savedFood : food
+            ))
+        }else{
+            setFoods(prevFoods =>[
+               ...prevFoods,
+               {...savedFood, _id: savedFood._id || Date.now().toString()}
+            ])
+        }
+        setSeletedFood(null)
+        setShowForm(false)
     }
+    const handleEditFood = (food:FoodItem)=>{
+        setSeletedFood(food)
+        setShowForm(true)
+    }
+    const handleAddClick = () =>{
+        setSeletedFood(null)
+        setShowForm(true)
+    }
+    const handleCloseForm = () =>{
+        setSeletedFood(null)
+        setShowForm(false)
+    }
+
     return(
         <>
         <div className="text-center text-gray-300 py-10">
             <div className='flex justify-end mb-4'>
                 <button className='flex items-center gap-1 text-green-400 hover:text-green-600 font-medium'
-                onClick={()=>setShowForm(true)}
+                onClick={handleAddClick}
                 >
                     Add Food<IoMdAdd className='text-lg'/>
                 </button>
@@ -30,6 +76,8 @@ export  default function Foods(){
                     <tr>
                         <th className='py-2 px-4'>Food Name</th>
                         <th className='py-2 px-4'>Catogery</th>
+                         <th className="py-2 px-4">Cuisine</th>
+                         <th className='py-2 px-4'>Description</th>
                         <th className='py-2 px-4'>Images</th>
                         <th className='py-2 px-4'>Action</th>
                     </tr>
@@ -38,14 +86,25 @@ export  default function Foods(){
                     {foods.map((food, index)=>(
                         <tr key={index} className="border-b border-gray-800 hover:bg-white/5">
                             <td className='py-2 px-4'>{food.name}</td>
-                            <td className='py-2 px-4'>{food.catogory}</td>
-                            <td className='py-2 px-4'> <img
-                                src={food.images}
-                                alt={food.name}
-                                className="w-16 h-16 object-cover rounded-md mx-auto"
-                            /></td>
+                            <td className='py-2 px-4'>{food.category}</td>
+                            <td className='py-2 px-4'>{food.cuisine}</td>
+                            <td className='py-2 px-4'>{food.description}</td>
+
+                            <td className="py-2 px-4">
+                                {food.images && food.images.length > 0 ? (
+                                    <img
+                                    src={food.images[0]}
+                                    alt={food.name}
+                                    className="w-16 h-16 object-cover rounded-md mx-auto"
+                                    />
+                                ) : (
+                                    <span>No Image</span>
+                                )}
+                            </td>
+                            
                             <td className='py-2 px-4'>
-                                <button className='text-blue-400 hover:text-blue-600 mx-2'>
+                                <button className='text-blue-400 hover:text-blue-600 mx-2'
+                                 onClick={() =>handleEditFood(food)}>
                                     <FaEdit/>
                                 </button>
                                 <button className='text-red-400 hover:text-red-600 mx-2'>
@@ -60,8 +119,9 @@ export  default function Foods(){
         </div>
         {showForm &&(
                 <FoodForm
-                onClose={()=>setShowForm(false)}
-                onSave={handleAddFood}
+                onClose={handleCloseForm}
+                onSave={handleSavedFood}
+                selectedFood = {selectedFood}
                 />
             )}
         </>

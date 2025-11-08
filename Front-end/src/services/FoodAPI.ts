@@ -8,3 +8,13 @@ export const addFood = (data: FormData)=>{
         }
     })
 }
+export const updateFood =  (id: string, data: FormData) =>{
+    return axiosInstance.put(`/food/updateFood/${id}`, data,{
+        headers:{
+            'Content-Type' : 'multipart/form-data'
+        }
+    })
+}
+export const getAllFoods = () =>{
+    return axiosInstance.get("/food/getAllFoods")
+}
