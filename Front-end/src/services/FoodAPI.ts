@@ -18,3 +18,6 @@ export const updateFood =  (id: string, data: FormData) =>{
 export const getAllFoods = () =>{
     return axiosInstance.get("/food/getAllFoods")
 }
+export const deleteFood =  (id: string) =>{
+    return axiosInstance.delete(`/food/deleteFood/${id}`)
+}

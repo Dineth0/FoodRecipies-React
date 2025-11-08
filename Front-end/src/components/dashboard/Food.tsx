@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { IoMdAdd } from "react-icons/io";
 import FoodForm from "../dashboard/FoodForm"
-import { getAllFoods } from '../../services/FoodAPI';
-import { showErrorAlert } from '../../utils/SweetAlerts';
+import { deleteFood, getAllFoods } from '../../services/FoodAPI';
+import { showConfirmDialog, showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
 
 interface FoodItem{
     _id:string
@@ -61,6 +61,28 @@ export  default function Foods(){
         setShowForm(false)
     }
 
+    const handleDelete = (foodDelete : FoodItem) =>{
+        showConfirmDialog(
+            'Are you sure?',
+            `${foodDelete.name} Do you want to delete? `,
+            'Yes, Delete id!'
+        ).then(async(result)=>{
+            if(result.isConfirmed){
+                try{
+                    await deleteFood(foodDelete._id)
+                    setFoods(prevFoods =>
+                        prevFoods.filter(food => food._id !== foodDelete._id)
+                    )
+
+                    showSuccessAlert('Deleted' ,`${foodDelete.name} has been Deleted`)
+                }catch(error){
+                    console.error(error)
+                    showErrorAlert('error', 'Faild to delete')
+                }
+            }
+        })
+    }
+
     return(
         <>
         <div className="text-center text-gray-300 py-10">
@@ -110,7 +132,8 @@ export  default function Foods(){
                                  onClick={() =>handleEditFood(food)}>
                                     <FaEdit/>
                                 </button>
-                                <button className='text-red-400 hover:text-red-600 mx-2'>
+                                <button className='text-red-400 hover:text-red-600 mx-2'
+                                onClick={()=>handleDelete(food)}>
                                     <FaTrash/>
                                 </button>
                             </td>
