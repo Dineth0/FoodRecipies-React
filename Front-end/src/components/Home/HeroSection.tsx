@@ -24,7 +24,7 @@ export default function HeroSection() {
         <img
           src={heroPic}
           alt="Delicious food"
-          className="w-[380px] md:w-[480px] lg:w-[520px] rounded-full shadow-2xl border-[10px] border-[#f8e1b8] mb-360"
+          className="w-[380px] md:w-[480px] lg:w-[520px] rounded-full shadow-2xl border-[10px] border-[#f8e1b8] "
         />
       </div>
     </section>

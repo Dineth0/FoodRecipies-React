@@ -5,7 +5,9 @@ const Home = () =>{
     return(
         <div className=" bg-fixed  bg-cover bg-center ">
             <HeroSection/>
-            <FoodCard/>
+            
+                <FoodCard/>
+           
         </div>
     )
 }

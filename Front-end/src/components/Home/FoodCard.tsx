@@ -31,7 +31,7 @@ export default function FoodCard() {
     fetchFoods()
   },[])
   return (
-    <section className='px-8 md:px-20 py-12  bg-green-100'>
+    <section className='px-8 md:px-20 py-10 bg-[#f8e1b8]'>
         <h2 className='text-3xl font-bold text-[#2d1b0b] mb-8'>Foods</h2>
 
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
