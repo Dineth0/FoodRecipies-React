@@ -36,7 +36,7 @@ const signup = async (req:Request, res:Response, next:NextFunction) =>{
         res.status(201).json({
             success: true,
             message: 'Librarian registered successfully',
-            user: {
+            data: {
                 id: newUser.id,
                 name: newUser.name,
                 email: newUser.email
@@ -69,12 +69,13 @@ const login = async (req:Request, res:Response, next:NextFunction) =>{
         res.status(200).json({
             success: true,
             message: 'Login successful',
-            token,
-            user: {
+            
+            data: {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                role:user.role
+                role:user.role,
+                token
             }
         })
     }catch(error){

@@ -11,8 +11,12 @@ interface Food{
   images: string[]
 }
 
+interface Props{
+  selectedCategory?: string
+}
 
-export default function FoodCard() {
+
+export default function FoodCard({selectedCategory}:Props) {
 
   const [foods, setFoods] = useState<Food[]>([])
   const navigate = useNavigate()
@@ -22,14 +26,22 @@ export default function FoodCard() {
       try{
         const response = await getAllFoods()
         console.log(response.data)
-        setFoods(response.data.data.foods)
+        let allFoods = response.data.data.foods
+
+        if(selectedCategory){
+          allFoods = allFoods.filter(
+            (f: Food) =>
+            f.category.toLowerCase() === selectedCategory.toLowerCase()
+          )
+        }
+        setFoods(allFoods)
 
       }catch(error){
         console.error(error)
       }
     }
     fetchFoods()
-  },[])
+  },[selectedCategory])
   return (
     <section className='px-8 md:px-20 py-10 bg-[#f8e1b8]'>
         <h2 className='text-3xl font-bold text-[#2d1b0b] mb-8'>Foods</h2>

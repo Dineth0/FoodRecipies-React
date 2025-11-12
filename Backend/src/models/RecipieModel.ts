@@ -27,11 +27,11 @@ const recipieSchema = new Schema<IRecipie>({
             required:[true, "Title is Required"],
             minlength:[1,"Title must be at least 1 characters"]
     },
-    ingredients:{
+    ingredients:[{
         type:String, 
             required:[true, "Ingredients is Required"],
             minlength:[1,"Ingredients must be at least 1 characters"]
-    },
+    }],
     step:{
         type:String, 
             required:[true, "Step is Required"],
