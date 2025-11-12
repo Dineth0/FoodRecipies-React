@@ -5,14 +5,14 @@ export const Navbar: React.FC = () => {
   return (
     <nav className="bg-gradient-to-r from-yellow-400 to-orange-400 shadow-md fixed top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
-        {/* Logo / Brand */}
+       
         <div className="flex items-center space-x-2">
           <div className="text-2xl font-extrabold text-white tracking-wide">
             Food<span className="text-yellow-950">ie</span>
           </div>
         </div>
 
-        {/* Center Nav Links */}
+        
         <div className="hidden md:flex space-x-8">
           <Link
             to="/"
@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {/* Login Button */}
+       
         <div>
           <Link
             to="/login"
