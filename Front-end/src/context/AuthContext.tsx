@@ -51,24 +51,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, [token]);
 
-//   const fetchUserProfile = async () => {
-//     try {
-//       const response = await axiosInstance.get('/auth/profile');
-//       setUser(response.data.user);
-//       setIsAuthenticated(true);
-//     } catch (error: any) {
- 
-//       let errorMessage = 'Failed to fetch profile';
-//       if (error.response?.data?.message) {
-//         errorMessage = typeof error.response.data.message === 'object'
-//           ? JSON.stringify(error.response.data.message)
-//           : String(error.response.data.message);
-//       }
-//       console.error('Error fetching user profile:', errorMessage, error);
-//       // If there's an error fetching the profile, the token might be invalid
-//       logout();
-//     }
-//   };
+  //   const fetchUserProfile = async () => {
+  //     try {
+  //       const response = await axiosInstance.get('/auth/profile');
+  //       setUser(response.data.user);
+  //       setIsAuthenticated(true);
+  //     } catch (error: any) {
+  
+  //       let errorMessage = 'Failed to fetch profile';
+  //       if (error.response?.data?.message) {
+  //         errorMessage = typeof error.response.data.message === 'object'
+  //           ? JSON.stringify(error.response.data.message)
+  //           : String(error.response.data.message);
+  //       }
+  //       console.error('Error fetching user profile:', errorMessage, error);
+  //       // If there's an error fetching the profile, the token might be invalid
+  //       logout();
+  //     }
+  //   };
 
   const login = async (email: string, password: string) => {
     setLoading(true);
