@@ -169,14 +169,31 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
 
           <div className="flex flex-col space-y-1">
             <label className="text-gray-300 text-sm">Category</label>
-            <input
+            <select
               name="category"
               value={formData.category}
               onChange={handleChange}
-              type="text"
+              id="category"
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
+            >
+               <option value="">-- Select Category --</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snacks">Snacks</option>
+                <option value="desserts">Desserts</option>
+                <option value="beverages">Beverages</option>
+                <option value="appetizers">Appetizers</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="shorteats">Shorteats</option>
+                <option value="meats">Meats</option>
+                <option value="sea foods">Sea Foods</option>
+                <option value="street food">Street Food</option>
+                <option value="traditional">Traditional</option>
+                <option value="other">Other</option>
+
+            </select>
+            </div>
 
           <div className="flex flex-col space-y-1">
             <label className="text-gray-300 text-sm">Cuisines</label>
