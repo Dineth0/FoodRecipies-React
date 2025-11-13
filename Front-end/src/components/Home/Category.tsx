@@ -38,7 +38,7 @@ export default function Category() {
 const navigate = useNavigate()
 
   return (
-    <section className='bg-[#f8e1b8] py-10 px-6 md:px-20'>
+    <section className=' via-[#f9d29d] to-[#f6c07a] py-10 px-6 md:px-20'>
         <h2 className='text-3xl font-bold text-[#2d1b0b] mb-6'>Categories</h2>
 
         <Swiper

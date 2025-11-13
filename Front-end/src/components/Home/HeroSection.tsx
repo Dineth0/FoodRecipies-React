@@ -2,7 +2,7 @@ import heroPic from "../../assets/heropic.png";
 
 export default function HeroSection() {
   return (
-    <section className="bg-[#f8e1b8] min-h-[100vh] flex flex-col md:flex-row items-start justify-between px-8 md:px-20 py-7">
+    <section className=" min-h-[100vh] flex flex-col md:flex-row items-start justify-between px-8 md:px-20 py-7">
       
       {/* Left Side - Text */}
       <div className="flex flex-col justify-start mt-10 md:mt-20">
