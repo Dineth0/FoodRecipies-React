@@ -1,4 +1,4 @@
-import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import { Navigate, Outlet, BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import { Navbar } from "./components/Navbar"
 import Home from "./pages/Home/Home"
 import About from "./pages/Home/About"
@@ -7,44 +7,52 @@ import Login from "./pages/auth/Login"
 import Signup from "./pages/auth/Signup"
 import { AuthProvider } from "./context/AuthContext"
 import ProtectedRoute from "./components/auth/ProtectedRoute"
-
-
+import CategoryPage from "./pages/Category/CategoryPage"
 
 const App = () =>{
   return (
     <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+  <AuthProvider>
 
-          <Route element={<ProtectedRoute/>}>
-            <Route
-              element={
-                <>
-                  <Navbar />
-                      <Outlet />
-                </>
-              }
-            >
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            {/* <Route path="/category/:category" element={<CategoryPage />} /> */}
+    <Routes>
 
-             
-          </Route>
-           <Route element={<ProtectedRoute/>}>
-                            <Route path="/dashboard" element={<Dashboard />} />
+      {/* Public Routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/"
+        element={
+          <>
+            <Navbar />
+            <Home />
+          </>
+        }
+      />
 
-            </Route>
-          
-          </Route>
-          
-          <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
+      {/* Protected Routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route
+          element={
+            <>
+              <Navbar />
+              <Outlet />
+            </>
+          }
+        >
+          <Route path="/about" element={<About />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/category/:category" element={<CategoryPage />} />
+        </Route>
+      </Route>
 
-        </Routes>
-      </AuthProvider>
-    </Router>
+      {/* Unknown Routes */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+
+    </Routes>
+
+  </AuthProvider>
+</Router>
+
   );
-} 
+}
 export default App

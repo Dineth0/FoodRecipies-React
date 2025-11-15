@@ -3,13 +3,18 @@ import userModel, {IUser} from '../models/userModel';
 import config from "../config/jwt"
 import bcrypt from 'bcrypt'
 import {Request, Response, NextFunction } from 'express';
+import { AuthRequest } from "../middleware/authMiddleware";
 
 //Generate access Token
 const generateAccessToken = (user: IUser) => {
   return jwt.sign(
-    { id: user.id, name: user.email, role: user.role },
-    config.JWT_SECRET as Secret,
-    { expiresIn: "4h" }
+    {   sub: user._id.toString(), 
+        role: user.role 
+    },
+        config.JWT_SECRET as Secret,
+    { 
+        expiresIn: "4h" 
+    }
   )
 }
 // user Signup
@@ -82,4 +87,23 @@ const login = async (req:Request, res:Response, next:NextFunction) =>{
         next(error)
     }
 }
-export {signup, login}
+const getProfile = async (req:AuthRequest, res:Response, next:NextFunction) =>{
+    try{
+        const userId = req.user?._id
+
+        const user = await userModel.findById(userId).select("-password")
+        if(!user){
+            const error = new Error('USer not found');
+            (error as any).statusCode = 404;
+            throw error;
+        }
+        const {name, email, role} = user
+        res.status(200).json({
+            success: true,
+            data : {name, email, role}
+        });
+    }catch(error){
+        next(error)
+    }
+}
+export {signup, login, getProfile}

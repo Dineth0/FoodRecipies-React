@@ -3,7 +3,7 @@ import jwt, { Secret } from "jsonwebtoken"
 import config from "../config/jwt"
 import User, {IUser} from "../models/userModel"
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: IUser
 }
 
@@ -20,16 +20,17 @@ export const authenticateUser = async (
 
   try {
     const decoded = jwt.verify(token, config.JWT_SECRET as Secret) as {
-      name?: string
+      sub: string
+      role: string
     }
 
     console.log(decoded)
 
-    if (!decoded.name) {
+    if (!decoded.sub) {
       return res.status(401).json({ message: "Token payload invalid" })
     }
 
-    const user: IUser | null = await User.findOne({ email: decoded.name })
+    const user: IUser | null = await User.findById({ email: decoded.sub })
 
     if (!user) {
       return res.status(401).json({ message: "User not found" })
