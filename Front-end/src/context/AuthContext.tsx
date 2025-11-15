@@ -75,7 +75,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setError(null);  
     try {
       const response = await axiosInstance.post('/auth/login', { email, password });
-      const { token, user } = response.data;
+      const backendData = response.data?.data;
+
+    if (!backendData) {
+      throw new Error("Invalid response format: Missing data field");
+    }
+
+    const token = backendData.token;
+    const user = {
+      id: backendData.id,
+      name: backendData.name,
+      email: backendData.email,
+      role: backendData.role
+    };
+
+    if (!token) {
+      throw new Error("Token missing in response");
+    }
       
       localStorage.setItem('token', token);
       setToken(token);
@@ -118,7 +134,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(user);
       setIsAuthenticated(true);
       showSuccessAlert('Account Created', `Welcome to BookClub, ${name}!`);
-      navigate('/profile');
+      navigate('/login');
     } catch (error: any) {
 
       let errorMessage = 'Signup failed. Please try again.';

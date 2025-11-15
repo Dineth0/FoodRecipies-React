@@ -5,7 +5,6 @@ import About from "./pages/Home/About"
 import Dashboard from "./pages/Dashboard/Dashboard"
 import Login from "./pages/auth/Login"
 import Signup from "./pages/auth/Signup"
-import Category from "./pages/Category/Category"
 import { AuthProvider } from "./context/AuthContext"
 import ProtectedRoute from "./components/auth/ProtectedRoute"
 
@@ -30,6 +29,8 @@ const App = () =>{
             >
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            {/* <Route path="/category/:category" element={<CategoryPage />} /> */}
+
              
           </Route>
            <Route element={<ProtectedRoute/>}>
@@ -40,7 +41,6 @@ const App = () =>{
           </Route>
           
           <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
-          <Route path="/category/:category" element={<Category />} />
 
         </Routes>
       </AuthProvider>

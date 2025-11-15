@@ -17,6 +17,7 @@ import Meats from "../../assets/meats.png"
 import SeaFoods from "../../assets/seafoods.png"
 import StreetFood from "../../assets/StreetFoods.png"
 import Traditional from "../../assets/TraditionalFoods.png"
+import { useAuth } from '../../context/AuthContext';
 
 
 const categories = [
@@ -36,6 +37,15 @@ const categories = [
 
 export default function Category() {
 const navigate = useNavigate()
+const {isAuthenticated} = useAuth()
+
+const handleCategoryClick = (catName: string) =>{
+  if(!isAuthenticated) {
+      navigate("/login")
+  }else{
+    navigate(`/category/${catName.toLowerCase()}`)
+  }
+}
 
   return (
     <section className=' via-[#f9d29d] to-[#f6c07a] py-10 px-6 md:px-20'>
@@ -62,7 +72,7 @@ const navigate = useNavigate()
             {categories.map((cat, index)=>(
                 <SwiperSlide 
                  key={index}
-                 onClick={()=> navigate(`/category/${cat.name.toLowerCase()}`)}>
+                 onClick={()=> handleCategoryClick(cat.name)}>
                     <div className='text-center cursor-pointer'>
                         <img
                          src={cat.image}
