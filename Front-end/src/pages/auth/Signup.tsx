@@ -27,13 +27,20 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex justify-center items-center p-4">
-      <div className="w-[400px] max-w-full">
-        <div className="bg-white shadow-2xl rounded-2xl p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#ffe4c3] to-[#f8cd96] flex justify-center items-center p-6">
+      <div className="w-[400px] max-w-full bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
+        
+
+          <div className="flex items-center justify-center mb-5">
+            <h1 className="text-3xl font-extrabold text-[#ff9f1c] tracking-wide">
+             DON Food<span className="text-[#3b2f2f]">ie</span>
+            </h1>
+          </div>
+
           {/* Header */}
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-blue-700">Create your account</h2>
-            <p className="text-sm text-gray-600 mt-2">Join the Library Management System</p>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-[#3b2f2f]">Create your account</h2>
+            <p className="text-sm text-gray-600 mt-1">Join the Foodie community 🍽️</p>
           </div>
 
           {/* Error Messages */}
@@ -55,7 +62,7 @@ const Signup = () => {
           {/* Form */}
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="name" className="block text-sm font-medium text-[#3b2f2f] mb-1">
                 Full name
               </label>
               <input
@@ -66,12 +73,12 @@ const Signup = () => {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Enter your full name"
-              />
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff9f1c]"
+                placeholder="Enter your full name  "            />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-[#3b2f2f] mb-1">
                 Email address
               </label>
               <input
@@ -82,12 +89,13 @@ const Signup = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Enter your email"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff9f1c]"
+                 placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-[#3b2f2f] mb-1">
                 Password
               </label>
               <input
@@ -98,12 +106,13 @@ const Signup = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Create a password"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff9f1c]"
+                 placeholder="Create a password"
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-[#3b2f2f] mb-1">
                 Confirm password
               </label>
               <input
@@ -114,7 +123,8 @@ const Signup = () => {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"                placeholder="Confirm your password"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff9f1c]"
+                placeholder="Confirm your password"
               />
             </div>
 
@@ -122,18 +132,18 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02]"
+                className="w-full py-3 mt-4 rounded-xl bg-gradient-to-r from-[#ff9f1c] to-[#ff7f00] text-white font-semibold shadow-lg transform hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating account...' : 'Create account'}
               </button>
             </div>
 
             <div className="text-center mt-6">
-              <p className="text-sm text-gray-600">
+              <p className="text-center text-sm text-gray-600 mt-5">
                 Already have an account?{' '}
                 <Link
                   to="/login"
-                  className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                  className="font-semibold text-[#ff9f1c] hover:text-[#ff7f00]"
                 >
                   Sign in
                 </Link>
@@ -142,7 +152,7 @@ const Signup = () => {
           </form>
         </div>
       </div>
-    </div>
+    
   );
 };
 

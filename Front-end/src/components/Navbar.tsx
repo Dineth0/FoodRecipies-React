@@ -8,7 +8,7 @@ export const Navbar: React.FC = () => {
        
         <div className="flex items-center space-x-2">
           <div className="text-2xl font-extrabold text-white tracking-wide">
-            Food<span className="text-yellow-950">ie</span>
+           DON Food<span className="text-yellow-950">ie</span>
           </div>
         </div>
 
