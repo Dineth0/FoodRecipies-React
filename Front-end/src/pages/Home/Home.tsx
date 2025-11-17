@@ -1,7 +1,6 @@
 import HeroSection from "../../components/Home/HeroSection"
 import FoodCard from "../../components/Home/FoodCard"
 import Category from "../../components/Home/Category"
-import Footer from "../../components/Footer"
 
 const Home = () =>{
     return(
@@ -9,7 +8,7 @@ const Home = () =>{
             <HeroSection/>
             <Category/>
                 <FoodCard/>
-            <Footer/>    
+               
            
         </div>
     )

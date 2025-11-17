@@ -30,7 +30,7 @@ export const authenticateUser = async (
       return res.status(401).json({ message: "Token payload invalid" })
     }
 
-    const user: IUser | null = await User.findById({ email: decoded.sub })
+    const user: IUser | null = await User.findById( decoded.sub )
 
     if (!user) {
       return res.status(401).json({ message: "User not found" })

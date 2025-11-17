@@ -1,9 +1,8 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer className='bg-gradient-to-br from-yellow-200 via-orange-200 to-amber-300 text-gray-800 py-12 mt-16 shadow-inner'>
+    <footer className='bg-gradient-to-br from-yellow-200 via-orange-200 to-amber-300 text-gray-800 py-12  shadow-inner'>
         <div className='max-w-6xl mx-auto px-6 grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-10'>
             <div>
                 <h2 className='text-3xl font-extrabold text-brown-900 tracking-tight'>

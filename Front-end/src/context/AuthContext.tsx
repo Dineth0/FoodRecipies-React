@@ -44,31 +44,44 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If we have a token, fetch the user profile
+    const token = localStorage.getItem("accessToken")
     if (token) {
-      console.log(`AuthProvider Token found ${token}`)
-    //   fetchUserProfile();
+      fetchUserProfile()
+        .then((res) => {
+          if (res.data) setUser(res.data)
+          else setUser(null)
+        })
+        .catch((err) => {
+          console.error(err)
+          setUser(null)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    } else {
+      setUser(null)
+      setLoading(false)
     }
-  }, [token]);
+  }, []);
 
-  //   const fetchUserProfile = async () => {
-  //     try {
-  //       const response = await axiosInstance.get('/auth/profile');
-  //       setUser(response.data.user);
-  //       setIsAuthenticated(true);
-  //     } catch (error: any) {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axiosInstance.get('/auth/me');
+        setUser(response.data.user);
+        setIsAuthenticated(true);
+        return response.data
+      } catch (error: any) {
   
-  //       let errorMessage = 'Failed to fetch profile';
-  //       if (error.response?.data?.message) {
-  //         errorMessage = typeof error.response.data.message === 'object'
-  //           ? JSON.stringify(error.response.data.message)
-  //           : String(error.response.data.message);
-  //       }
-  //       console.error('Error fetching user profile:', errorMessage, error);
-  //       // If there's an error fetching the profile, the token might be invalid
-  //       logout();
-  //     }
-  //   };
+        let errorMessage = 'Failed to fetch profile';
+        if (error.response?.data?.message) {
+          errorMessage = typeof error.response.data.message === 'object'
+            ? JSON.stringify(error.response.data.message)
+            : String(error.response.data.message);
+        }
+        console.error('Error fetching user profile:', errorMessage, error);
+        logout();
+      }
+    };
 
   const login = async (email: string, password: string) => {
     setLoading(true);
@@ -107,7 +120,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     
     } catch (error: any) {
-      // Handle error message, ensuring it's a string
       let errorMessage = 'Login failed. Please try again.';
       if (error.response?.data?.message) {
         errorMessage = typeof error.response.data.message === 'object'
