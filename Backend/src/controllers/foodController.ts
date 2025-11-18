@@ -46,11 +46,24 @@ export const addFood = async (req:Request, res:Response, next:NextFunction) => {
 
 export const getAllFoods = async(req:Request, res:Response, next: NextFunction)=>{
     try{
+        const page = parseInt(req.query.page as string) || 1
+        const limit = parseInt(req.query.limit as string) || 3
+        const skip = (page - 1) * limit
+
         const foods = await Food.find()
+           
+            .sort({createdAt: -1})
+            .skip(skip)
+            .limit(limit)
+        const total = await Food.countDocuments()    
+
         res.status(200).json({
             success: true,
             data: { foods },
             message: "Foods fetched successfully",
+            totalPages: Math.ceil(total / limit),
+            totalCount: total,
+            page
         });
     }catch(error){
         res.status(500).json({

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import FoodCard from '../../components/Home/FoodCard'
 
-export default function Category() {
+export default function CategoryPage() {
   const {category} = useParams()
   return (
     <div>
@@ -9,3 +9,4 @@ export default function Category() {
     </div>
   )
 }
+

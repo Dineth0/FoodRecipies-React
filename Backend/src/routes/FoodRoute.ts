@@ -11,7 +11,7 @@ router.post("/addFood",
             upload.array("images",5),
             addFood)
 
-router.get("/getAllFoods", getAllFoods)
+router.get("/", getAllFoods)
 router.put("/updateFood/:id", upload.array("images", 5), updateFood)
 router.delete("/deleteFood/:id", deleteFood)
 router.get("/getFoodsById/:id", getFoodsById)

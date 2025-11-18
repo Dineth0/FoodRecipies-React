@@ -16,7 +16,8 @@ interface FoodItem{
 
 
 export  default function Foods(){
-
+    const [page, setPage] = useState(1)
+    const [totalPages, settotalPages] = useState(1)
     const [foods,setFoods] =useState<FoodItem[]>([])
     const [showForm,setShowForm] = useState(false)
     const [selectedFood, setSeletedFood] = useState<FoodItem | null>(null)
@@ -24,15 +25,16 @@ export  default function Foods(){
     useEffect(() =>{
         const fetchFoods = async () =>{
             try{
-                const response = await getAllFoods()
+                const response = await getAllFoods(page, 3)
                 setFoods(response.data.data.foods)
+                settotalPages(response.data.totalPages )
             }catch(error){
                 console.error(error)
                 showErrorAlert('error', "Can not load data")
             }
         }
         fetchFoods()
-    },[])
+    },[page])
 
     const handleSavedFood = (savedFood: FoodItem) =>{
         if(savedFood._id){
@@ -141,6 +143,38 @@ export  default function Foods(){
                     ))}
                 </tbody>
             </table>
+
+            <div className="flex justify-center items-center gap-4 mt-10">
+                <button
+                disabled={page === 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className={`px-5 py-2 rounded-lg border text-sm font-medium transition ${
+                    page === 1
+                    ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                    : "text-gray-700 border-gray-300 hover:bg-gray-100"
+                }`}
+                >
+                Prev
+                </button>
+
+                <span className="text-gray-600 text-sm">
+                Page <span className="font-semibold">{page}</span> of{" "}
+                <span className="font-semibold">{totalPages}</span>
+                </span>
+
+                <button
+                disabled={page === totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                className={`px-5 py-2 rounded-lg border text-sm font-medium transition ${
+                    page === totalPages
+                    ? "text-gray-400 border-gray-200 cursor-not-allowed"
+                    : "text-gray-700 border-gray-300 hover:bg-gray-100"
+                }`}
+                >
+                Next
+                </button>
+            </div>
+          
             
         </div>
         {showForm &&(
