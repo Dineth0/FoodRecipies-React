@@ -2,8 +2,6 @@
 import { lazy, Suspense, type ReactNode } from "react"
 import {  Navigate, Route, Routes } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
-import { Navbar } from "../components/Navbar"
-import Footer from "../components/Footer"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
 

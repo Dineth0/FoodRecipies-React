@@ -2,22 +2,24 @@ import mongoose, { Schema,Document, Date } from "mongoose";
 
 
 interface IRecipie extends Document{
-    userId: mongoose.Types.ObjectId
-    foodId: mongoose.Types.ObjectId
+    _id: mongoose.Types.ObjectId
+    user: mongoose.Types.ObjectId
+    food: mongoose.Types.ObjectId
     title:string
     ingredients: string[]
     step: string
+    readyIn : string
     date: Date
     images: string[]
 }
 
 const recipieSchema = new Schema<IRecipie>({
-    userId:{
+    user:{
         type: Schema.Types.ObjectId,
         ref: "users",
         required: [true, "UserId is required"]
     },
-    foodId:{
+    food:{
         type: Schema.Types.ObjectId,
         ref: "foods",
         required: [true, "FoodId is required"]
@@ -34,6 +36,11 @@ const recipieSchema = new Schema<IRecipie>({
     }],
     step:{
         type:String, 
+            required:[true, "Step is Required"],
+            minlength:[1,"Step must be at least 1 characters"]
+    },
+    readyIn:{
+        type:String,
             required:[true, "Step is Required"],
             minlength:[1,"Step must be at least 1 characters"]
     },

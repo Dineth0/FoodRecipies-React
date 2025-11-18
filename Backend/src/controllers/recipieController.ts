@@ -7,9 +7,9 @@ import { error } from 'console';
 
 export const addRecipie = async (req:Request, res:Response, next: NextFunction)=>{
     try{
-        const {userId, foodId, title, ingredients, step, date} = req.body
+        const {user, food, title, ingredients, step, readyIn, date} = req.body
         
-        const exstingUser = await userModel.findById(userId)
+        const exstingUser = await userModel.findById(user)
         if(!exstingUser){
             return res.status(404).json({
                 success: false,
@@ -18,7 +18,7 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
             })
         }
 
-        const exstingFood = await Food.findById(foodId)
+        const exstingFood = await Food.findById(food)
         if(!exstingFood){
             return res.status(404).json({
                 success: false,
@@ -30,12 +30,13 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
         const files = req.files as Express.Multer.File[]
         const imageUrls = files.map((file)=>(file as any).path)
         const newResipie = new Recipie({
-            userId,
-            foodId,
+            user,
+            food,
             title,
-            ingredients,
+            ingredients : ingredients.split(","),
             step,
-            date:new Date(),
+            readyIn,
+            date : new Date(),
             images: imageUrls
         })
         await newResipie.save()
