@@ -1,9 +1,11 @@
 
 import { lazy, Suspense, type ReactNode } from "react"
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import {  Navigate, Route, Routes } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { Navbar } from "../components/Navbar"
 import Footer from "../components/Footer"
+import Dashboard from "../pages/Dashboard/Dashboard"
+import Layout from "../components/Layout"
 
 
 
@@ -41,20 +43,37 @@ export default function Router(){
                     <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
                 </div>
               }>
-                <Navbar/>
+              
                 <Routes>
-                    <Route path="/" element={<Home/>}></Route>
+                    
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/signup" element={<Signup/>}></Route>
+
+                    <Route element={<Layout/>}>
+                        <Route path="/" element={<Home/>}></Route>
+                        <Route
+                            path="/category/:category"
+                            element={
+                                <RequireAuth>
+                                    <CategoryPage/>
+                                </RequireAuth>
+                        }/>
+                    </Route>
+
+                    
+
                     <Route
-                        path="/category/:category"
+                        path="/dashboard"
                         element={
                             <RequireAuth>
-                                <CategoryPage/>
+                                <Dashboard/>
                             </RequireAuth>
-                        }></Route>
+                        }
+                    />
+
+                      
                 </Routes>
-                <Footer/>
+               
             </Suspense>
        
     )
