@@ -4,6 +4,7 @@ import {  Navigate, Route, Routes } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
+import FoodPage from "../pages/food/FoodPage"
 
 
 
@@ -54,6 +55,13 @@ export default function Router(){
                             element={
                                 <RequireAuth>
                                     <CategoryPage/>
+                                </RequireAuth>
+                        }/>
+                        <Route
+                            path="/foodpage/:name"
+                            element={
+                                <RequireAuth>
+                                    <FoodPage/>
                                 </RequireAuth>
                         }/>
                     </Route>

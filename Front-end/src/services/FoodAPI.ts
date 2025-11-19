@@ -21,3 +21,6 @@ export const getAllFoods = async (page: number, limit: number) =>{
 export const deleteFood =  (id: string) =>{
     return axiosInstance.delete(`/food/deleteFood/${id}`)
 }
+export const getFoodByName = (name: string) =>{
+    return axiosInstance.get(`/food/name/${encodeURIComponent(name)}`)
+}

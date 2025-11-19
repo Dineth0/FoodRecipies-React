@@ -168,3 +168,26 @@ export const getFoodsById = async (req:Request, res:Response, next:NextFunction)
     }
 }
 
+export const getFoodByName = async (req: Request, res:Response, next:NextFunction)=>{
+    try{
+        const {name} = req.params
+
+        const decodedName = decodeURIComponent(name)
+        const food = await Food.findOne({name: decodedName})
+
+        if(!food){
+            return res.status(404).json({
+                success: false,
+                message: "Food not found",
+            })
+        }
+        res.status(200).json({
+            success: true,
+            data: { food },
+            message: "Food fetched successfully",
+        })
+    }catch(error){
+        next(error)
+    }
+}
+

@@ -51,7 +51,7 @@ export default function FoodCard({selectedCategory}:Props) {
           {foods.map((food) =>(
             <div 
               key={food._id}
-              onClick={()=> navigate(`/food/${food._id}`)}
+              onClick={()=> navigate(`/foodpage/${food.name}`)}
               className='cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-transform transform hover:-translate-y-2'>
 
               <img
