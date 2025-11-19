@@ -39,7 +39,7 @@ export default function FoodPage() {
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         
-        {/* Back Button */}
+    
         <button 
           onClick={() => navigate(-1)}
           className="mb-6 flex items-center text-gray-600 hover:text-orange-600 transition-colors font-medium"
@@ -49,9 +49,9 @@ export default function FoodPage() {
 
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden lg:flex">
           
-          {/* LEFT COLUMN: Image Gallery */}
+         
           <div className="lg:w-1/2 p-6 lg:p-10 bg-gray-100 flex flex-col items-center justify-center">
-            {/* Main Large Image */}
+          
             <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] mb-6 rounded-2xl overflow-hidden shadow-lg bg-white">
               <img
                 src={activeImage}
@@ -60,7 +60,6 @@ export default function FoodPage() {
               />
             </div>
 
-            {/* Thumbnails Strip */}
             <div className="flex gap-3 overflow-x-auto w-full py-2 px-1 scrollbar-hide">
               {food.images.map((img, index) => (
                 <button
@@ -78,10 +77,10 @@ export default function FoodPage() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Product Details */}
+         
           <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col">
             
-            {/* Badges */}
+          
             <div className="flex flex-wrap gap-3 mb-4">
               <span className="bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                 {food.category}
@@ -91,19 +90,18 @@ export default function FoodPage() {
               </span>
             </div>
 
-            {/* Title */}
             <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
               {food.name}
             </h1>
 
-            {/* Description */}
+         
             <div className="prose prose-lg text-gray-600 mb-8 flex-grow">
               <p className="leading-relaxed">
                 {food.description}
               </p>
             </div>
 
-            {/* Divider */}
+          
             <div className="border-t border-gray-200 my-6"></div>
 
             

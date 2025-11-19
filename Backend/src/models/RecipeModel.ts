@@ -10,7 +10,7 @@ interface IRecipe extends Document{
     step: string
     readyIn : string
     date: Date
-    images: string[]
+    images?: string[]
 }
 
 const recipeSchema = new Schema<IRecipe>({

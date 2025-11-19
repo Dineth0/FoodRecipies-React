@@ -81,3 +81,26 @@ export const getAllRecipes = async(req:Request, res:Response, next:NextFunction)
         })
     }
 }
+
+export const getRecipeByFood = async (req:Request, res:Response, next:NextFunction) =>{
+    try{
+        const {food} = req.params
+        const recipe = await Recipe.find({food})
+        .populate("user", "user")
+        .populate("food", "name")
+        if(!recipe){
+            return res.status(404).json({
+                 success: false,
+                data:null,
+                message:"Recipe Not Found"
+            })
+        }
+        res.status(200).json({
+        success: true,
+        data: { recipe },
+        message: "Recipe fetched successfully",
+        })
+    }catch(error){
+        next(error)
+    }
+}

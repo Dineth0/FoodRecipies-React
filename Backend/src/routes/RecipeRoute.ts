@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middleware/upload";
-import { addRecipie, getAllRecipes } from "../controllers/recipeController";
+import { addRecipie, getAllRecipes, getRecipeByFood } from "../controllers/recipeController";
 import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
 
@@ -12,6 +12,7 @@ router.post(
             upload.array("images", 5), 
             addRecipie
         )
-router.get("/", getAllRecipes)        
+router.get("/", getAllRecipes)   
+router.get("/byfood/:food", getRecipeByFood)     
 
 export default router
