@@ -1,7 +1,7 @@
 import mongoose, { Schema,Document, Date } from "mongoose";
 
 
-interface IRecipie extends Document{
+interface IRecipe extends Document{
     _id: mongoose.Types.ObjectId
     user: mongoose.Types.ObjectId
     food: mongoose.Types.ObjectId
@@ -13,15 +13,15 @@ interface IRecipie extends Document{
     images: string[]
 }
 
-const recipieSchema = new Schema<IRecipie>({
+const recipeSchema = new Schema<IRecipe>({
     user:{
         type: Schema.Types.ObjectId,
-        ref: "users",
+        ref: "User",
         required: [true, "UserId is required"]
     },
     food:{
         type: Schema.Types.ObjectId,
-        ref: "foods",
+        ref: "food",
         required: [true, "FoodId is required"]
     },
     title:{
@@ -56,4 +56,4 @@ const recipieSchema = new Schema<IRecipie>({
    
 },{timestamps:true})
 
-export const Recipie = mongoose.model<IRecipie>("recipie", recipieSchema)
+export const Recipe = mongoose.model<IRecipe>("recipie", recipeSchema)

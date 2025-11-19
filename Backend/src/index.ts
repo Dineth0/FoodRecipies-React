@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 import cors from "cors"
 import authRoute from "../src/routes/authRoute"
 import FoodRoute from "../src/routes/FoodRoute"
-import RecipieRoute from "../src/routes/RecipieRoute"
+import RecipeRoute from "./routes/RecipeRoute"
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.get("/",(req: Request, res: Response) =>{
     res.send("Hello TS Express")
 }) 
 app.use("/api/v1/food", FoodRoute)
-app.use("/api/v1/recipie", RecipieRoute )
+app.use("/api/v1/recipe", RecipeRoute )
 const mongo = mongoose.connect("mongodb://localhost:27017/foodRecipies")
 mongo.then(() =>{
     console.log("MongoDb Connected")

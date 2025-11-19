@@ -5,11 +5,13 @@ import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
 
 const router = Router()
-router.post("/addFood",
+router.post(
+            "/addFood",
             authenticateUser,
             authorizeRole(["Admin","User"]),
             upload.array("images",5),
-            addFood)
+            addFood
+        )
 
 router.get("/", getAllFoods)
 router.put("/updateFood/:id", upload.array("images", 5), updateFood)
