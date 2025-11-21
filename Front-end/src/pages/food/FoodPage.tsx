@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import {  getFoodByName } from "../../services/FoodAPI"
 import { useNavigate, useParams } from "react-router-dom"
+import { getRecipeByFood } from "../../services/RecipeAPI"
+import RecipeCard from "../../components/recipe/RecipeCard"
 
 interface Food{
     _id: string
@@ -15,6 +17,8 @@ export default function FoodPage() {
     const [food , setFood] = useState<Food| null>(null)
     const [activeImage, setActiveImage] = useState<string>("")
     const navigate = useNavigate()
+    const [recipes, setRecipes] = useState<any[]>([]);
+
     useEffect(() =>{
         if(!name) return
         const fetchFood = async()=>{
@@ -23,6 +27,9 @@ export default function FoodPage() {
                 console.log(response.data)
                 const foodDetail = response.data.data.food
                 setFood(foodDetail)
+                const recipeResponse = await getRecipeByFood(foodDetail._id);
+                setRecipes(recipeResponse.data.data.recipes);
+
                 if(foodDetail.images.length > 0){
                     setActiveImage(foodDetail.images[0])
                 }
@@ -39,7 +46,7 @@ export default function FoodPage() {
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         
-    
+  
         <button 
           onClick={() => navigate(-1)}
           className="mb-6 flex items-center text-gray-600 hover:text-orange-600 transition-colors font-medium"
@@ -120,6 +127,25 @@ export default function FoodPage() {
 
           </div>
         </div>
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold mb-8 text-gray-800 border-l-4 border-orange-500 pl-4">
+            Related Recipes
+          </h2>
+
+          {recipes.length === 0 ? (
+            <div className="text-center py-10 bg-white rounded-xl shadow-sm">
+               <p className="text-gray-500 text-lg">No recipes available for this food yet.</p>
+            </div>
+          ) : (
+            // Grid Layout එක මෙතැනින් හදන්න
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

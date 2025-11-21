@@ -97,7 +97,7 @@ export const getRecipeByFood = async (req:Request, res:Response, next:NextFuncti
         }
         res.status(200).json({
         success: true,
-        data: { recipe },
+        data: { recipes: recipe },
         message: "Recipe fetched successfully",
         })
     }catch(error){
