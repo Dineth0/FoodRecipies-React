@@ -3,6 +3,7 @@ import { getAllRecipes } from "../../services/RecipeAPI"
 import { showErrorAlert } from "../../utils/SweetAlerts"
 import { IoMdAdd } from "react-icons/io"
 import { FaEdit, FaTrash } from "react-icons/fa"
+import { RecipeForm } from "./RecipeForm"
 
 
 interface User {
@@ -32,6 +33,7 @@ export default function Recipes(){
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [recipes, setRecipes] = useState<RecipeItem[]>([])
+    const [showForm, setShoeForm] = useState(false)
 
     useEffect(()=>{
         const fetchRecipe = async () =>{
@@ -47,16 +49,30 @@ export default function Recipes(){
         fetchRecipe()
     },[page])
 
+    const handleSavedFood = () =>{
+        
+    }
+
+    const handleAddClick = () =>{
+        setShoeForm(true)
+    }
+    const handleCloseForm = () =>{
+        setShoeForm(false)
+    }
+
+
+
 
     return(
         <>
         <div className="text-center text-gray-300 py-10">
             <div className="flex justify-end mb-4">
-                <button className="flex items-center gap-1 text-green-400 hover:text-green-600 font-medium">
+                <button className="flex items-center gap-1 text-green-400 hover:text-green-600 font-medium"
+                onClick={handleAddClick}>
                     Add Recipe<IoMdAdd className="text-lg"/>
                 </button>
             </div>
-
+            <div className="w-full overflow-auto">
             <table className="w-full text-left text-sm">
                 <thead className="text-gray-300 border-b border-gray-700">
                     <tr>
@@ -112,6 +128,7 @@ export default function Recipes(){
                     ))}
                 </tbody>
             </table>
+            </div>
 
             <div className="flex justify-center items-center gap-4 mt-10">
                 <button
@@ -144,6 +161,14 @@ export default function Recipes(){
                 </button>
             </div>
         </div>
+        {
+            showForm && (
+                <RecipeForm
+                    onClose={handleCloseForm}
+                    onSave={handleSavedFood}
+                />
+            )
+        }
         </>
     )
 }
