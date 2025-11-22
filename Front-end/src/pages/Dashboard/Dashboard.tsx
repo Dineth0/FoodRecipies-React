@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import StatsCard from '../../components/dashboard/StatsCard';
 import Tab from '../../components/dashboard/Tab'
 import Foods from '../../components/dashboard/Food';
-import Recipies from '../../components/dashboard/Recipies';
+import Recipie from '../../components/dashboard/Recipe';
 import User from '../../components/dashboard/User';
 import Comment from '../../components/dashboard/Comments';
 import NavButton from '../../components/dashboard/NavButton';
@@ -60,7 +60,7 @@ export default function Dashboard() {
         )}
 
         {activeTab === 'foods' && <Foods/>}
-        {activeTab === 'recipies' && <Recipies/>}
+        {activeTab === 'recipies' && <Recipie/>}
         {activeTab === 'users' && <User/>}
         {activeTab === 'comments' && <Comment/>}
 

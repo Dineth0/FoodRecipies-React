@@ -4,7 +4,7 @@ import {  Navigate, Route, Routes } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
-import FoodPage from "../pages/food/FoodPage"
+import FoodPage from "../pages/food/FoodDetailPage"
 
 
 
