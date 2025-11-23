@@ -104,3 +104,43 @@ export const getRecipeByFood = async (req:Request, res:Response, next:NextFuncti
         next(error)
     }
 }
+
+export const updateRecipe = async (req:Request, res:Response, next:NextFunction) =>{
+    try{
+        const {id} = req.params
+        const { food, title, ingredients, step, readyIn} = req.body
+        const files = req.files as Express.Multer.File[]
+
+        const existingRecipe = await Recipe.findById(id)
+        if(!existingRecipe){
+            return res.status(404).json({
+                success: false,
+                message: "Recipe not found"
+            })
+        }
+
+        let updatedImages = existingRecipe.images 
+        if(files && files.length > 0){
+            const newImagesUrls = files.map((file) => (file as any).path)
+            updatedImages = [...existingRecipe.images ?? [], ...newImagesUrls]
+
+        }
+        
+        existingRecipe.food = food || existingRecipe.food
+        existingRecipe.title = title || existingRecipe.title
+        existingRecipe.ingredients = ingredients || existingRecipe.ingredients
+        existingRecipe.step = step || existingRecipe.step
+        existingRecipe.readyIn = readyIn || existingRecipe.readyIn
+        existingRecipe.images = updatedImages
+
+        await existingRecipe.save()
+
+        res.status(200).json({
+             success: true,
+            data: {food: existingRecipe},
+            message: "Recipe updated successflly"
+        })
+    }catch(error){
+        next(error)
+    }
+}

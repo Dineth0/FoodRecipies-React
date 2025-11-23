@@ -34,6 +34,7 @@ export default function Recipes(){
     const [totalPages, setTotalPages] = useState(1)
     const [recipes, setRecipes] = useState<RecipeItem[]>([])
     const [showForm, setShoeForm] = useState(false)
+    const [selectedRecipe, setSelectedRecipe] = useState<RecipeItem | null>(null)
 
     useEffect(()=>{
         const fetchRecipe = async () =>{
@@ -53,10 +54,17 @@ export default function Recipes(){
         
     }
 
+    const handleEditRecipe = (recipe: RecipeItem) =>{
+        setSelectedRecipe(recipe)
+        setShoeForm(true)
+    }
+
     const handleAddClick = () =>{
+        setSelectedRecipe(null)
         setShoeForm(true)
     }
     const handleCloseForm = () =>{
+        setSelectedRecipe(null)
         setShoeForm(false)
     }
 
@@ -129,7 +137,8 @@ export default function Recipes(){
                             </td>
 
                             <td className="py-2 px-4">
-                                <button className="text-blue-400 hover:text-blue-600 mx-2">
+                                <button className="text-blue-400 hover:text-blue-600 mx-2"
+                                    onClick={()=> handleEditRecipe(recipe)}>
                                     <FaEdit/>
                                 </button>
                                 <button className="text-blue-400 hover:text-blue-600 mx-2">
@@ -178,6 +187,7 @@ export default function Recipes(){
                 <RecipeForm
                     onClose={handleCloseForm}
                     onSave={handleSavedFood}
+                    selectedRecipe={selectedRecipe}
                 />
             )
         }

@@ -38,20 +38,21 @@ interface FormData{
 interface RecipeFormProps{
     onClose: () => void
     onSave: (recipe: RecipeItem) => void
+    selectedRecipe : RecipeItem | null
 }
-export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
+export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selectedRecipe}) =>{
 
     const [formdata, setFormdata] = useState<FormData>({
-        food: '',
-        title: '',
-        ingredients: '',
-        step: '',
-        readyIn: ''
+        food: selectedRecipe?.food._id || '',
+        title: selectedRecipe?.title || '',
+        ingredients: selectedRecipe?.ingredients || '',
+        step: selectedRecipe?.step || '',
+        readyIn: selectedRecipe?.readyIn || ''
     
 
     })
     const [files, setFiles] = useState<FileList | null>(null)
-    const [existingImageUrls, setExsitingImageUrls] = useState<string[]>([])
+    const [existingImageUrls, setExsitingImageUrls] = useState<string[]>(selectedRecipe?.images || [])
     
     const[loading, setLoading] =useState(false)
     const[error, setError] = useState<string | null> (null)
@@ -59,15 +60,24 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
     const {user} = useAuth()
 
     useEffect (()=>{
-        setFormdata({
-        food: '',
-        title: '',
-        ingredients: '',
-        step: '',
-        readyIn: ''
-      
 
-        })
+        if(selectedRecipe){
+          setFormdata({
+            food: selectedRecipe.food._id ,
+            title: selectedRecipe.title,
+            ingredients: selectedRecipe.ingredients ,
+            step: selectedRecipe.step ,
+            readyIn: selectedRecipe.readyIn 
+          })
+        }else{
+          setFormdata({
+          food: '',
+          title: '',
+          ingredients: '',
+          step: '',
+          readyIn: ''
+          })
+        }
         const loadFoods = async () =>{
             try{
                 const res = await getAllFoods()
@@ -78,7 +88,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
         }
         loadFoods()
         setExsitingImageUrls([])
-    },[])
+    },[selectedRecipe])
 
     const handleChange = (
         e : React.ChangeEvent<HTMLInputElement |  HTMLTextAreaElement | HTMLSelectElement >
