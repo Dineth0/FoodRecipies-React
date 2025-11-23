@@ -23,7 +23,6 @@ interface RecipeItem{
     ingredients: string
     step: string
     readyIn : string
-    date: string
     images?: string[]
 
 }
@@ -33,7 +32,7 @@ interface FormData{
     ingredients: string
     step: string
     readyIn : string
-    date: string
+ 
    
 }
 interface RecipeFormProps{
@@ -47,8 +46,8 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
         title: '',
         ingredients: '',
         step: '',
-        readyIn: '',
-        date: ''
+        readyIn: ''
+    
 
     })
     const [files, setFiles] = useState<FileList | null>(null)
@@ -65,8 +64,8 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
         title: '',
         ingredients: '',
         step: '',
-        readyIn: '',
-        date: ''
+        readyIn: ''
+      
 
         })
         const loadFoods = async () =>{
@@ -105,8 +104,8 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
             !formdata.title ||
             !formdata.ingredients ||
             !formdata.step ||
-            !formdata.readyIn||
-            !formdata.date 
+            !formdata.readyIn
+          
         ){
             setError("Fill All Fields")
             return
@@ -130,7 +129,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
         data.append('ingredients', formdata.ingredients)
         data.append('step', formdata.step)
         data.append('readyIn', formdata.readyIn)
-        data.append('date', formdata.date)
+      
 
         if(files){
             for(let i= 0; i < files.length; i++){
@@ -227,18 +226,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
-
-          <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Date</label>
-            <input
-                type='date'
-                name='date'
-                value={formdata.date}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          
+ 
 
           <div className="flex flex-col space-y-1">
             <label className="text-gray-300 text-sm">Images</label>
