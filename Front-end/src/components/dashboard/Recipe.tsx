@@ -21,7 +21,7 @@ interface RecipeItem{
     user: User
     food: Food
     title:string
-    ingredients: string[]
+    ingredients: string
     step: string
     readyIn : string
     date: Date
@@ -93,7 +93,19 @@ export default function Recipes(){
                             <td className="py-2 px-4">{recipe.title}</td>
                             <td className="py-2 px-4">{recipe.food?.name}</td>
                             <td className="py-2 px-4">{recipe.user?.name}</td>
-                            <td className="py-2 px-4">{recipe.ingredients.join(", ")}</td>
+                            <td className="py-2 px-4">
+                                {(()=>{
+                                    const ingre = recipe.ingredients
+                                    if(Array.isArray(ingre)){
+                                        return ingre.join(", ")
+                                    }
+                                    try{
+                                        return JSON.parse(ingre).join(", ")
+                                    }catch{
+                                        return ingre
+                                    }
+                                })()}
+                            </td>
                             <td className="py-2 px-4">{recipe.step}</td>
                             <td className="py-2 px-4">{recipe.readyIn}</td>
                             <td className="py-2 px-4">

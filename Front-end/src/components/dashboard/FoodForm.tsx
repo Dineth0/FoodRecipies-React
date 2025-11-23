@@ -111,7 +111,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
     for(let i= 0; i < files.length; i++){
       data.append('images', files[i])
     }
-  }
+    }
 
     try{
       let response;

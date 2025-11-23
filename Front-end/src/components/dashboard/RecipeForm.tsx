@@ -1,5 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
+import { addRecipe } from '../../services/RecipeAPI';
+import { showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
+import { getAllFoods } from '../../services/FoodAPI';
+import { useAuth } from '../../context/AuthContext';
 
 
 interface User {
@@ -16,18 +20,142 @@ interface RecipeItem{
     user: User
     food: Food
     title:string
-    ingredients: string[]
+    ingredients: string
     step: string
     readyIn : string
-    date: Date
+    date: string
     images?: string[]
 
+}
+interface FormData{
+    food: string
+    title:string
+    ingredients: string
+    step: string
+    readyIn : string
+    date: string
+   
 }
 interface RecipeFormProps{
     onClose: () => void
     onSave: (recipe: RecipeItem) => void
 }
 export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
+
+    const [formdata, setFormdata] = useState<FormData>({
+        food: '',
+        title: '',
+        ingredients: '',
+        step: '',
+        readyIn: '',
+        date: ''
+
+    })
+    const [files, setFiles] = useState<FileList | null>(null)
+    const [existingImageUrls, setExsitingImageUrls] = useState<string[]>([])
+    
+    const[loading, setLoading] =useState(false)
+    const[error, setError] = useState<string | null> (null)
+    const [foods, setFoods] = useState<Food[]>([])
+    const {user} = useAuth()
+
+    useEffect (()=>{
+        setFormdata({
+        food: '',
+        title: '',
+        ingredients: '',
+        step: '',
+        readyIn: '',
+        date: ''
+
+        })
+        const loadFoods = async () =>{
+            try{
+                const res = await getAllFoods()
+                setFoods(res.data.data.foods)
+            }catch(error){
+                console.error(error)
+            }
+        }
+        loadFoods()
+        setExsitingImageUrls([])
+    },[])
+
+    const handleChange = (
+        e : React.ChangeEvent<HTMLInputElement |  HTMLTextAreaElement | HTMLSelectElement >
+      )=>{
+        const {name, value} = e.target
+        setFormdata((prevData)=>({
+            ...prevData,
+            [name] : value
+        }))
+    }
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
+        if(e.target.files){
+            setFiles(e.target.files)
+        }
+    }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault()
+
+        if(
+            !formdata.food ||
+            !formdata.title ||
+            !formdata.ingredients ||
+            !formdata.step ||
+            !formdata.readyIn||
+            !formdata.date 
+        ){
+            setError("Fill All Fields")
+            return
+        }
+        if (existingImageUrls.length === 0 && (!files || files.length === 0)) {
+            setError("Please add at least one image");
+            return;
+        }
+        const totalImage = existingImageUrls.length + (files ? files.length : 0)
+            if(totalImage > 5){
+                setError("You can only upload 5 Images")
+        }
+        setError(null)
+        setLoading(true)
+
+        const data = new FormData()
+        data.append('user', user?.id || "")
+        data.append('food', formdata.food)
+        data.append('title', formdata.title)
+        // const ingredientsArray = formdata.ingredients.split(",").map(i => i.trim())
+        data.append('ingredients', formdata.ingredients)
+        data.append('step', formdata.step)
+        data.append('readyIn', formdata.readyIn)
+        data.append('date', formdata.date)
+
+        if(files){
+            for(let i= 0; i < files.length; i++){
+                data.append('images', files[i])
+            }
+        }
+
+        try{
+            const response = await addRecipe(data)
+            showSuccessAlert('success', "Food Added Successfully")
+            onSave(response.data.data.recipe)
+        }catch(error: any){
+          setLoading(false)
+                let errorMessage = 'Faild to add food. Please try again.';
+                      if (error.response?.data?.message) {
+                        errorMessage = typeof error.response.data.message === 'object'
+                          ? JSON.stringify(error.response.data.message)
+                          : String(error.response.data.message);
+                      }
+                      setError(errorMessage);
+                      showErrorAlert('Food Add Failed', errorMessage);
+                      console.error(' error:', error);  
+        }
+    }
+
   return ReactDOM.createPortal (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-start z-50 overflow-y-auto p-6 transition-opacity duration-300">
         <div className="relative bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-100 hover:scale-[1.01] my-auto">
@@ -35,40 +163,78 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
         
         </h2>
 
-        <form  className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+
+            <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Food</label>
+            <select
+              name="food"
+              id="food"
+              value={formdata.food}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+            >
+               <option value="">-- Select Food --</option>
+                {foods.map((item)=>(
+                    <option key={item._id} value={item._id}>
+                        {item.name}
+                    </option>
+                ))}
+
+            </select>
+            </div>
           
 
           <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Food Title</label>
+            <label className="text-gray-300 text-sm">Recipe Title</label>
             <input
-              name="name"
+              name="title"
+                value={formdata.title}
+              onChange={handleChange}
               placeholder="Enter name"
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Food Title</label>
+            <label className="text-gray-300 text-sm">Ingredients</label>
             <input
-              name="name"
-              placeholder="Enter name"
+              name="ingredients"
+              value={formdata.ingredients}
+              onChange={handleChange}
+              placeholder="Enter Ingredients"
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
 
           <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Food Title</label>
-            <input
-              name="name"
-              placeholder="Enter name"
-              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-
-          <div className="flex flex-col space-y-1">
-            <label className="text-gray-300 text-sm">Description</label>
+            <label className="text-gray-300 text-sm">Steps</label>
             <textarea
-              name="description"
+              name="step"
+              value={formdata.step}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Ready In</label>
+            <input
+              name="readyIn"
+              value={formdata.readyIn}
+              onChange={handleChange}
+              placeholder="Enter Ready In"
+              className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Date</label>
+            <input
+                type='date'
+                name='date'
+                value={formdata.date}
+              onChange={handleChange}
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
@@ -79,11 +245,26 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
             <input
               name="images"
               type="file"
+              onChange={handleFileChange}
               multiple
               accept='image/png, image/jpeg, image/webp'
               className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div> 
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-800">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           
 
@@ -93,17 +274,17 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
             <button
               type="button"
               onClick={onClose}
-           
+                disabled={loading}
               className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-           
+                disabled={loading}
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md transition"
             >
-           
+                Submit
             </button>
           </div>
         </form>

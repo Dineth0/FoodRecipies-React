@@ -137,7 +137,6 @@ export default function FoodPage() {
                <p className="text-gray-500 text-lg">No recipes available for this food yet.</p>
             </div>
           ) : (
-            // Grid Layout එක මෙතැනින් හදන්න
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {recipes.map((recipe) => (
                 <RecipeCard key={recipe._id} recipe={recipe} />
