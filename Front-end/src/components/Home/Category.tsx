@@ -2,9 +2,8 @@
 import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/autoplay";
+import "swiper/swiper-bundle.css";
+
 import breakfirst from "../../assets/braekfirst.png"
 import Lunch from "../../assets/lunch.png"
 import Dinner from "../../assets/dinner.png"

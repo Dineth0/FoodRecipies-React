@@ -4,7 +4,7 @@ export const getRecipeByFood =  (foodId: string) =>{
     return axiosInstance.get(`/recipe/byfood/${foodId}`)
 }
 
-export const getAllRecipes = (page: number , limit : number)=>{
+export const getAllRecipes = (page: number = 1 , limit : number =100)=>{
     return axiosInstance.get(`/recipe?page=${page}&limit=${limit}`)
 }
 

@@ -15,7 +15,7 @@ export const updateFood =  (id: string, data: FormData) =>{
         }
     })
 }
-export const getAllFoods = async (page: number, limit: number) =>{
+export const getAllFoods = async (page: number = 1, limit: number = 100) =>{
     return axiosInstance.get(`/food?page=${page}&limit=${limit}`)
 }
 export const deleteFood =  (id: string) =>{
