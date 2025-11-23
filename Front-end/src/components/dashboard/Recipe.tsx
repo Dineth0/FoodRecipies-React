@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { getAllRecipes } from "../../services/RecipeAPI"
-import { showErrorAlert } from "../../utils/SweetAlerts"
+import { deleteRecipes, getAllRecipes } from "../../services/RecipeAPI"
+import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
 import { IoMdAdd } from "react-icons/io"
 import { FaEdit, FaTrash } from "react-icons/fa"
 import { RecipeForm } from "./RecipeForm"
@@ -68,6 +68,28 @@ export default function Recipes(){
         setShoeForm(false)
     }
 
+    const handleDelete = (recipeDelete : RecipeItem)=>{
+        showConfirmDialog(
+           'Are you sure?',
+            `${recipeDelete.title} Do you want to delete? `,
+            'Yes, Delete id!' 
+        ).then(async(result)=>{
+            if(result.isConfirmed){
+                try{
+                    await deleteRecipes(recipeDelete._id)
+                    setRecipes(prevRecipes =>
+                        prevRecipes.filter(recipe => recipe._id !== recipeDelete._id)
+                    )
+                    showSuccessAlert('Deleted' ,`${recipeDelete.title} has been Deleted`)
+                }catch(error){
+                    console.error(error)
+                    showErrorAlert('error', 'Faild to delete')
+                }
+            }
+            
+            
+        })
+    }
 
 
 
@@ -141,7 +163,8 @@ export default function Recipes(){
                                     onClick={()=> handleEditRecipe(recipe)}>
                                     <FaEdit/>
                                 </button>
-                                <button className="text-blue-400 hover:text-blue-600 mx-2">
+                                <button className="text-blue-400 hover:text-blue-600 mx-2"
+                                    onClick={()=> handleDelete(recipe)}>
                                     <FaTrash/>
                                 </button>
                             </td>

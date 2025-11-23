@@ -25,5 +25,5 @@ export const updateRecipe = ( id: string ,data: FormData)=>{
 }
 
 export const deleteRecipes = (id: string) =>{
-    return axiosInstance.delete(`/recipe/deleteRecipe${id}`)
+    return axiosInstance.delete(`/recipe/deleteRecipe/${id}`)
 }
