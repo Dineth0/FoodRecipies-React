@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { addRecipe } from '../../services/RecipeAPI';
+import { addRecipe, updateRecipe } from '../../services/RecipeAPI';
 import { showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
 import { getAllFoods } from '../../services/FoodAPI';
 import { useAuth } from '../../context/AuthContext';
@@ -69,6 +69,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
             step: selectedRecipe.step ,
             readyIn: selectedRecipe.readyIn 
           })
+          setExsitingImageUrls(selectedRecipe.images || [])
         }else{
           setFormdata({
           food: '',
@@ -77,6 +78,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
           step: '',
           readyIn: ''
           })
+          setExsitingImageUrls([])
         }
         const loadFoods = async () =>{
             try{
@@ -87,7 +89,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
             }
         }
         loadFoods()
-        setExsitingImageUrls([])
+        
     },[selectedRecipe])
 
     const handleChange = (
@@ -148,9 +150,16 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
         }
 
         try{
-            const response = await addRecipe(data)
-            showSuccessAlert('success', "Food Added Successfully")
-            onSave(response.data.data.recipe)
+            let response;
+            if(selectedRecipe){
+              response = await updateRecipe(selectedRecipe._id! , data)
+                showSuccessAlert('Success','Recipe Successfully Updated')
+              }else{
+                response = await addRecipe(data)
+                showSuccessAlert('Success','Recipe Successfully Added')
+              }
+              onSave(response.data.data.recipe)
+            
         }catch(error: any){
           setLoading(false)
                 let errorMessage = 'Faild to add food. Please try again.';
@@ -165,11 +174,14 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
         }
     }
 
+    const formTitle = selectedRecipe ? "Edit Recipe" : "Add Recipe"
+    const saveButtonText = selectedRecipe ? "Update" : "Save"
+
   return ReactDOM.createPortal (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-start z-50 overflow-y-auto p-6 transition-opacity duration-300">
         <div className="relative bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-100 hover:scale-[1.01] my-auto">
         <h2 className="text-2xl font-bold text-center mb-6 border-b border-gray-700 pb-2">
-        
+          {formTitle}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -237,6 +249,24 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
             />
           </div>
  
+          {existingImageUrls.length > 0 &&(
+             <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Current Images</label>
+            <div className="flex flex-wrap gap-2 p-2 bg-gray-800 rounded-lg border border-gray-700">
+              {existingImageUrls.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Existing food ${index + 1}`}
+                  className="w-20 h-20 object-cover rounded-md"
+                />
+              ))}
+            </div>
+            <p className="text-xs text-gray-400">
+              You can add more images below.
+            </p>
+          </div> 
+          )}
 
           <div className="flex flex-col space-y-1">
             <label className="text-gray-300 text-sm">Images</label>
@@ -282,7 +312,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
                 disabled={loading}
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md transition"
             >
-                Submit
+                {loading ? 'Saving...': saveButtonText}
             </button>
           </div>
         </form>

@@ -15,3 +15,15 @@ export const addRecipe = (data: FormData)=>{
         }
     })
 }
+
+export const updateRecipe = ( id: string ,data: FormData)=>{
+    return axiosInstance.put(`/recipe/updateRecipe/${id}`, data, {
+        headers:{
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+}
+
+export const deleteRecipes = (id: string) =>{
+    return axiosInstance.delete(`/recipe/deleteRecipe${id}`)
+}
