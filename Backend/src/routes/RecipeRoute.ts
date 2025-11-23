@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middleware/upload";
-import { addRecipie, getAllRecipes, getRecipeByFood, updateRecipe } from "../controllers/recipeController";
+import { addRecipie, deleteRecipe, getAllRecipes, getRecipeByFood, updateRecipe } from "../controllers/recipeController";
 import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
 
@@ -15,5 +15,6 @@ router.post(
 router.get("/", getAllRecipes)   
 router.get("/byfood/:food", getRecipeByFood)     
 router.put("/updateRecipe/:id", upload.array("images", 5), updateRecipe)
+router.delete("/deleteRecipe/:id", deleteRecipe)
 
 export default router

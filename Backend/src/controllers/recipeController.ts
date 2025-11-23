@@ -3,6 +3,7 @@ import userModel from "../models/userModel";
 import {Food} from "../models/FoodModel"
 import { Recipe } from "../models/RecipeModel";
 import { error } from 'console';
+import cloudinary from "../config/cloudinary";
 
 
 export const addRecipie = async (req:Request, res:Response, next: NextFunction)=>{
@@ -139,6 +140,38 @@ export const updateRecipe = async (req:Request, res:Response, next:NextFunction)
              success: true,
             data: {food: existingRecipe},
             message: "Recipe updated successflly"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+export const deleteRecipe = async (req:Request, res:Response, next:NextFunction)  =>{
+    try{
+        const {id} = req.params
+
+        const existingRecpe = await Recipe.findById(id)
+        if(!existingRecpe){
+            return res.status(404).json({
+                success: false,
+                message: "Recipe not found"
+            })
+        }
+        for (const imageUrl of existingRecpe.images ?? []){
+            try{
+                const parts = imageUrl.split("/")
+                const filename = parts[parts.length - 1]
+                const publicId = `recipe/${filename.split("."[0])}`
+                await cloudinary.uploader.destroy(publicId)
+            }catch(error){
+                console.error(error)
+            }
+        }
+
+        await Recipe.findByIdAndDelete(id)
+        res.status(200).json({
+            success: true,
+            message:"Recipe deleted successfully" 
         })
     }catch(error){
         next(error)
