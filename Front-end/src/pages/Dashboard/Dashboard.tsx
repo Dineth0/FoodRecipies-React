@@ -29,7 +29,7 @@ export default function Dashboard() {
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-800 to-indigo-900 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-r from-[#0A0A0A] to-[#4A3B00] text-white p-8">
       <h1 className="text-3xl font-bold mb-8 text-center">Foods And Recipies</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -66,7 +66,7 @@ export default function Dashboard() {
 
       </div>
 
-      <div className="fixed left-1/2 transform -translate-x-1/2 bottom-6 bg-blue-600 rounded-full backdrop-blur-md px-8 py-3 flex space-x-6">
+      <div className="fixed left-1/2 transform -translate-x-1/2 bottom-6 bg-[#3A2E00] rounded-full backdrop-blur-md px-8 py-3 flex space-x-6">
         {(["home","foods","recipies","users","comments"]as TabType[]).map((tab)=>(
               <NavButton
               key={tab}
