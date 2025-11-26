@@ -125,7 +125,7 @@ export default function FoodPage() {
         </div>
             
 
-          </div>
+      </div>
         </div>
         <div className="mt-16">
           <h2 className="text-3xl font-bold mb-8 text-gray-800 border-l-4 border-orange-500 pl-4">
