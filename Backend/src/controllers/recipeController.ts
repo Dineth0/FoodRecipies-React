@@ -177,3 +177,26 @@ export const deleteRecipe = async (req:Request, res:Response, next:NextFunction)
         next(error)
     }
 }
+
+export const getRecipeByName = async (req:Request, res: Response, next:NextFunction) =>{
+    try{
+        const {name} = req.params
+
+        const decodedName = decodeURIComponent(name)
+        const recipe = await Recipe.findOne({name: decodedName})
+
+        if(!recipe){
+             return res.status(404).json({
+                success: false,
+                message: "Recipe not found",
+            })
+        }
+        res.status(200).json({
+            success: true,
+            data: { recipe },
+            message: "Recipe fetched successfully",
+        })
+    }catch(error){
+        next(error)
+    }
+}
