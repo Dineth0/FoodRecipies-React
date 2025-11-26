@@ -178,12 +178,12 @@ export const deleteRecipe = async (req:Request, res:Response, next:NextFunction)
     }
 }
 
-export const getRecipeByName = async (req:Request, res: Response, next:NextFunction) =>{
+export const getRecipeByTitle = async (req:Request, res: Response, next:NextFunction) =>{
     try{
-        const {name} = req.params
+        const {title} = req.params
 
-        const decodedName = decodeURIComponent(name)
-        const recipe = await Recipe.findOne({name: decodedName})
+        const decodedTitle = decodeURIComponent(title)
+        const recipe = await Recipe.findOne({title: decodedTitle})
 
         if(!recipe){
              return res.status(404).json({

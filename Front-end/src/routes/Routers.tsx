@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
 import FoodPage from "../pages/food/FoodDetailPage"
+import RecipeDeatilsPage from "../pages/Recipe/RecipeDetails"
 
 
 
@@ -62,6 +63,13 @@ export default function Router(){
                             element={
                                 <RequireAuth>
                                     <FoodPage/>
+                                </RequireAuth>
+                        }/>
+                        <Route
+                            path="/recipe/:title"
+                            element={
+                                <RequireAuth>
+                                    <RecipeDeatilsPage/>
                                 </RequireAuth>
                         }/>
                     </Route>

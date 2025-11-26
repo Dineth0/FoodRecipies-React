@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"
 
 
 interface Recipe {
@@ -13,9 +14,12 @@ interface RecipeCardProps {
 }
 
 export default function RecipeCard({recipe}:RecipeCardProps){
-
+  const navigate = useNavigate()
   return(
-    <div className='bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer'>
+    <div 
+      key={recipe._id}
+      onClick={()=> navigate(`/recipe/${recipe.title}`)}
+      className='bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer'>
         <div className='h-48 w-full overflow-hidden'>
             {recipe.images && recipe.images.length > 0 ?(
               <img 
