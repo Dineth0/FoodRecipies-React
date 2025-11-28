@@ -26,6 +26,13 @@ export const Navbar: React.FC = () => {
           >
             ABOUT
           </Link>
+
+          <Link
+            to="/my-recipes"
+            className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300"
+          >
+            My Recipes
+          </Link>
         </div>
 
        

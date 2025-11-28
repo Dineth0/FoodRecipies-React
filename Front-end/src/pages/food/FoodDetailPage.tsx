@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import {  getFoodByName } from "../../services/FoodAPI"
-import { useNavigate, useParams } from "react-router-dom"
+import {  useParams } from "react-router-dom"
 import { getRecipeByFood } from "../../services/RecipeAPI"
 import RecipeCard from "../../components/recipe/RecipeCard"
+import { MdOutlinePostAdd } from "react-icons/md";
+import { UserAddRecipeForm } from "../../components/UserAddRecipeForm"
 
 interface Food{
     _id: string
@@ -16,11 +18,11 @@ export default function FoodPage() {
     const {name} = useParams<{name : string}>()
     const [food , setFood] = useState<Food| null>(null)
     const [activeImage, setActiveImage] = useState<string>("")
-    const navigate = useNavigate()
     const [recipes, setRecipes] = useState<any[]>([]);
+    const [showForm, setShowForm] = useState(false)
 
     useEffect(() =>{
-        if(!name) return
+      if(!name) return
         const fetchFood = async()=>{
             try{
                 const response = await getFoodByName(name)
@@ -36,23 +38,26 @@ export default function FoodPage() {
             }catch(error){
                 console.error(error)
             }
-        }
-        fetchFood()
-    },[name])
-        if (!food) {
-        return <p className="p-10">Loading...</p>
+      }
+      fetchFood()
+      },[name])
+      if (!food) {
+      return <p className="p-10">Loading...</p>  
     }
-  return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] ">
-      <div className="max-w-7xl mx-auto">
+     const handleSavedFood = () =>{
         
-  
-        <button 
-          onClick={() => navigate(-1)}
-          className="mb-6 flex items-center text-gray-600 hover:text-orange-600 transition-colors font-medium"
-        >
-          ← Back to Menu
-        </button>
+    }
+    const handleAddClick = () =>{
+        
+        setShowForm(true)
+    }
+     const handleCloseForm = () =>{
+        setShowForm(false)
+    }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] mt-12 ">
+      <div className="max-w-7xl mx-auto">
 
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden lg:flex">
           
@@ -123,10 +128,18 @@ export default function FoodPage() {
             <li>• Easy to prepare at home</li>
           </ul>
         </div>
-            
-
       </div>
         </div>
+        <div className="mt-10 flex justify-center">
+          <button 
+            onClick={handleAddClick}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md"
+          >
+            <MdOutlinePostAdd size={24}/>
+            Add Your Recipe
+          </button>
+        </div>
+
         <div className="mt-16">
           <h2 className="text-3xl font-bold mb-8 text-gray-800 border-l-4 border-orange-500 pl-4">
             Related Recipes
@@ -146,6 +159,16 @@ export default function FoodPage() {
         </div>
 
       </div>
+      {
+        showForm && (
+          <UserAddRecipeForm
+              onClose={handleCloseForm}
+              onSave={handleSavedFood}
+              />
+        )
+      }
     </div>
+    
   );
+  
 }

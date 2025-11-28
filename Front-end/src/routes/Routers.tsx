@@ -51,6 +51,7 @@ export default function Router(){
 
                     <Route element={<Layout/>}>
                         <Route path="/" element={<Home/>}></Route>
+                        
                         <Route
                             path="/category/:category"
                             element={
@@ -72,6 +73,7 @@ export default function Router(){
                                     <RecipeDeatilsPage/>
                                 </RequireAuth>
                         }/>
+                        
                     </Route>
 
                     
