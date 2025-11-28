@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getRecipeByName } from "../../services/RecipeAPI";
 
 interface User {
@@ -28,7 +28,7 @@ export default function RecipeDetailsPage() {
   const { title } = useParams<{ title: string }>();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [activeImage, setActiveImage] = useState("");
-  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     if (!title) return;
@@ -52,33 +52,29 @@ export default function RecipeDetailsPage() {
   }, [title]);
 
   return (
-    <div className="min-h-screen bg-[#faf9f7] py-12 px-4 sm:px-6 lg:px-10">
+    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-[#fff3e4] via-[#ffd8b5] to-[#ffba7a]">
         <div className="max-w-6xl mx-auto">
-            <button
-              onClick={() => navigate(-1)}
-              className="mb-6 text-gray-700 hover:text-black font-semibold">
-                Back
-            </button>
+            
 
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl font-bold text-[#3a2f2a] tracking-tight mt-3">
                 {recipe?.title}
             </h1>
 
-            <div className="flex flex-wrap gap-4 mb-10 text-gray-600">
-                <span className="px-4 py-1 bg-gray-200 rounded-full text-sm">
-                    Food: <span className="font-semibold">{recipe?.food.name}</span>
+            <div className="flex flex-wrap gap-4 mb-10 text-[#7a6e67] mt-6">
+                <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
+                    Food: <span className="font-semibold text-[#3a2f2a]">{recipe?.food.name}</span>
                 </span>
 
-                <span className="px-4 py-1 bg-gray-200 rounded-full text-sm">
-                    Posted By: <span className="font-semibold">{recipe?.user.name}</span>
+                <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
+                    Posted By: <span className="font-semibold text-[#3a2f2a]">{recipe?.user.name}</span>
                 </span>
 
-                <span className="px-4 py-1 bg-gray-200 rounded-full text-sm">
-                    Ready In: <span className="font-semibold">{recipe?.readyIn}</span>
+                <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
+                    Ready In: <span className="font-semibold text-[#3a2f2a]">{recipe?.readyIn}</span>
                 </span>
 
-                <span className="px-4 py-1 bg-gray-200 rounded-full text-sm">
-                  Date:{""}
+                <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
+                  Date:<span className="font-semibold text-[#3a2f2a]"></span>
                   <span>
                     {recipe?.date ? new Date(recipe.date).toLocaleDateString():""}
                   </span>
@@ -87,7 +83,7 @@ export default function RecipeDetailsPage() {
 
             <div className="grid lg:grid-cols-2 gap-10">
               <div>
-                <div className="w-full h-[350px] rounded-3xl shadow-xl overflow-hidden mb-4">
+                <div className="w-full h-[350px] rounded-3xl  shadow-[0_4px_20px_rgba(0,0,0,0.1)] overflow-hidden mb-4">
                   <img
                     src={activeImage}
                     className="object-cover w-full h-full">
@@ -117,16 +113,16 @@ export default function RecipeDetailsPage() {
 
              
                 <div>
-                  <h2 className="text-2xl font-semibold mb-3">About this recipe</h2>
-                  <p className="text-gray-700 leading-relaxed">
+                  <h2 className="text-2xl font-semibold mb-3 text-[#3a2f2a]">About this recipe</h2>
+                  <p className=" text-[#5c4f47] text-gray-700 leading-relaxed">
                     A beautifully crafted dish with a rich blend of flavors and 
                     textures. Follow through the steps to recreate this delicious meal.
                   </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-3xl shadow-md border border-gray-100">
-                  <h2 className="text-2xl font-semibold mb-4">Ingredients</h2>
-                  <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                <div className=" bg-[#ffe8d6] p-6 rounded-3xl shadow-md border border-gray-100 ">
+                  <h2 className="text-2xl font-semibold text-[#3a2f2a] mb-4">Ingredients</h2>
+                  <ul className="list-disc pl-5 space-y-1 text-[#5c4f47]">
                     {recipe?.ingredients.map((ing, i) => (
                       <li key={i}>{ing.trim()}</li>
                     ))}
@@ -136,12 +132,12 @@ export default function RecipeDetailsPage() {
               </div>
             </div>
 
-            <div className="mt-16 bg-white p-10 rounded-3xl shadow-xl">
-                <h2 className="text-3xl font-bold mb-6 border-l-4 border-orange-500 pl-4">
+            <div className="mt-16 bg-[#ffe8d6] p-10 rounded-3xl  shadow-[0_4px_25px_rgba(0,0,0,0.08)]">
+                <h2 className="text-3xl font-bold mb-6 border-l-4  border-[#ff8a00] pl-4 text-[#3a2f2a] pl-4">
                     Step By Step Instructions
                 </h2>
 
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line text-lg">
+                <p className="text-[#5c4f47] text-gray-700 leading-relaxed whitespace-pre-line text-lg">
                     {recipe?.step}
                 </p>
             </div>
