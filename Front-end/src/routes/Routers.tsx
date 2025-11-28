@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
 import FoodPage from "../pages/food/FoodDetailPage"
 import RecipeDeatilsPage from "../pages/Recipe/RecipeDetails"
+import MyRecipes from "../pages/MyRecipe/MyRecipes"
 
 
 
@@ -73,7 +74,13 @@ export default function Router(){
                                     <RecipeDeatilsPage/>
                                 </RequireAuth>
                         }/>
-                        
+                        <Route
+                            path="/my-recipes"
+                            element={
+                                <RequireAuth>
+                                    <MyRecipes/>
+                                </RequireAuth>
+                        }/>
                     </Route>
 
                     
