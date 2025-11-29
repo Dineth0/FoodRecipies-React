@@ -31,3 +31,11 @@ export const deleteRecipes = (id: string) =>{
 export const getRecipeByName = (title : string) =>{
     return axiosInstance.get(`/recipe/title/${encodeURIComponent(title)}`)
 }
+
+export const getPendingRecipes = () =>{
+    return axiosInstance.get('/recipe/pending')
+}
+
+export const approvedRecipe = (id: string) =>{
+    return axiosInstance.put(`/recipe/approved/${id}`)
+}

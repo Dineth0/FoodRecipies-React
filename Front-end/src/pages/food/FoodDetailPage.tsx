@@ -5,9 +5,10 @@ import { getRecipeByFood } from "../../services/RecipeAPI"
 import RecipeCard from "../../components/recipe/RecipeCard"
 import { MdOutlinePostAdd } from "react-icons/md";
 import { UserAddRecipeForm } from "../../components/UserAddRecipeForm"
+import { showSuccessAlert } from "../../utils/SweetAlerts"
 
 interface Food{
-    _id: string
+  _id: string
   name: string
   category: string
   cuisine: string
@@ -44,9 +45,18 @@ export default function FoodPage() {
       if (!food) {
       return <p className="p-10">Loading...</p>  
     }
-     const handleSavedFood = () =>{
-        
-    }
+     const handleSavedFood = (newRecipe: any) =>{
+        setShowForm(false); // Form එක close කරනවා
+
+        // Recipe එකේ status එක Approved නම් විතරක් (Admin දැම්මොත්) ලිස්ට් එකට දානවා
+        if (newRecipe.status === 'Approved') {
+            setRecipes((prev) => [newRecipe, ...prev]);
+            showSuccessAlert('Success', 'Recipe Added Successfully!');
+        } else {
+            // User කෙනෙක් නම් (Pending නම්) ලිස්ට් එකට දාන්නේ නෑ. Message එක විතරයි.
+            showSuccessAlert('Submitted', 'Your recipe has been submitted for admin approval.');
+        }
+      }
     const handleAddClick = () =>{
         
         setShowForm(true)

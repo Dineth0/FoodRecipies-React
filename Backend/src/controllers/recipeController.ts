@@ -48,7 +48,7 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
         const message = userRole === 'Admin' ? "Recipe Added Successfully" : "Recipes Submitted for Approval"
         res.status(201).json({
             success:true,
-            data: {food: newResipe},
+            data: {recipe: newResipe},
             message: message
         })
     }catch(error){
