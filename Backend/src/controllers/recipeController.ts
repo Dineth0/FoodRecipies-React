@@ -11,6 +11,9 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
         const {user, food, title, ingredients, step, readyIn, date} = req.body
         
         const exstingUser = await userModel.findById(user)
+        const userRole = (req as any).user.role
+        const checkStatus = userRole === 'Admin' ? 'Approved' : 'Pending'
+
         if(!exstingUser){
             return res.status(404).json({
                 success: false,
@@ -38,13 +41,15 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
             step,
             readyIn,
             date : new Date(),
-            images: imageUrls
+            images: imageUrls,
+            status: checkStatus
         })
         await newResipe.save()
+        const message = userRole === 'Admin' ? "Recipe Added Successfully" : "Recipes Submitted for Approval"
         res.status(201).json({
             success:true,
             data: {food: newResipe},
-            message: "Recipie Added Successfully"
+            message: message
         })
     }catch(error){
         next(error)
@@ -86,7 +91,7 @@ export const getAllRecipes = async(req:Request, res:Response, next:NextFunction)
 export const getRecipeByFood = async (req:Request, res:Response, next:NextFunction) =>{
     try{
         const {food} = req.params
-        const recipe = await Recipe.find({food})
+        const recipe = await Recipe.find({food: food, status: 'Approved'})
         .populate("user", "user")
         .populate("food", "name")
         if(!recipe){
@@ -195,6 +200,51 @@ export const getRecipeByTitle = async (req:Request, res: Response, next:NextFunc
             success: true,
             data: { recipe },
             message: "Recipe fetched successfully",
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+export const getPandingRecipes = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const recipes = await Recipe.find({ status: 'Pending'})
+        .populate("user", "name")
+        .populate("food", "name")
+        .sort({createdAt: -1})
+
+        res.status(200).json({
+            success:true,
+            data:{recipes},
+            message: "Get Pneding Recipes"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+export const approveRecipe = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {id} = req.params
+
+        const recipe = await Recipe.findByIdAndUpdate(
+            id,
+            {status: 'Approved'},
+            {new: true}
+        )
+
+        if(!recipe){
+            return res.status(404).json({
+                success:false,
+               
+                message: "Recipe not found"
+            })
+        }
+
+        res.status(404).json({
+             success:true,
+            data:{recipe},
+            message: "Recipe Approved Succesfully"
         })
     }catch(error){
         next(error)

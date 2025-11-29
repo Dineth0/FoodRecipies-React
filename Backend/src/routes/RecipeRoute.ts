@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middleware/upload";
-import { addRecipie, deleteRecipe, getAllRecipes, getRecipeByFood, getRecipeByTitle, updateRecipe } from "../controllers/recipeController";
+import { addRecipie, approveRecipe, deleteRecipe, getAllRecipes, getPandingRecipes, getRecipeByFood, getRecipeByTitle, updateRecipe } from "../controllers/recipeController";
 import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
 
@@ -18,4 +18,17 @@ router.put("/updateRecipe/:id", upload.array("images", 5), updateRecipe)
 router.delete("/deleteRecipe/:id", deleteRecipe)
 router.get("/title/:title", getRecipeByTitle)
 
+router.get(
+        "/pending",
+        authenticateUser,
+        authorizeRole(["Admin"]),
+        getPandingRecipes
+        )
+    
+ router.put(
+        "/approved/:id",
+        authenticateUser,
+        authorizeRole(["Admin"]),
+        approveRecipe
+ )       
 export default router
