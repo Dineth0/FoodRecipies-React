@@ -57,18 +57,18 @@ export default function PendingRecipes(){
                 <p className="text-gray-300">No Pending Recipes</p>
             ):(
                 <div className="w-full overflow-x-auto">
-                    <table className="w-full text-left text-sm  text-gray-300">
+                    <table className="w-full text-left text-sm text-gray-300 table-fixed min-w-[1000px]">
                         <thead className="uppercase tracking-wider border-b border-gray-700 bg-gray-800">
                             <tr>
-                                <th scope="col" className="py-2 px-4">Title</th>
-                                <th scope="col" className="py-2 px-4">Food</th>
-                                <th scope="col" className="py-2 px-4">User</th>
-                                <th scope="col" className="py-2 px-4">Ingradiants</th>
-                                <th scope="col" className="py-2 px-4">Ready In</th>
-                                <th scope="col" className="py-2 px-4">Date</th>
-                                <th scope="col" className="py-2 px-4">Step</th>
-                                <th scope="col" className="py-2 px-4">Images</th>
-                                <th scope="col" className="py-2 px-4">Action</th>
+                                <th scope="col" className="py-2 px-4 w-[10%]">Title</th>
+                                <th scope="col" className="py-2 px-4 w-[8%]">Food</th>
+                                <th scope="col" className="py-2 px-4 w-[8%]">User</th>
+                                <th scope="col" className="py-2 px-4 w-[12%]">Ingradiants</th>
+                                <th scope="col" className="py-2 px-4 w-[8%]">Ready In</th>
+                                <th scope="col" className="py-2 px-4 w-[8%]">Date</th>
+                                <th scope="col" className="py-2 px-4 w-[25%]">Step</th>
+                                <th scope="col" className="py-2 px-4 w-[12%]">Images</th>
+                                <th scope="col" className="py-2 px-4 w-[9%]">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -94,7 +94,11 @@ export default function PendingRecipes(){
                                     <td className="px-4 py-2 align-top">
                                         {new Date(recipe.date).toLocaleDateString()}
                                     </td>
-                                    <td className="px-4 py-2 align-top">{recipe.step}</td>
+                                    <td className="px-4 py-2 align-top">
+                                        <div className="break-words whitespace-pre-wrap max-h-40 overflow-y-auto pr-1">
+                                            {recipe.step}
+                                        </div>
+                                    </td>
                                     <td className="py-4 px-2 flex gap-2 align-top justify-center">
                                         {recipe.images && recipe.images.length > 0 ? (
                                             recipe.images.map((imageUrl, idx)=>(
@@ -112,13 +116,25 @@ export default function PendingRecipes(){
                                     </td>
                                     <td className="px-4 py-2 align-top">
                                         
-                                        <button className="text-green-400 hover:text-green-600 mx-2"
-                                            onClick={() =>handleApproved(recipe._id)}>
-                                             <FaCheckCircle size={20}  />                            
-                                        </button>
-                                        <button className="text-red-400 hover:text-red-600 mx-2">
-                                             <IoCloseCircle size={20}  />                            
-                                        </button>
+                                       <div className="flex items-center justify-center gap-3">
+        
+        <button 
+            className="text-green-400 hover:text-green-600 transition-colors"
+            onClick={() => handleApproved(recipe._id)}
+            title="Approve"
+        >
+            <FaCheckCircle size={20} />
+        </button>
+
+        <button 
+            className="text-red-400 hover:text-red-600 transition-colors"
+            title="Reject"
+        >
+            <IoCloseCircle size={22} /> {/* size eka poddak wadi kala lassanata penanna */}
+        </button>
+        
+    </div>
+                                        
                                     </td>
                                 </tr>
                             ))}
