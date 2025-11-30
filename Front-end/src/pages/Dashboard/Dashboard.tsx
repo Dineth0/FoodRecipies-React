@@ -6,8 +6,9 @@ import Recipie from '../../components/dashboard/Recipe';
 import User from '../../components/dashboard/User';
 import Comment from '../../components/dashboard/Comments';
 import NavButton from '../../components/dashboard/NavButton';
+import PendingRecipes from '../../components/dashboard/PendingRecipes';
 
-type TabType = "home" | "foods" | "recipies" | "users" | "comments"
+type TabType = "home" | "foods" | "recipies" | "users" | "comments" | "Peending Recipes"
 
 // interface Stats {
 //   totalFoods = number
@@ -42,7 +43,7 @@ export default function Dashboard() {
       <div className="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
         <div className="flex justify-between items-center mb-6">
           <div className="flex space-x-3">
-            {(["home","foods","recipies","users","comments"]as TabType[]).map((tab)=>(
+            {(["home","foods","recipies","users","comments","Peending Recipes"]as TabType[]).map((tab)=>(
               <Tab
               key={tab}
               label={tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -50,7 +51,10 @@ export default function Dashboard() {
               onClick={() =>setActiveTab(tab)}
               >
               </Tab>
+              
             ))}
+
+
           </div>
         </div>
 
@@ -63,6 +67,7 @@ export default function Dashboard() {
         {activeTab === 'recipies' && <Recipie/>}
         {activeTab === 'users' && <User/>}
         {activeTab === 'comments' && <Comment/>}
+        {activeTab === 'Peending Recipes' && <PendingRecipes/>}
 
       </div>
 
