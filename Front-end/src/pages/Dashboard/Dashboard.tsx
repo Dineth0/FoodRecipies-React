@@ -5,7 +5,7 @@ import Foods from '../../components/dashboard/Food';
 import Recipie from '../../components/dashboard/Recipe';
 import User from '../../components/dashboard/User';
 import Comment from '../../components/dashboard/Comments';
-import NavButton from '../../components/dashboard/NavButton';
+// import NavButton from '../../components/dashboard/NavButton';
 import PendingRecipes from '../../components/dashboard/PendingRecipes';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "comments" | "Peending Recipes"
@@ -71,7 +71,7 @@ export default function Dashboard() {
 
       </div>
 
-      <div className="fixed left-1/2 transform -translate-x-1/2 bottom-6 bg-[#3A2E00] rounded-full backdrop-blur-md px-8 py-3 flex space-x-6">
+      {/* <div className="fixed left-1/2 transform -translate-x-1/2 bottom-6 bg-[#3A2E00] rounded-full backdrop-blur-md px-8 py-3 flex space-x-6">
         {(["home","foods","recipies","users","comments"]as TabType[]).map((tab)=>(
               <NavButton
               key={tab}
@@ -81,7 +81,7 @@ export default function Dashboard() {
               >
               </NavButton>
             ))}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -208,15 +208,25 @@ export const getRecipeByTitle = async (req:Request, res: Response, next:NextFunc
 
 export const getPandingRecipes = async (req:Request, res:Response, next:NextFunction)=>{
     try{
+        const page = parseInt(req.query.page as string) || 1
+        const limit  = parseInt(req.query.limit as string) || 3
+        const skip = (page -1) * limit
         const recipes = await Recipe.find({ status: 'Pending'})
         .populate("user", "name")
         .populate("food", "name")
         .sort({createdAt: -1})
+        .skip(skip)
+        .limit(limit)
+        const total = await Recipe.countDocuments()
+
 
         res.status(200).json({
             success:true,
             data:{recipes},
-            message: "Get Pneding Recipes"
+            message: "Get Pneding Recipes",
+            totalPages: Math.ceil(total / limit),
+            totalCount: total,
+            page
         })
     }catch(error){
         next(error)

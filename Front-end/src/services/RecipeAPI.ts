@@ -15,7 +15,6 @@ export const addRecipe = (data: FormData)=>{
         }
     })
 }
-
 export const updateRecipe = ( id: string ,data: FormData)=>{
     return axiosInstance.put(`/recipe/updateRecipe/${id}`, data, {
         headers:{
@@ -23,19 +22,16 @@ export const updateRecipe = ( id: string ,data: FormData)=>{
         }
     })
 }
-
 export const deleteRecipes = (id: string) =>{
     return axiosInstance.delete(`/recipe/deleteRecipe/${id}`)
 }
-
 export const getRecipeByName = (title : string) =>{
     return axiosInstance.get(`/recipe/title/${encodeURIComponent(title)}`)
 }
 
-export const getPendingRecipes = () =>{
-    return axiosInstance.get('/recipe/pending')
+export const getPendingRecipes = (page: number = 1, limit: number = 3 ) =>{
+    return axiosInstance.get(`/recipe/pending?page=${page}&limit=${limit}`)
 }
-
 export const approvedRecipe = (id: string) =>{
     return axiosInstance.put(`/recipe/approved/${id}`)
 }
