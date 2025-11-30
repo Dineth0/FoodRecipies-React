@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { getPendingRecipes } from "../../services/RecipeAPI";
+import { approvedRecipe, getPendingRecipes } from "../../services/RecipeAPI";
 import { FaCheckCircle } from 'react-icons/fa'
+import { IoCloseCircle } from "react-icons/io5";
+import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
 
 interface Recipe{
     _id: string;
@@ -34,6 +36,17 @@ export default function PendingRecipes(){
         }
         loadPendingRecipes()
     },[page])
+
+    const handleApproved = async (id: string)=>{
+        try{
+            await approvedRecipe(id)
+            showSuccessAlert('Approved' , "Recipe has been approved and is now public")
+            setPendingRecipes(pendingRecipes.filter(rec => rec._id !== id))
+        }catch(error){
+            console.error(error)
+            showErrorAlert('Error' , "Failed to approve recipe")
+        }
+    }
 
 
 
@@ -98,18 +111,20 @@ export default function PendingRecipes(){
                                         )}
                                     </td>
                                     <td className="px-4 py-2 align-top">
-                                        <button
-                                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
-                                            <FaCheckCircle size={24} color="green" /> {/* Customize size and color */}
-                                            <span>Approved</span>
+                                        
+                                        <button className="text-green-400 hover:text-green-600 mx-2"
+                                            onClick={() =>handleApproved(recipe._id)}>
+                                             <FaCheckCircle size={20}  />                            
+                                        </button>
+                                        <button className="text-red-400 hover:text-red-600 mx-2">
+                                             <IoCloseCircle size={20}  />                            
                                         </button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                </div>
-                
+                </div>  
             )}
             <div className="flex justify-center items-center gap-4 mt-10">
                 <button

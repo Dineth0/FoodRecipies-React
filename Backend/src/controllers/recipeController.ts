@@ -62,13 +62,13 @@ export const getAllRecipes = async(req:Request, res:Response, next:NextFunction)
         const limit = parseInt(req.query.limit as string) || 3
         const skip = (page -1) * limit
 
-        const recipes = await Recipe.find()
+        const recipes = await Recipe.find({status: 'Approved'})
                 .populate("user", "name")
                 .populate("food","name")
                 .sort({createdAt: -1})
                 .skip(skip)
                 .limit(limit)
-        const total = await Recipe.countDocuments()
+        const total = await Recipe.countDocuments({status: 'Approved'})
         
         res.status(200).json({
             success: true,
@@ -217,7 +217,7 @@ export const getPandingRecipes = async (req:Request, res:Response, next:NextFunc
         .sort({createdAt: -1})
         .skip(skip)
         .limit(limit)
-        const total = await Recipe.countDocuments()
+        const total = await Recipe.countDocuments({status : 'Pending'})
 
 
         res.status(200).json({
@@ -251,7 +251,7 @@ export const approveRecipe = async (req:Request, res:Response, next:NextFunction
             })
         }
 
-        res.status(404).json({
+        res.status(200).json({
              success:true,
             data:{recipe},
             message: "Recipe Approved Succesfully"
