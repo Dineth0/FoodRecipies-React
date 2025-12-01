@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import userModel from "../models/userModel";
 import {Food} from "../models/FoodModel"
 import { Recipe } from '../models/RecipeModel';
+import { Notification } from "../models/NotificationModel";
 import { error } from 'console';
 import cloudinary from "../config/cloudinary";
 
@@ -45,6 +46,35 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
             status: checkStatus
         })
         await newResipe.save()
+
+        if(userRole === 'User'){
+            const foodData = await Food.findById(food)
+            const userData = await userModel.findById(user)
+            const notification = new Notification({
+                recipeId : newResipe._id,
+                userId : user,
+                recipeTitle : title,
+                foodName :  foodData?.name,
+                userName : userData?.name,
+                message : `New Recipe '${title}' submitted for approval`,
+                read: false,
+                createdAt : new Date()
+
+            })
+            await notification.save()
+
+            const io = req.app.get("io")
+            io.emit("New Pending Recipe", {
+                message: "New Recipe Submitted",
+                data:{
+                    recipeId: newResipe._id,
+                    recipeTitle: title,
+                    userName : userData?.name,
+                    createdAt : new Date()
+                }
+            })
+        }
+
         const message = userRole === 'Admin' ? "Recipe Added Successfully" : "Recipes Submitted for Approval"
         res.status(201).json({
             success:true,
