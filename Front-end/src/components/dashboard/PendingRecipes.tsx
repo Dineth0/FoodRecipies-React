@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { approvedRecipe, getPendingRecipes } from "../../services/RecipeAPI";
+import { approvedRecipe, getPendingRecipes, rejectedRecipes } from "../../services/RecipeAPI";
 import { FaCheckCircle } from 'react-icons/fa'
 import { IoCloseCircle } from "react-icons/io5";
 import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
@@ -45,6 +45,16 @@ export default function PendingRecipes(){
         }catch(error){
             console.error(error)
             showErrorAlert('Error' , "Failed to approve recipe")
+        }
+    }
+
+    const handleReject = async (id:string) =>{
+        try{
+            await rejectedRecipes(id)
+            showSuccessAlert('Reject' , "Recipe has been Rejected ")
+        }catch(error){
+            console.error(error)
+            showErrorAlert('Error' , "Failed to reject recipe")
         }
     }
 
@@ -129,7 +139,7 @@ export default function PendingRecipes(){
                                             <button 
                                                 className="text-red-400 hover:text-red-600 transition-colors"
                                                 title="Reject"
-                                            >
+                                                onClick={() => handleReject(recipe._id)}>
                                                 <IoCloseCircle size={22} /> {/* size eka poddak wadi kala lassanata penanna */}
                                             </button>
                                             

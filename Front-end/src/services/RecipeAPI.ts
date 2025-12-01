@@ -35,3 +35,6 @@ export const getPendingRecipes = (page: number = 1, limit: number = 3 ) =>{
 export const approvedRecipe = (id: string) =>{
     return axiosInstance.put(`/recipe/approved/${id}`)
 }
+export const rejectedRecipes = (id:string) =>{
+    return axiosInstance.put(`/recipe/rejected/${id}`)
+}

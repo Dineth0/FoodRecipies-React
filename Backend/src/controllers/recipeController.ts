@@ -211,7 +211,7 @@ export const getPandingRecipes = async (req:Request, res:Response, next:NextFunc
         const page = parseInt(req.query.page as string) || 1
         const limit  = parseInt(req.query.limit as string) || 3
         const skip = (page -1) * limit
-        const recipes = await Recipe.find({ status: 'Pending'})
+        const recipes = await Recipe.find({ status: 'Pending' })
         .populate("user", "name")
         .populate("food", "name")
         .sort({createdAt: -1})

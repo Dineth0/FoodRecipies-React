@@ -11,7 +11,7 @@ interface IRecipe extends Document{
     readyIn : string
     date: Date
     images?: string[]
-    status: 'Pending' | 'Approved' 
+    status: 'Pending' | 'Approved' | 'Reject'
 }
 
 const recipeSchema = new Schema<IRecipe>({
@@ -56,7 +56,7 @@ const recipeSchema = new Schema<IRecipe>({
     }],
     status:{
         type:String,
-        enum: ['Pending','Approved'],
+        enum: ['Pending','Approved', 'Reject'],
         default: 'Pending'
     }
    
