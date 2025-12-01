@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import userModel from "../models/userModel";
 import {Food} from "../models/FoodModel"
-import { Recipe } from "../models/RecipeModel";
+import { Recipe } from '../models/RecipeModel';
 import { error } from 'console';
 import cloudinary from "../config/cloudinary";
 
@@ -12,7 +12,7 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
         
         const exstingUser = await userModel.findById(user)
         const userRole = (req as any).user.role
-        const checkStatus = userRole === 'Admin' ? 'Approved' : 'Pending'
+        const checkStatus = userRole === 'Admin' ? 'Approved' : 'Pending' 
 
         if(!exstingUser){
             return res.status(404).json({
@@ -255,6 +255,32 @@ export const approveRecipe = async (req:Request, res:Response, next:NextFunction
              success:true,
             data:{recipe},
             message: "Recipe Approved Succesfully"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+export const rejectRecipes = async (req:Request, res:Response, next:NextFunction) =>{
+    try{
+        const {id} = req.params
+
+        const recipe = await Recipe.findByIdAndUpdate(
+            id,
+            {status : 'Reject'},
+            {new: true}
+        )
+        if(!recipe){
+           return res.status(404).json({
+                success:false,
+               
+                message: "Recipe not found"
+            }) 
+        }
+        res.status(200).json({
+             success:true,
+            data:{recipe},
+            message: "Recipe Rejected Succesfully"
         })
     }catch(error){
         next(error)

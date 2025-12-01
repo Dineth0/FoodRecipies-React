@@ -118,22 +118,22 @@ export default function PendingRecipes(){
                                         
                                        <div className="flex items-center justify-center gap-3">
         
-        <button 
-            className="text-green-400 hover:text-green-600 transition-colors"
-            onClick={() => handleApproved(recipe._id)}
-            title="Approve"
-        >
-            <FaCheckCircle size={20} />
-        </button>
+                                            <button 
+                                                className="text-green-400 hover:text-green-600 transition-colors"
+                                                onClick={() => handleApproved(recipe._id)}
+                                                title="Approve"
+                                            >
+                                                <FaCheckCircle size={20} />
+                                            </button>
 
-        <button 
-            className="text-red-400 hover:text-red-600 transition-colors"
-            title="Reject"
-        >
-            <IoCloseCircle size={22} /> {/* size eka poddak wadi kala lassanata penanna */}
-        </button>
-        
-    </div>
+                                            <button 
+                                                className="text-red-400 hover:text-red-600 transition-colors"
+                                                title="Reject"
+                                            >
+                                                <IoCloseCircle size={22} /> {/* size eka poddak wadi kala lassanata penanna */}
+                                            </button>
+                                            
+                                        </div>
                                         
                                     </td>
                                 </tr>
