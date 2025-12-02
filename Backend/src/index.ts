@@ -5,6 +5,7 @@ import cors from "cors"
 import authRoute from "../src/routes/authRoute"
 import FoodRoute from "../src/routes/FoodRoute"
 import RecipeRoute from "./routes/RecipeRoute"
+import NotifyRoute from "./routes/NotifyRoutes"
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
@@ -23,15 +24,6 @@ const io = new Server(server,{
 })
 app.set("io",io)
 
-app.use(cors({origin:"*"}))
-app.use(express.json())
-app.use("/api/v1/auth", authRoute)
-app.get("/",(req: Request, res: Response) =>{
-    res.send("Hello TS Express")
-}) 
-app.use("/api/v1/food", FoodRoute)
-app.use("/api/v1/recipe", RecipeRoute )
-
 io.on("connection",(socket)=>{
     console.log("User connected", socket.id)
 
@@ -43,6 +35,18 @@ io.on("connection",(socket)=>{
         console.log("User disconnected", socket.id)
     })
 })
+
+app.use(cors({origin:"*"}))
+app.use(express.json())
+app.use("/api/v1/auth", authRoute)
+app.get("/",(req: Request, res: Response) =>{
+    res.send("Hello TS Express")
+}) 
+app.use("/api/v1/food", FoodRoute)
+app.use("/api/v1/recipe", RecipeRoute )
+app.use("/api/v1/notification",NotifyRoute)
+
+
 
 const mongo = mongoose.connect("mongodb://localhost:27017/foodRecipies")
 mongo.then(() =>{

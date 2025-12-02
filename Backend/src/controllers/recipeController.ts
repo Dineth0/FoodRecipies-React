@@ -69,6 +69,7 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
                 data:{
                     recipeId: newResipe._id,
                     recipeTitle: title,
+                    foodName : foodData?.name,
                     userName : userData?.name,
                     createdAt : new Date()
                 }

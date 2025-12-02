@@ -4,6 +4,6 @@ import { getNotifications, markAsRead } from "../controllers/notificationControl
 
 const router = Router()
 router.get("/", getNotifications)
-router.put("mark-read", markAsRead)
+router.put("/mark-read", markAsRead)
 
 export default router
