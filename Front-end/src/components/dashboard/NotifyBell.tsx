@@ -55,7 +55,13 @@ const NotifyBell = () =>{
 
     const handleDropDown = async  () =>{
         setIsOpen(!isOpen)
-        if(!isOpen && unReadCount > 0){
+        if(isOpen){
+            setIsOpen(false)
+            setNotifications([])
+            return
+        }
+        setIsOpen(true)
+        if( unReadCount > 0){
             try{
                 await markAsRead()
                 setUnReadCount(0)
