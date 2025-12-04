@@ -5,6 +5,8 @@ import { Recipe } from '../models/RecipeModel';
 import { Notification } from "../models/NotificationModel";
 import { error } from 'console';
 import cloudinary from "../config/cloudinary";
+import { Email } from '../models/EmailModel';
+import { sendApprovalemail } from "./emailController";
 
 
 export const addRecipie = async (req:Request, res:Response, next: NextFunction)=>{
@@ -272,7 +274,7 @@ export const approveRecipe = async (req:Request, res:Response, next:NextFunction
             id,
             {status: 'Approved'},
             {new: true}
-        )
+        ).populate("user","name email")
 
         if(!recipe){
             return res.status(404).json({
@@ -282,10 +284,38 @@ export const approveRecipe = async (req:Request, res:Response, next:NextFunction
             })
         }
 
+        const recipeUser = recipe.user as any
+
+        if(recipeUser && recipeUser.email){
+            try{
+                await sendApprovalemail(recipeUser.email, recipeUser.name, recipe.title)
+
+                const emailDeatils = new Email({
+                    recipe: recipe._id,
+                    user: recipeUser._id,
+                    recipientEmail: recipeUser.userEmail,
+                    subject: "Recipe Approved!",
+                    message: "Recipe Approval",
+                    status: "Success",
+                    sendAt: new Date()
+                })
+
+                await emailDeatils.save()
+                console.log("send mail")
+
+            }catch(error){
+                console.error("Failed to send email", error)
+
+            }
+
+        }
+
         res.status(200).json({
              success:true,
             data:{recipe},
-            message: "Recipe Approved Succesfully"
+            message: "Recipe Approved Succesfully and Email sent",
+            
+            
         })
     }catch(error){
         next(error)

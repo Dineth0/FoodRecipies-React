@@ -48,4 +48,4 @@ const emailSchema = new Schema<IEmail>({
     }
 
 })
-export const Email = mongoose.model<IEmail>("email", emailSchema)
+export const Email = mongoose.model<IEmail>("Email", emailSchema)
