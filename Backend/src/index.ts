@@ -6,6 +6,7 @@ import authRoute from "../src/routes/authRoute"
 import FoodRoute from "../src/routes/FoodRoute"
 import RecipeRoute from "./routes/RecipeRoute"
 import NotifyRoute from "./routes/NotifyRoutes"
+import ReviewRouter from "./routes/ReviewRoutes"
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
@@ -45,6 +46,7 @@ app.get("/",(req: Request, res: Response) =>{
 app.use("/api/v1/food", FoodRoute)
 app.use("/api/v1/recipe", RecipeRoute )
 app.use("/api/v1/notification",NotifyRoute)
+app.use("/api/v1/review",ReviewRouter)
 
 
 

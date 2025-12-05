@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getRecipeByName } from "../../services/RecipeAPI";
+import { MdOutlinePostAdd } from "react-icons/md";
+import { ReviewForm } from "../../components/Review/ReviewForm";
+
 
 interface User {
   _id: string;
@@ -28,6 +31,7 @@ export default function RecipeDetailsPage() {
   const { title } = useParams<{ title: string }>();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [activeImage, setActiveImage] = useState("");
+  const [showForm, setShowForm] = useState(false)
  
 
   useEffect(() => {
@@ -50,6 +54,16 @@ export default function RecipeDetailsPage() {
 
     fetchRecipe();
   }, [title]);
+
+  const handleAddClick = () =>{
+    setShowForm(true)
+  }
+  const handleCloseform = () =>{
+    setShowForm(false)
+  }
+  const handleSave  =() =>{
+
+  } 
 
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-[#fff3e4] via-[#ffd8b5] to-[#ffba7a]">
@@ -141,7 +155,34 @@ export default function RecipeDetailsPage() {
                     {recipe?.step}
                 </p>
             </div>
+
+            <div className="mt-16 bg-[#ffe8d6] p-10 rounded-3xl  shadow-[0_4px_25px_rgba(0,0,0,0.08)]">
+                <h2 className="text-3xl font-bold mb-6 border-l-4  border-[#ff8a00] pl-4 text-[#3a2f2a] pl-4">
+                    Reviews
+                </h2>
+                <span className=" ">
+                    <button 
+                        onClick={handleAddClick}    
+                    className="bg-orange-500 w-55 h-10 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md"
+                    >
+                      <MdOutlinePostAdd size={24}/>
+                          Add Your Review
+                    </button>
+                </span>
+
+                {/* <p className="text-[#5c4f47] text-gray-700 leading-relaxed whitespace-pre-line text-lg">
+                    {recipe?.step}
+                </p> */}
+            </div>
         </div>
+        {
+          showForm && (
+            <ReviewForm
+              onClose={handleCloseform}
+              onSave={handleSave}
+              recipeId={recipe!._id}/>
+          )
+        }
     </div>
   );
 }

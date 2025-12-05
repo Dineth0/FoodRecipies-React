@@ -46,14 +46,12 @@ export default function FoodPage() {
       return <p className="p-10">Loading...</p>  
     }
      const handleSavedFood = (newRecipe: any) =>{
-        setShowForm(false); // Form එක close කරනවා
+        setShowForm(false); 
 
-        // Recipe එකේ status එක Approved නම් විතරක් (Admin දැම්මොත්) ලිස්ට් එකට දානවා
         if (newRecipe.status === 'Approved') {
             setRecipes((prev) => [newRecipe, ...prev]);
             showSuccessAlert('Success', 'Recipe Added Successfully!');
         } else {
-            // User කෙනෙක් නම් (Pending නම්) ලිස්ට් එකට දාන්නේ නෑ. Message එක විතරයි.
             showSuccessAlert('Submitted', 'Your recipe has been submitted for admin approval.');
         }
       }
