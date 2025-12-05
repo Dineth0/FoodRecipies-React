@@ -293,7 +293,7 @@ export const approveRecipe = async (req:Request, res:Response, next:NextFunction
                 const emailDeatils = new Email({
                     recipe: recipe._id,
                     user: recipeUser._id,
-                    recipientEmail: recipeUser.userEmail,
+                    userEmail: recipeUser.email,
                     subject: "Recipe Approved!",
                     message: "Recipe Approval",
                     status: "Success",
