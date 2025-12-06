@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAllReviews } from "../../services/ReviewAPI";
+import { deleteReview, getAllReviews } from "../../services/ReviewAPI";
 import {  FaTrash } from "react-icons/fa"
 import { FaStar } from "react-icons/fa";
+import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
 
 
 
@@ -53,8 +54,25 @@ export default function Review(){
             })
         }
 
-    const handleDelete = ()=>{
-
+    const handleDelete = (reviewDelete: ReviewItem)=>{
+        showConfirmDialog(
+            'Are you sure?',
+            `Do you want to delete ${reviewDelete.user.name} 's Review ? `,
+            'Yes, Delete id!'
+        ).then(async(result)=>{
+            if(result.isConfirmed){
+                try{
+                   await deleteReview(reviewDelete._id)
+                   setReview(prevReviews =>
+                        prevReviews.filter(review => review._id !== reviewDelete._id)
+                   ) 
+                   showSuccessAlert('Deleted' ,`${reviewDelete.user.name} 's Review has been Deleted`)
+                }catch(error){
+                    console.error(error)
+                    showErrorAlert('error', 'Faild to delete')
+                }
+            }
+        })
     }
 
     return(
@@ -84,7 +102,7 @@ export default function Review(){
                                 </td>
                                 <td className="py-2 px-4">
                                     <button className="text-blue-400 hover:text-blue-600 mx-2"
-                                        onClick={()=> handleDelete()}>
+                                        onClick={()=> handleDelete(review)}>
                                         <FaTrash/>
                                     </button>
                                 </td>

@@ -20,3 +20,6 @@ export const getReviewByRecipe = (recipeId: string)=>{
 export const getAllReviews  = (page: number =1, limit: number =100 )=>{
     return axiosInstance.get(`/review?page=${page}&limit=${limit}`)
 }
+export const deleteReview  = (id:string )=>{
+    return axiosInstance.delete(`/review/deleteReview/${id}`)
+}
