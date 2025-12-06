@@ -119,3 +119,35 @@ export const getReviewByRecipe = async (req:Request, res:Response, next:NextFunc
         next(error)
     }
 }
+
+export const getAllReviews = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const page = parseInt(req.query.page as string) || 1
+        const limit = parseInt(req.query.limit as string) || 3
+        const skip = (page -1) * limit
+
+        const reviews = await Review.find()
+            .populate("user", "name")
+            .populate("recipie", "name")
+            .sort({createdAt: -1})
+            .skip(skip)
+            .limit(limit)
+        const total = await Review.countDocuments()
+        
+        res.status(200).json({
+            success: true,
+            data: { reviews },
+            message: "Reviews fetched successfully",
+            totalPages: Math.ceil(total / limit),
+            totalCount: total,
+            page
+        })
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            data: null,
+            message: "Error fetching Reviews",
+            error,
+        })
+    }
+}
