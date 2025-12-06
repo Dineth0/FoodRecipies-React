@@ -18,7 +18,7 @@ const reviewSchema = new Schema({
     },
     recipe:{
         type: Schema.Types.ObjectId,
-        ref: "Recipe",
+        ref: "recipie",
         required: [true, "RecipeId is required"]
     },
     rating:{

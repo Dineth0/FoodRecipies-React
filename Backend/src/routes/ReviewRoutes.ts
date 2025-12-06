@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateUser } from "../middleware/authMiddleware";
-import { addReview, getreviewByRecipe } from "../controllers/reviewController";
+import { addReview, getReviewByRecipe } from "../controllers/reviewController";
 
 
 const router = Router()
@@ -10,6 +10,6 @@ router.post(
             authenticateUser,
             addReview
         )       
-router.get("/byRecipe/:recipe", getreviewByRecipe)        
+router.get("/byRecipe/:recipe", getReviewByRecipe)        
 
  export default router       

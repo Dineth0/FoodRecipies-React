@@ -174,11 +174,7 @@ export const updateRecipe = async (req:Request, res:Response, next:NextFunction)
 
         await existingRecipe.save()
 
-        res.status(200).json({
-             success: true,
-            data: {food: existingRecipe},
-            message: "Recipe updated successflly"
-        })
+       
     }catch(error){
         next(error)
     }

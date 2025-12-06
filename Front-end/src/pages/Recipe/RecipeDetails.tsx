@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { getRecipeByName } from "../../services/RecipeAPI";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { ReviewForm } from "../../components/Review/ReviewForm";
+import { getReviewByRecipe } from "../../services/ReviewAPI";
+import ReviewCard from "../../components/Review/ReviewCard";
 
 
 interface User {
@@ -32,6 +34,7 @@ export default function RecipeDetailsPage() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [activeImage, setActiveImage] = useState("");
   const [showForm, setShowForm] = useState(false)
+  const [review, setReview] = useState<any[]>([])
  
 
   useEffect(() => {
@@ -43,6 +46,10 @@ export default function RecipeDetailsPage() {
         const recipeDetails = response.data.data.recipe;
 
         setRecipe(recipeDetails);
+
+        const reviewResponse = await getReviewByRecipe(recipeDetails._id)
+        setReview(reviewResponse.data.data.review)
+
 
         if (recipeDetails.images?.length > 0) {
           setActiveImage(recipeDetails.images[0]);
@@ -157,22 +164,33 @@ export default function RecipeDetailsPage() {
             </div>
 
             <div className="mt-16 bg-[#ffe8d6] p-10 rounded-3xl  shadow-[0_4px_25px_rgba(0,0,0,0.08)]">
-                <h2 className="text-3xl font-bold mb-6 border-l-4  border-[#ff8a00] pl-4 text-[#3a2f2a] pl-4">
+                <div className="flex items-center gap-4 mb-6">
+                    <span className="text-2xl font-bold mb-8 border-l-4  border-[#ff8a00] pl-4 text-[#3a2f2a] ">
                     Reviews
-                </h2>
-                <span className=" ">
+                </span>
+               
                     <button 
                         onClick={handleAddClick}    
-                    className="bg-orange-500 w-55 h-10 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md"
+                        className="bg-orange-500 w-55 h-10 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md mb-6"
                     >
                       <MdOutlinePostAdd size={24}/>
                           Add Your Review
                     </button>
-                </span>
+                </div>
+                
+               
 
-                {/* <p className="text-[#5c4f47] text-gray-700 leading-relaxed whitespace-pre-line text-lg">
-                    {recipe?.step}
-                </p> */}
+                {review.length === 0 ? (
+                  <div className="text-center py-10 bg-white rounded-xl shadow-sm">
+                    <p className="text-gray-500 text-lg">No Review available for this Recipe yet.</p>
+                  </div>
+                ):(
+                  <div>
+                    {review.map((rev)=>(
+                      <ReviewCard key={rev._id} review={rev}/>
+                    ))}
+                  </div>
+                )}
             </div>
         </div>
         {

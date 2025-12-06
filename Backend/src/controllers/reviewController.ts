@@ -94,3 +94,28 @@ export const deleteReview = async (req:Request, res:Response, next:NextFunction)
         next(error)
     }
 }
+
+export const getReviewByRecipe = async (req:Request, res:Response, next:NextFunction) =>{
+    try{
+        const {recipe} = req.params
+        const review = await Review.find({recipe: recipe})
+        .populate("user", "name")
+        .populate("recipe","title")
+
+        if(!review){
+            return res.status(404).json({
+                 success: false,
+                data:null,
+                message:"Review Not Found"
+            })
+        }
+        res.status(200).json({
+            success: true,
+            data: { review: review },
+            message: "Review fetched successfully",
+        })
+    }catch(error){
+        console.error(error)
+        next(error)
+    }
+}

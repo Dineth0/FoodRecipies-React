@@ -13,3 +13,6 @@ export const addReview = (data: ReviewData)=>{
         }
     })
 }
+export const getReviewByRecipe = (recipeId: string)=>{
+    return axiosInstance.get(`/review/byRecipe/${recipeId}`)
+}
