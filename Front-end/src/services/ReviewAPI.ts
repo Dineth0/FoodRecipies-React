@@ -16,3 +16,7 @@ export const addReview = (data: ReviewData)=>{
 export const getReviewByRecipe = (recipeId: string)=>{
     return axiosInstance.get(`/review/byRecipe/${recipeId}`)
 }
+
+export const getAllReviews  = (page: number =1, limit: number =100 )=>{
+    return axiosInstance.get(`/review?page=${page}&limit=${limit}`)
+}

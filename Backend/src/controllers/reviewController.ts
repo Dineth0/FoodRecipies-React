@@ -128,7 +128,7 @@ export const getAllReviews = async (req:Request, res:Response, next:NextFunction
 
         const reviews = await Review.find()
             .populate("user", "name")
-            .populate("recipie", "name")
+            .populate("recipe", "title")
             .sort({createdAt: -1})
             .skip(skip)
             .limit(limit)
@@ -143,6 +143,7 @@ export const getAllReviews = async (req:Request, res:Response, next:NextFunction
             page
         })
     }catch(error){
+        console.error(error)
         res.status(500).json({
             success: false,
             data: null,

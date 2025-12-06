@@ -4,14 +4,14 @@ import Tab from '../../components/dashboard/Tab'
 import Foods from '../../components/dashboard/Food';
 import Recipie from '../../components/dashboard/Recipe';
 import User from '../../components/dashboard/User';
-import Comment from '../../components/dashboard/Comments';
 // import NavButton from '../../components/dashboard/NavButton';
 import PendingRecipes from '../../components/dashboard/PendingRecipes';
 import NotificationBell from '../../components/dashboard/NotifyBell';
+import  Review  from '../../components/dashboard/Review';
 
-type TabType = "home" | "foods" | "recipies" | "users" | "comments" | "Peending Recipes"
+type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
-// interface Stats {
+// interface Stats 
 //   totalFoods = number
 //   totalRecipies: number
 //   totalComments: number
@@ -51,7 +51,7 @@ export default function Dashboard() {
       <div className="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
         <div className="flex justify-between items-center mb-6">
           <div className="flex space-x-3">
-            {(["home","foods","recipies","users","comments","Peending Recipes"]as TabType[]).map((tab)=>(
+            {(["home","foods","recipies","users","reviews","Peending Recipes"]as TabType[]).map((tab)=>(
               <Tab
               key={tab}
               label={tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -74,7 +74,7 @@ export default function Dashboard() {
         {activeTab === 'foods' && <Foods/>}
         {activeTab === 'recipies' && <Recipie/>}
         {activeTab === 'users' && <User/>}
-        {activeTab === 'comments' && <Comment/>}
+        {activeTab === 'reviews' && <Review/>}
         {activeTab === 'Peending Recipes' && <PendingRecipes/>}
 
       </div>
