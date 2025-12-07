@@ -33,6 +33,13 @@ export const Navbar: React.FC = () => {
           >
             My Recipes
           </Link>
+
+          <Link
+            to="/my-review"
+            className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300"
+          >
+            My Reviews
+          </Link>
         </div>
 
        
