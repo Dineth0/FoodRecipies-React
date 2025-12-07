@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { getReviewByUser } from "../../services/ReviewAPI"
+import { deleteReview, getReviewByUser } from "../../services/ReviewAPI"
 import { FaStar ,FaEdit,FaTrash } from "react-icons/fa";
 import { ReviewForm } from "../../components/Review/ReviewForm";
+import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
 
 
 interface User{
@@ -57,6 +58,28 @@ export default function MyReview() {
     }
     const handleSaved = () =>{
         
+    }
+
+    const handleDelete = (reviewDelete : ReviewCardItem) =>{
+        showConfirmDialog(
+            'Are you sure?',
+            ` Do you want to delete? `,
+            'Yes, Delete id!'
+        ).then(async(result)=>{
+            if(result.isConfirmed){
+                try{
+                    await deleteReview(reviewDelete._id)
+                    setReview(prevReviews =>
+                        prevReviews.filter(rev => rev._id !== reviewDelete._id)
+                    )
+
+                    showSuccessAlert('Deleted' ,'This has been Deleted')
+                }catch(error){
+                    console.error(error)
+                    showErrorAlert('error', 'Faild to delete')
+                }
+            }
+        })
     }
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] mt-12 ">

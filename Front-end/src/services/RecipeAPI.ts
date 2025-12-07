@@ -38,3 +38,6 @@ export const approvedRecipe = (id: string) =>{
 export const rejectedRecipes = (id:string) =>{
     return axiosInstance.put(`/recipe/rejected/${id}`)
 }
+export const getRecipeByUser = () =>{
+    return axiosInstance.get('/recipe/myRecipe')
+}
