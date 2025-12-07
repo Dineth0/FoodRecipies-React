@@ -7,6 +7,7 @@ import { error } from 'console';
 import cloudinary from "../config/cloudinary";
 import { Email } from '../models/EmailModel';
 import { sendApprovalemail } from "./emailController";
+import { AuthRequest } from "../middleware/authMiddleware";
 
 
 export const addRecipie = async (req:Request, res:Response, next: NextFunction)=>{
@@ -342,4 +343,31 @@ export const rejectRecipes = async (req:Request, res:Response, next:NextFunction
     }catch(error){
         next(error)
     }
+}
+
+export const getRecipeByUser = async (req:AuthRequest, res:Response, next:NextFunction) => {
+    try{
+        const userId = req.user?._id
+
+        if(!userId){
+            return res.status(401).json({
+                success: false,
+                data: null,
+                message: "User not logged in"
+            })
+        }
+
+        const recipes = await Recipe.find({user: userId})
+            .populate("food", "name")
+            .sort({date: -1})
+        
+        res.status(200).json({
+            success: true,
+            data: { recipes },
+            message: "User Recipe fetched successfully"
+        })
+    }catch(error){
+        next(error)
+    }
+    
 }
