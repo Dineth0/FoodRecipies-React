@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { deleteRecipes, getRecipeByUser } from "../../services/RecipeAPI";
+import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
 
 interface Recipe {
   _id: string;
@@ -30,15 +31,26 @@ export default function MyRecipes() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this recipe?")) {
-      try {
-        await deleteRecipes(id);
-        setRecipes(prev => prev.filter(r => r._id !== id));
-      } catch (error) {
-        console.error("Delete error:", error);
-      }
-    }
+  const handleDelete = async (recipeDelete: Recipe) => {
+    showConfirmDialog(
+            'Are you sure?',
+            `${recipeDelete.title} Do you want to delete? `,
+            'Yes, Delete id!'
+        ).then(async(result)=>{
+            if(result.isConfirmed){
+                try{
+                    await deleteRecipes(recipeDelete._id)
+                    setRecipes(prevRecipes =>
+                        prevRecipes.filter(rec => rec._id !== recipeDelete._id)
+                    )
+
+                    showSuccessAlert('Deleted' ,`${recipeDelete.title} has been Deleted`)
+                }catch(error){
+                    console.error(error)
+                    showErrorAlert('error', 'Faild to delete')
+                }
+            }
+        })
   };
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
@@ -81,7 +93,7 @@ export default function MyRecipes() {
                   <FaEdit />
                 </button>
                 <button
-                  onClick={() => handleDelete(recipe._id)}
+                  onClick={() => handleDelete(recipe)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <FaTrash />
