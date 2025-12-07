@@ -24,5 +24,5 @@ export const deleteReview  = (id:string )=>{
     return axiosInstance.delete(`/review/deleteReview/${id}`)
 }
 export const getReviewByUser = () =>{
-    return axiosInstance.get('/review/myReview')
+    return axiosInstance.get('/review/myReviews')
 }

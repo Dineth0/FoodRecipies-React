@@ -167,6 +167,7 @@ export const getReviewByUser = async (req:AuthRequest, res:Response, next:NextFu
         }
 
         const reviews = await Review.find({user: userId})
+            .populate("user", "name")
             .populate("recipe", "title")
             .sort({date: -1})
         
