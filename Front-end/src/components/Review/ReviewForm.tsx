@@ -1,8 +1,8 @@
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ReactDOM from 'react-dom'
 import { useAuth } from "../../context/AuthContext"
-import { addReview } from "../../services/ReviewAPI"
+import { addReview, updateReview } from "../../services/ReviewAPI"
 import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
 
 
@@ -26,13 +26,17 @@ interface ReviewItem{
 }
 
 
+
 interface ReviewFormProps{
     onClose: () => void
     onSave: (review: ReviewItem) => void
     recipeId : string
+    selectedReview : ReviewItem | null
 }
 
-export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeId}) =>{
+
+
+export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeId, selectedReview}) =>{
 
     const [hover, setHover] = useState(0)
     const [rating, setRating] = useState(0)
@@ -40,9 +44,18 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
     const[loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const {user} = useAuth()
+   
     
 
-    
+    useEffect (() =>{
+        if(selectedReview){
+           setRating(selectedReview.rating)
+           setDescription(selectedReview.description)
+        }else{
+            setRating(0)
+            setDescription("")
+        }
+    },[selectedReview])
 
     const handlesubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -58,10 +71,20 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
             rating,
             description
         }
+        setLoading(true)
         try{
-            const response = await addReview(payload)
-            showSuccessAlert('Success','Your Review Successfully Added')
-            onSave(response.data.data.review)
+            let response;
+            if(selectedReview){
+                 response = await updateReview(selectedReview._id, payload)
+                 
+            }else{
+                response = await addReview(payload)
+            }
+            showSuccessAlert('Success', selectedReview ? 'Review Updated' : 'Review Added');
+            onSave(response.data.data.review);
+            onClose();
+            
+            
         }catch(error: any){
             setLoading(false)
                             let errorMessage = 'Faild to add food. Please try again.';

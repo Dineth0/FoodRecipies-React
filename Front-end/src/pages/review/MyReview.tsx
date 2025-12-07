@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getReviewByUser } from "../../services/ReviewAPI"
 import { FaStar ,FaEdit,FaTrash } from "react-icons/fa";
+import { ReviewForm } from "../../components/Review/ReviewForm";
 
 
 interface User{
@@ -22,6 +23,8 @@ interface ReviewCardItem{
 }
 export default function MyReview() {
     const [review, setReview] = useState<ReviewCardItem[]>([])
+    const [selectedReview, setSelectedReview] = useState<ReviewCardItem | null>(null)
+    const [showForm,setShowForm] = useState(false)
 
     useEffect(()=>{
         const fetchReviews = async () =>{
@@ -43,6 +46,17 @@ export default function MyReview() {
                     className={index < rating ? "text-yellow-500" : "text-gray-300"}/>
             )
         })
+    }
+    const handleEdit = (review: ReviewCardItem) =>{
+        setSelectedReview(review)
+        setShowForm(true)
+    }
+    const handleCloseForm = () =>{
+        setSelectedReview(null)
+        setShowForm(false)
+    }
+    const handleSaved = () =>{
+        
     }
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] mt-12 ">
@@ -75,11 +89,11 @@ export default function MyReview() {
                         </div>
                         <div className="flex flex-center gap-4 ml-4 pr-6">
                             <button className='p-2 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-500 hover:text-blue-700 shadow-sm transition '
-                                 onClick={() =>handleEditFood(food)}>
+                                 onClick={() =>handleEdit(rev)}>
                                     <FaEdit size={18}/>
                         </button>
                         <button className='p-2 rounded-full bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 shadow-sm transition'
-                                onClick={()=>handleDelete(food)}>
+                                onClick={()=>handleDelete(rev)}>
                                     <FaTrash size={18}/>
                         </button> 
                         </div>
@@ -88,6 +102,16 @@ export default function MyReview() {
                 </div>
             ))
         )}
+        {showForm &&(
+                <ReviewForm
+                onClose={handleCloseForm}
+                onSave={handleSaved}
+                
+                selectedReview = {selectedReview}
+                recipeId={selectedReview!.recipe._id}
+                />
+            )}
     </div>
+    
   )
 }
