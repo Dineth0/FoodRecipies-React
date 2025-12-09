@@ -23,6 +23,7 @@ interface RecipeItem{
     ingredients: string
     step: string
     readyIn : string
+    date: Date
     images?: string[]
 
 }
@@ -39,15 +40,16 @@ interface RecipeFormProps{
     onClose: () => void
     onSave: (recipe: RecipeItem) => void
     selectedRecipe : RecipeItem | null
+    selectedMyRecipe? : RecipeItem | null
 }
-export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selectedRecipe}) =>{
+export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selectedRecipe , selectedMyRecipe}) =>{
 
     const [formdata, setFormdata] = useState<FormData>({
-        food: selectedRecipe?.food._id || '',
-        title: selectedRecipe?.title || '',
-        ingredients: selectedRecipe?.ingredients || '',
-        step: selectedRecipe?.step || '',
-        readyIn: selectedRecipe?.readyIn || ''
+        food: selectedRecipe?.food._id || selectedMyRecipe?.food._id || '' ,
+        title: selectedRecipe?.title || selectedMyRecipe?.title ||'',
+        ingredients: selectedRecipe?.ingredients ||  selectedMyRecipe?.ingredients ||'',
+        step: selectedRecipe?.step || selectedMyRecipe?.step ||'',
+        readyIn: selectedRecipe?.readyIn || selectedMyRecipe?.readyIn ||''
     
 
     })
@@ -70,6 +72,15 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
             readyIn: selectedRecipe.readyIn 
           })
           setExsitingImageUrls(selectedRecipe.images || [])
+        }else if(selectedMyRecipe) {
+          setFormdata({
+            food: selectedMyRecipe.food._id ,
+            title: selectedMyRecipe.title,
+            ingredients: selectedMyRecipe.ingredients ,
+            step: selectedMyRecipe.step ,
+            readyIn: selectedMyRecipe.readyIn 
+          })
+          setExsitingImageUrls(selectedMyRecipe.images || [])
         }else{
           setFormdata({
           food: '',
@@ -90,7 +101,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
         }
         loadFoods()
         
-    },[selectedRecipe])
+    },[selectedRecipe, selectedMyRecipe])
 
     const handleChange = (
         e : React.ChangeEvent<HTMLInputElement |  HTMLTextAreaElement | HTMLSelectElement >
@@ -154,6 +165,9 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
             if(selectedRecipe){
               response = await updateRecipe(selectedRecipe._id! , data)
                 showSuccessAlert('Success','Recipe Successfully Updated')
+              }else if(selectedMyRecipe){
+                 response = await updateRecipe(selectedMyRecipe._id! , data)
+                showSuccessAlert('Success','Your Recipe Successfully Updated')
               }else{
                 response = await addRecipe(data)
                 showSuccessAlert('Success','Recipe Successfully Added')

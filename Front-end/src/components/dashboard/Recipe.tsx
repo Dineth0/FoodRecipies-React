@@ -50,8 +50,18 @@ export default function Recipes(){
         fetchRecipe()
     },[page])
 
-    const handleSavedFood = () =>{
-        
+    const handleSavedFood = (savedRecipe: RecipeItem) =>{
+        if (selectedRecipe) {
+        setRecipes((prevRecipes) => 
+            prevRecipes.map((recipe) => 
+                recipe._id === savedRecipe._id ? savedRecipe : recipe
+            )
+        );
+    } else {
+        setRecipes((prevRecipes) => [savedRecipe, ...prevRecipes]);
+    }
+
+    handleCloseForm();
     }
 
     const handleEditRecipe = (recipe: RecipeItem) =>{

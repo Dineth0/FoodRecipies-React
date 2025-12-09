@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { deleteRecipes, getRecipeByUser } from "../../services/RecipeAPI";
 import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
+import { RecipeForm } from "../../components/dashboard/RecipeForm";
 
 interface Recipe {
   _id: string;
@@ -15,6 +16,9 @@ interface Recipe {
 export default function MyRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false)
+      const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+  
 
   useEffect(() => {
     loadRecipes();
@@ -30,6 +34,27 @@ export default function MyRecipes() {
       setLoading(false);
     }
   };
+
+  const handleEdit = (recipe: Recipe)=>{
+    setSelectedRecipe(recipe)
+    setShowForm(true)
+  }
+
+  const handleCloseForm = () =>{
+        setSelectedRecipe(null)
+        setShowForm(false)
+  }
+
+  const handleMyRecipesaved = (updatedRecipe: Recipe) =>{
+    setRecipes((prev) =>{
+      const existing = prev.find(rec => rec._id === updatedRecipe._id)
+      if(existing){
+        return prev.map(rec => rec._id === updatedRecipe._id ? updatedRecipe : rec)
+      }
+      return [updatedRecipe, ...prev]
+    })
+    handleCloseForm()
+  }
 
   const handleDelete = async (recipeDelete: Recipe) => {
     showConfirmDialog(
@@ -89,7 +114,8 @@ export default function MyRecipes() {
 
               {/* Actions */}
               <div className="flex justify-end gap-3 mt-3">
-                <button className="text-blue-500 hover:text-blue-700">
+                <button className="text-blue-500 hover:text-blue-700"
+                onClick={()=> handleEdit(recipe)}>
                   <FaEdit />
                 </button>
                 <button
@@ -103,6 +129,12 @@ export default function MyRecipes() {
           </div>
         ))}
       </div>
+      {showForm && (
+        <RecipeForm
+        onClose={handleCloseForm}
+        onSave={handleMyRecipesaved}
+        selectedMyRecipe={selectedRecipe}/>
+      )}
     </div>
   );
 }
