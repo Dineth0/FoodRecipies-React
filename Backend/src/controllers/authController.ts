@@ -97,10 +97,10 @@ const getProfile = async (req:AuthRequest, res:Response, next:NextFunction) =>{
             (error as any).statusCode = 404;
             throw error;
         }
-        const {name, email, role} = user
+        const {name, email, image, role} = user
         res.status(200).json({
             success: true,
-            data : {name, email, role}
+            data : {name, email, image, role}
         });
     }catch(error){
         next(error)

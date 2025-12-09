@@ -6,6 +6,7 @@ export interface IUser extends Document{
     name:string,
     email:string,
     password:string
+    image?: string
     role: "Admin" | "User"
 }
 
@@ -29,6 +30,10 @@ const userSchema = new Schema<IUser>({
         type:String,
          required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters"],
+    },
+     image:{
+                type:String, 
+                required:false
     },
     role:{
         type:String,

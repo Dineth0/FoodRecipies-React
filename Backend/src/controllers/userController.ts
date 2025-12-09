@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
  
  
  export const createUser = async (req:Request, res:Response, next:NextFunction) =>{
-    const {name, email, password, role} = req.body
+    const {name, email, password, image, role} = req.body
 
     if(!name || !email || !password){
         return res.status(400).json({
@@ -28,6 +28,7 @@ import bcrypt from 'bcrypt';
                     name,
                     email,
                     password:hashedPassword,
+                    image: null,
                     role
                 })
                 await user.save()
@@ -38,6 +39,44 @@ import bcrypt from 'bcrypt';
     }catch(error){
         res.status(500).json({ message: "Server error" })
 
+    }
+}
+
+export const updateUser = async(req:Request, res:Response, next:NextFunction) =>{
+    try{
+        const {id} = req.params
+        const {name, email ,password , image} = req.body
+        const files = req.files as Express.Multer.File[]
+
+        const existingUSer = await userModel.findById(id)
+
+        if(!existingUSer){
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            })
+        }
+
+        let updatedImage = existingUSer.image
+        if(files && files.length === 1){
+            const newImagesUrl =  (files[0] as any).path
+            updatedImage = newImagesUrl
+        }
+
+        existingUSer.name = name || existingUSer.name
+        existingUSer.email = email || existingUSer.email
+        existingUSer.password = password || existingUSer.password
+        existingUSer.image = updatedImage
+
+        await existingUSer.save()
+
+        res.status(200).json({
+            success: true,
+            data: {food: existingUSer},
+            message: "Food updated successflly"
+        })
+    }catch(error){
+        next(error)
     }
 }
  

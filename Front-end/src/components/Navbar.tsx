@@ -22,7 +22,6 @@ export const Navbar: React.FC = () => {
           >
             HOME
           </Link>
-
           <Link
             to="/cotegories"
             className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300"
