@@ -2,6 +2,37 @@ import type React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+
+import breakfirst from "../assets/braekfirst.png"
+import Lunch from "../assets/lunch.png"
+import Dinner from "../assets/dinner.png"
+import Snacks from "../assets/snacks.png"
+import Desserts from "../assets/desserts.jpg"
+import Beverages from "../assets/beverages.png"
+import Appetizers from "../assets/Appetizers.png"
+import Vegetarian from "../assets/Vegetarian.png"
+import Meats from "../assets/meats.png"
+import SeaFoods from "../assets/seafoods.png"
+import StreetFood from "../assets/StreetFoods.png"
+import Traditional from "../assets/TraditionalFoods.png"
+
+
+
+const categories = [
+  { name: "Breakfast", image: breakfirst  },
+  { name: "Lunch", image:  Lunch},
+  { name: "Dinner", image: Dinner },
+  { name: "Snacks", image: Snacks },
+  { name: "Desserts", image: Desserts },
+  { name: "Beverages", image:  Beverages},
+  { name: "Appetizers", image:  Appetizers },
+  { name: "Vegetarian", image: Vegetarian },
+  { name: "Meats", image: Meats },
+  { name: "Sea Foods", image: SeaFoods },
+  { name: "Street Food", image: StreetFood },
+  { name: "Traditional", image: Traditional }
+]
+
 export const Navbar: React.FC = () => {
   const {user, isAuthenticated, logout} = useAuth()
   return (
@@ -22,12 +53,26 @@ export const Navbar: React.FC = () => {
           >
             HOME
           </Link>
-          <Link
-            to="/cotegories"
-            className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300"
-          >
-            CATEGORIES
-          </Link>
+          
+          <div className="relative group">
+              <button className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300">
+                CATEGORIES
+                </button>
+                  <div className="absolute left-0 mt-2 w-40 h-120 bg-white shadow-lg rounded-xl 
+                  opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                  transition-all duration-300 py-2 z-50">
+                      {categories.map((cat)=>(
+                        <Link 
+                          key={cat.name}
+                          to={`/category/${cat.name.toLowerCase()}`}
+                          className="flex items-center px-3 py-2 space-x-1 hover:bg-gray-100 transition">
+                            <img src={cat.image} className="w-5 h-5 rounded-full object-cover"></img>
+                            <span className="text-sm text-gray-700">{cat.name}</span>
+                        </Link>
+                      ))}
+                  </div>
+             
+          </div>
 
           <Link
             to="/all-foods"
@@ -63,7 +108,7 @@ export const Navbar: React.FC = () => {
                                 flex items-center text=md justify-center shadow-md 
                                 hover:shadow-lg transition-all duration-300 cursor-pointer align-center">
                 {user.name.charAt(0).toUpperCase()}
-              </div>              
+                </div>              
 
                 <p className="px-4 py-2 text-sm font-medium border-b">{user.name.split(" ")[0]}</p>
 

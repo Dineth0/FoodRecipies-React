@@ -57,13 +57,17 @@ const {user} = useAuth()
                             <div className="w-11 h-11 bg-yellow-100 w-40 h-40 text-yellow-800 font-semibold rounded-full 
                                 flex items-center text=md justify-center shadow-md 
                                 hover:shadow-lg transition-all duration-300 cursor-pointer align-center">
-                            {user?.name.charAt(0).toUpperCase()}
-                        </div>
+                                {user?.name.charAt(0).toUpperCase()}
+                            </div>
                         </div> 
                     </div>
+                    
 
                     
                 </div>
+                 <button className="mt-10 px-6 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition cursor-pointer ">
+            EDIT PROFILE
+          </button>
             </div>
         </div> 
     </div>
