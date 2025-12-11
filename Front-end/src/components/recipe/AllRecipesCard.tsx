@@ -41,7 +41,7 @@ export default function AllRecipesCard(){
                 {recipes.map((recipe) =>(
                     <div
                         key={recipe._id}
-                        onClick={()=>navigate(`/foodpage/${recipe.title}`)}
+                        onClick={()=>navigate(`/recipe/${recipe.title}`)}
                         className="cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-transform transform hover:-translate-y-2">
 
                         <div className='h-48 w-full overflow-hidden'>

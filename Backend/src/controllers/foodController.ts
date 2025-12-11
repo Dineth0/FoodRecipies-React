@@ -10,22 +10,22 @@ export const addFood = async (req:Request, res:Response, next:NextFunction) => {
         const {name, category,cuisine, description} = req.body
         let imageURLs: string[] = [];
 
-if (req.files && Array.isArray(req.files)) {
-  for (const file of req.files) {
-    const uploaded: any = await new Promise((resolve, reject) => {
-      const upload_stream = cloudinary.uploader.upload_stream(
-        { folder: "food" },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      );
-      upload_stream.end(file.buffer);
-    });
+    if (req.files && Array.isArray(req.files)) {
+        for (const file of req.files) {
+            const uploaded: any = await new Promise((resolve, reject) => {
+            const upload_stream = cloudinary.uploader.upload_stream(
+                { folder: "food" },
+                (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+                }
+            );
+            upload_stream.end(file.buffer);
+            });
 
-    imageURLs.push(uploaded.secure_url);
-  }
-}
+            imageURLs.push(uploaded.secure_url);
+        }
+    }
 
         const newFood = new Food({
             name,
@@ -90,10 +90,21 @@ export const updateFood = async(req:Request, res:Response, next:NextFunction)=>{
             })
         }
 
-        let updatedImages = existingFood.images
-        if(files && files.length > 0){
-            const newImagesUrls = files.map((file) => (file as any).path)
-            updatedImages = [...existingFood.images, ...newImagesUrls]
+        let updatedImages = [...existingFood.images]
+        if(files && Array.isArray(files) && files.length > 0){
+            for(const file of files){
+                const uploaded: any = await new Promise((resolve, reject)=>{
+                    const upload_stream = cloudinary.uploader.upload_stream(
+                        { folder: "food" },
+                        (error, result) => {
+                        if (error) return reject(error);
+                        resolve(result);
+                        }
+                    );
+                    upload_stream.end(file.buffer);
+                })
+                updatedImages.push(uploaded.secure_url)
+            }
 
         }
 
