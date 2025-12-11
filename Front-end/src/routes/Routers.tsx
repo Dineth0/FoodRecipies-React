@@ -10,6 +10,7 @@ import MyRecipes from "../pages/Recipe/MyRecipes"
 import MyReview from "../pages/review/MyReview"
 import Profile from "../pages/auth/Profile"
 import AllFoods from "../pages/food/AllFoods"
+import AllRecipesPage from "../pages/Recipe/AllRecipesPage"
 
 
 
@@ -97,6 +98,14 @@ export default function Router(){
                             element={
                                 <RequireAuth>
                                     <AllFoods/>
+                                </RequireAuth>
+                        }/>
+
+                        <Route
+                            path="/all-recipes"
+                            element={
+                                <RequireAuth>
+                                    <AllRecipesPage/>
                                 </RequireAuth>
                         }/>
 
