@@ -97,6 +97,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
     const totalImage = existingImageUrls.length + (files ? files.length : 0)
     if(totalImage > 5){
       setError("You can only upload 5 Images")
+      return
     }
     setLoading(true)
     setError(null)

@@ -20,7 +20,7 @@ import { useAuth } from '../../context/AuthContext';
 
 
 const categories = [
-    { name: "Breakfast", image: breakfirst  },
+  { name: "Breakfast", image: breakfirst  },
   { name: "Lunch", image:  Lunch},
   { name: "Dinner", image: Dinner },
   { name: "Snacks", image: Snacks },
@@ -33,6 +33,7 @@ const categories = [
   { name: "Street Food", image: StreetFood },
   { name: "Traditional", image: Traditional }
 ]
+
 
 export default function Category() {
 const navigate = useNavigate()

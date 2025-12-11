@@ -8,30 +8,31 @@ import cloudinary from "../config/cloudinary";
 export const addFood = async (req:Request, res:Response, next:NextFunction) => {
     try{
         const {name, category,cuisine, description} = req.body
-        const files = req.files as Express.Multer.File[]
+        let imageURLs: string[] = [];
 
-        if(!files || files.length === 0){
-            return res.status(400).json({
-                success:false,
-                message:"No images Uploaded"
-            })
+if (req.files && Array.isArray(req.files)) {
+  for (const file of req.files) {
+    const uploaded: any = await new Promise((resolve, reject) => {
+      const upload_stream = cloudinary.uploader.upload_stream(
+        { folder: "food" },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
         }
+      );
+      upload_stream.end(file.buffer);
+    });
 
-        const existing = await Food.findOne({name})
-        if(existing){
-            return res.status(400).json({
-                success:false,
-                data:null,
-                message:"Food already exsting"
-            })
-        }
-        const imageUrls = files.map((file)=>(file as any).path)
+    imageURLs.push(uploaded.secure_url);
+  }
+}
+
         const newFood = new Food({
             name,
             category,
             cuisine,
             description,
-            images:imageUrls
+            images:imageURLs
         })
         await newFood.save()
         res.status(201).json({
