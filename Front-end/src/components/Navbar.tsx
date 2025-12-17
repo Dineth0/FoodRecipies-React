@@ -93,24 +93,42 @@ export const Navbar: React.FC = () => {
           {isAuthenticated && user ? (
             <div className="relative group">
 
-              <button className="w-11 h-11 bg-white text-yellow-800 font-semibold rounded-full 
+              <button className="w-11 h-11  text-yellow-800 font-semibold rounded-full 
                                 flex items-center justify-center shadow-md 
                                 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                {user.name.charAt(0).toUpperCase()}
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt="profile"
+                    className="w-full h-full object-cover rounded-full"/>
+                ):(
+                  <span className="text-4xl font-semibold text-yellow-800">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </span> 
+                )}
               </button>
 
               
               <div className="absolute right-0 mt-3 w-60 bg-white shadow-lg rounded-xl text-gray-800 
                               opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                              transition-all duration-300 py-2">
+                              transition-all duration-300 py-4 z-50 ">
 
-                <div className="w-11 h-11 bg-yellow w-40 h-40 text-yellow-800 font-semibold rounded-full 
+                <div className="mx-auto w-24 h-24 bg-yellow w-40 h-40 text-yellow-800 font-semibold rounded-full 
                                 flex items-center text=md justify-center shadow-md 
                                 hover:shadow-lg transition-all duration-300 cursor-pointer align-center">
-                {user.name.charAt(0).toUpperCase()}
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt="profile"
+                    className="w-full h-full object-cover rounded-full"/>
+                ):(
+                  <span className="text-4xl font-semibold text-yellow-800">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </span> 
+                )}
                 </div>              
 
-                <p className="px-4 py-2 text-sm font-medium border-b">{user.name.split(" ")[0]}</p>
+                <p className="px-4 py-2 text-sm text-center font-medium border-b">{user.name.split(" ")[0]}</p>
 
                 <Link
                   to="/my-recipes"

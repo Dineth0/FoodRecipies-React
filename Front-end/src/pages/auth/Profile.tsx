@@ -2,13 +2,46 @@ import { useAuth } from "../../context/AuthContext"
 import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
+import { useState } from "react";
+import { ProfileForm } from "../../components/ProfileForm";
 
 
 
+interface UserItem{
+  
+    id:string
+    name:string
+    email:string
+    image?: string
+}
 
 export default function Profile() {
 
-const {user} = useAuth()
+const {user, updateUser} = useAuth()
+const [editUser, setEditUser] = useState<UserItem | null>(null)
+const [showForm, setShowForm] = useState(false)
+
+
+const handleEditProfile = (user: UserItem)=>{
+    console.log(user)
+    setEditUser(user)
+    setShowForm(true)
+}
+const handleSavedUser = ( updatedUser: UserItem) =>{
+    if(user)
+    updateUser({
+    ...user,
+    id: updatedUser.id ,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    image: updatedUser.image
+   
+  });
+}
+const handleCloseForm = () =>{
+    setEditUser(null)
+    setShowForm(false)
+}
 
   return (
     <div className="bg-gray-100 min-h-screen py-10 mt-15">
@@ -54,10 +87,18 @@ const {user} = useAuth()
                         <div className="text-blue-600 text-2xl"><CgProfile /></div>
                         <div>
                             <p className="font-semibold text-lg mb-3">Profile Picture</p>
-                            <div className="w-11 h-11 bg-yellow-100 w-40 h-40 text-yellow-800 font-semibold rounded-full 
-                                flex items-center text=md justify-center shadow-md 
-                                hover:shadow-lg transition-all duration-300 cursor-pointer align-center">
-                                {user?.name.charAt(0).toUpperCase()}
+                            <div className="w-40 h-40 bg-yellow-100 rounded-full overflow-hidden flex items-center justify-center shadow-md">
+                                {user?.image ? (
+                                    <img 
+                                        src={user.image}
+                                        alt="profile"
+                                        className="w-full h-full object-cover"/>
+                                    
+                                ):(
+                                    <span className="text-4xl font-semibold text-yellow-800">
+                                        {user?.name?.charAt(0).toUpperCase()}
+                                    </span>
+                                )}
                             </div>
                         </div> 
                     </div>
@@ -65,11 +106,20 @@ const {user} = useAuth()
 
                     
                 </div>
-                 <button className="mt-10 px-6 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition cursor-pointer ">
+                 <button className="mt-10 px-6 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition cursor-pointer "
+                 onClick={()=> user && handleEditProfile(user)}>
             EDIT PROFILE
           </button>
             </div>
         </div> 
+        {
+            showForm && (
+                <ProfileForm 
+                onClose={handleCloseForm}
+                onSave={handleSavedUser}
+                editUser = {editUser}/>
+            )
+        }
     </div>
   )
 }

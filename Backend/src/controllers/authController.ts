@@ -35,6 +35,7 @@ const signup = async (req:Request, res:Response, next:NextFunction) =>{
             name,
             email,
             password:hashedPassword,
+            image: null
         })
         await newUser.save()
 
@@ -79,6 +80,7 @@ const login = async (req:Request, res:Response, next:NextFunction) =>{
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                image: user.image,
                 role:user.role,
                 token
             }
@@ -100,7 +102,7 @@ const getProfile = async (req:AuthRequest, res:Response, next:NextFunction) =>{
         const {name, email, image, role} = user
         res.status(200).json({
             success: true,
-            data : {name, email, image, role}
+            user : {name, email, image, role}
         });
     }catch(error){
         next(error)

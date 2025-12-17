@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import userModel from "../models/userModel";
 import bcrypt from 'bcrypt';
+import cloudinary from "../config/cloudinary";
+import { error } from "console";
 
 
  
@@ -45,8 +47,8 @@ import bcrypt from 'bcrypt';
 export const updateUser = async(req:Request, res:Response, next:NextFunction) =>{
     try{
         const {id} = req.params
-        const {name, email ,password , image} = req.body
-        const files = req.files as Express.Multer.File[]
+        const {name, email ,password} = req.body
+        const file = req.file
 
         const existingUSer = await userModel.findById(id)
 
@@ -57,10 +59,21 @@ export const updateUser = async(req:Request, res:Response, next:NextFunction) =>
             })
         }
 
-        let updatedImage = existingUSer.image
-        if(files && files.length === 1){
-            const newImagesUrl =  (files[0] as any).path
-            updatedImage = newImagesUrl
+        let updatedImage = existingUSer.image;
+
+        if (file) {
+        const uploaded: any = await new Promise((resolve, reject) => {
+            const upload_stream = cloudinary.uploader.upload_stream(
+            { folder: "users" },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            }
+            );
+            upload_stream.end(file.buffer);
+        });
+
+        updatedImage = uploaded.secure_url;
         }
 
         existingUSer.name = name || existingUSer.name
@@ -72,7 +85,7 @@ export const updateUser = async(req:Request, res:Response, next:NextFunction) =>
 
         res.status(200).json({
             success: true,
-            data: {food: existingUSer},
+            data: {user: existingUSer},
             message: "Food updated successflly"
         })
     }catch(error){

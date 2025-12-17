@@ -7,21 +7,26 @@ interface User {
   id: string;
   name: string;
   email: string;
+  image?: string
   role: string
 }
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User  | null;
+  
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUser: (userData: User) => void
   loading: boolean;
   error: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -42,6 +47,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const updateUser = (userData: User) =>{
+  setUser(userData)
+}
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken")
@@ -99,6 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       id: backendData.id,
       name: backendData.name,
       email: backendData.email,
+      image: backendData.image,
       role: backendData.role
     };
 
@@ -179,6 +189,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     login,
     signup,
     logout,
+    updateUser,
     loading,
     error
   };

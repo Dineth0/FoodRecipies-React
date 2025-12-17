@@ -85,8 +85,8 @@ export default function PendingRecipes(){
                             {pendingRecipes.map((recipe)=>(
                                 <tr key={recipe._id} className="border-b border-gray-700 hover:bg-gray-700">
                                     <td className="px-4 py-2 font-medium text-white align-top">{recipe.title}</td>
-                                    <td className="px-4 py-2 align-top">{recipe.food.name}</td>
-                                    <td className="px-4 py-2 align-top">{recipe.user.name}</td>
+                                    <td className="px-4 py-2 align-top">{recipe.food?.name || <span className="text-red-400">Unknown Food</span>}</td>
+                                    <td className="px-4 py-2 align-top">{recipe.user?.name || <span className="text-red-400">Unknown User</span>}</td>
                                     <td className="py-4 px-2 align-top">
                                         {(()=>{
                                             const ingre = recipe.ingredients
