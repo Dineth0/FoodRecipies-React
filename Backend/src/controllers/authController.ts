@@ -4,6 +4,7 @@ import config from "../config/jwt"
 import bcrypt from 'bcrypt'
 import {Request, Response, NextFunction } from 'express';
 import { AuthRequest } from "../middleware/authMiddleware";
+import nodemailer from 'nodemailer';
 
 //Generate access Token
 const generateAccessToken = (user: IUser) => {
@@ -108,4 +109,75 @@ const getProfile = async (req:AuthRequest, res:Response, next:NextFunction) =>{
         next(error)
     }
 }
-export {signup, login, getProfile}
+const generateOTP = () =>{
+    return Math.floor(10000 + Math.random() * 900000)
+}
+
+const forgotPassword = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const {email} = req.body
+
+        const user = await userModel.findOne({email})
+        if(!user){
+            return res.status(404).json({
+                message : "User not found"
+            })
+        }
+        const otp = generateOTP()
+        user.resetOTP = otp
+        user.OTPExpire = new Date(Date.now() + 10 * 60 * 1000)
+        await user.save()
+
+        const otpsend = nodemailer.createTransport({
+            service: 'gamil',
+            auth:{
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            }
+        })
+
+        await otpsend.sendMail({
+            to: user.email,
+            subject: "Password Reset OTP",
+            html: `<h3>Your OTP is</h3><h2>${otp}</h2>`
+        })
+        return res.status(200).json({
+            success: true,
+            message: "OTP sent to email"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+const resetPassword = async (req:Request, res:Response, next:NextFunction) =>{
+    try{
+        const {email, otp, newPassword} = req.body
+
+        const user = await userModel.findOne({
+            email,
+            resetOTP:otp,
+            OTPExpire: {$gt: new Date()}
+        })
+        if(!user){
+            return res.status(404).json({
+                message : "User not found"
+            })
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(newPassword ,salt)
+
+        user.resetOTP = null
+        user.OTPExpire = null
+
+        await user.save()
+
+        return res.status(200).json({
+            success: true,
+            message: "Password Reset Successfull"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+export {signup, login, getProfile, forgotPassword, resetPassword}

@@ -8,6 +8,8 @@ export interface IUser extends Document{
     password:string
     image?: string
     role: "Admin" | "User"
+    resetOTP?: number |null
+    OTPExpire: Date  | null
 }
 
 const userSchema = new Schema<IUser>({
@@ -39,6 +41,14 @@ const userSchema = new Schema<IUser>({
         type:String,
         enum:["Admin", "User"],
         default:"User"
+    },
+    resetOTP:{
+        type: Number,
+        default: null
+    },
+    OTPExpire:{
+        type:Date,
+        default: null
     }
    
 },{ timestamps: true })
