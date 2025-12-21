@@ -1,7 +1,7 @@
 import { forgotPassword, getProfile, login, resetPassword, signup } from "../controllers/authController";
 import { Router } from "express";
 import { authenticateUser } from "../middleware/authMiddleware";
-import { updateUser } from "../controllers/userController";
+import { getAllUsers, updateUser } from "../controllers/userController";
 import upload from "../middleware/upload";
 
 
@@ -12,6 +12,7 @@ authRouter.get("/me", authenticateUser,getProfile)
 authRouter.put("/updateUser/:id", upload.single('image'), updateUser)
 authRouter.post("/forgot-password",forgotPassword)
 authRouter.post("/reset-password", resetPassword)
+authRouter.get("/", getAllUsers) 
 
 
 export default authRouter

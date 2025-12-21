@@ -92,6 +92,37 @@ export const updateUser = async(req:Request, res:Response, next:NextFunction) =>
         next(error)
     }
 }
+
+export const getAllUsers = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+            const page = parseInt(req.query.page as string) || 1
+            const limit = parseInt(req.query.limit as string) || 3
+            const skip = (page - 1) * limit
+    
+            const foods = await userModel.find()
+               
+                .sort({createdAt: -1})
+                .skip(skip)
+                .limit(limit)
+            const total = await userModel.countDocuments()    
+    
+            res.status(200).json({
+                success: true,
+                data: { foods },
+                message: "Users fetched successfully",
+                totalPages: Math.ceil(total / limit),
+                totalCount: total,
+                page
+            });
+        }catch(error){
+            res.status(500).json({
+                success: false,
+                data: null,
+                message: "Error fetching Users",
+                error,
+        });
+    }
+}
  
 
 
