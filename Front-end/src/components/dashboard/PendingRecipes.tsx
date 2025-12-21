@@ -68,7 +68,7 @@ export default function PendingRecipes(){
             ):(
                 <div className="w-full overflow-x-auto">
                     <table className="w-full text-left text-sm text-gray-300 table-fixed min-w-[1000px]">
-                        <thead className="uppercase tracking-wider border-b border-gray-700 bg-gray-800">
+                        <thead className="uppercase tracking-wider  bg-black/70 backdrop-blur-md border-b border-white/20">
                             <tr>
                                 <th scope="col" className="py-2 px-4 w-[10%]">Title</th>
                                 <th scope="col" className="py-2 px-4 w-[8%]">Food</th>
@@ -83,7 +83,7 @@ export default function PendingRecipes(){
                         </thead>
                         <tbody>
                             {pendingRecipes.map((recipe)=>(
-                                <tr key={recipe._id} className="border-b border-gray-700 hover:bg-gray-700">
+                                <tr key={recipe._id} className="border-b border-gray-700 hover:bg-black/25">
                                     <td className="px-4 py-2 font-medium text-white align-top">{recipe.title}</td>
                                     <td className="px-4 py-2 align-top">{recipe.food?.name || <span className="text-red-400">Unknown Food</span>}</td>
                                     <td className="px-4 py-2 align-top">{recipe.user?.name || <span className="text-red-400">Unknown User</span>}</td>
