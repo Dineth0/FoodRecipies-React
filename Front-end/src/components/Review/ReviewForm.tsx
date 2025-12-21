@@ -87,14 +87,14 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
             
         }catch(error: any){
             setLoading(false)
-                            let errorMessage = 'Faild to add food. Please try again.';
+                            let errorMessage = 'Faild to add Review. Please try again.';
                                   if (error.response?.data?.message) {
                                     errorMessage = typeof error.response.data.message === 'object'
                                       ? JSON.stringify(error.response.data.message)
                                       : String(error.response.data.message);
                                   }
                                   setError(errorMessage);
-                                  showErrorAlert('Food Add Failed', errorMessage);
+                                  showErrorAlert('Review Add Failed', errorMessage);
                                   console.error(' error:', error);  
         }
 

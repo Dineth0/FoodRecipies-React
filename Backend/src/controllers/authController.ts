@@ -129,7 +129,7 @@ const forgotPassword = async (req:Request, res:Response, next:NextFunction)=>{
         await user.save()
 
         const otpsend = nodemailer.createTransport({
-            service: 'gamil',
+            service: 'gmail',
             auth:{
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS

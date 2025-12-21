@@ -11,6 +11,8 @@ import MyReview from "../pages/review/MyReview"
 import Profile from "../pages/auth/Profile"
 import AllFoods from "../pages/food/AllFoods"
 import AllRecipesPage from "../pages/Recipe/AllRecipesPage"
+import ForgotPassword from "../pages/auth/ForgotPassword"
+import ResetPassword from "../pages/auth/ResetPassword"
 
 
 
@@ -53,6 +55,8 @@ export default function Router(){
                     
                     <Route path="/login" element={<Login/>}></Route>
                     <Route path="/signup" element={<Signup/>}></Route>
+                    <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
+                    <Route path="/reset-password" element={<ResetPassword/>}></Route>
 
                     <Route element={<Layout/>}>
                         <Route path="/" element={<Home/>}></Route>

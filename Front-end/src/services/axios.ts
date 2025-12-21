@@ -9,6 +9,13 @@ const axiosInstance = axios.create({
     }
 })
 
+export const forgetPassword = async (email : string) =>{
+    return axiosInstance.post("/auth/forgot-password",{email})
+}
+export const passwordReset = async (data:{email:string, otp:number, newPassword:string}) =>{
+    return axiosInstance.post("/auth/reset-password", data)
+}
+
 axiosInstance.interceptors.request.use(
     (config) =>{
         const token = localStorage.getItem('token')
