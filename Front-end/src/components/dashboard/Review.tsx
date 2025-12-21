@@ -79,7 +79,7 @@ export default function Review(){
         <div className="bg-white/10 p-6 rounded-lg backdrop-blur-md">
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm text-gray-300 table-fixed min-w-[1000px]">
-                    <thead className="uppercase tracking-wider border-b border-gray-700 bg-gray-800">
+                    <thead className="uppercase tracking-wider  bg-black/70 backdrop-blur-md border-b border-white/20">
                         <tr>
                             <th scope="col" className="py-2 px-4 w-[10%]">User</th>
                             <th scope="col" className="py-2 px-4 w-[8%]">Recipe</th>
@@ -91,7 +91,7 @@ export default function Review(){
                     </thead>
                     <tbody>
                         {review.map((review)=>(
-                            <tr key={review._id} className="border-b border-gray-700 hover:bg-gray-700">
+                            <tr key={review._id} className="border-b border-gray-700 hover:bg-black/25">
                                 <td className="px-4 py-2 align-top">{review.user.name}</td>
                                 <td className="px-4 py-2 align-top">{review.recipe.title}</td>
                                 <td className="flex gap-1 mt-3 ml-1">{renderStar(review.rating)}</td>
