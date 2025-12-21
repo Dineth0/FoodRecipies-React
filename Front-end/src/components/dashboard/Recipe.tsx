@@ -105,7 +105,8 @@ export default function Recipes(){
 
     return(
         <>
-        <div className="text-center text-gray-300 py-10">
+        <div className="bg-white/10 p-6 rounded-lg backdrop-blur-md">
+        <h2 className="text-2xl font-bold mb-4 text-white">Recipes</h2>
             <div className="flex justify-end mb-4">
                 <button className="flex items-center gap-1 text-green-400 hover:text-green-600 font-medium"
                 onClick={handleAddClick}>
@@ -113,23 +114,23 @@ export default function Recipes(){
                 </button>
             </div>
             <div className="w-full overflow-auto">
-            <table className="w-full text-left text-sm">
-                <thead className="text-gray-300 border-b border-gray-700">
+            <table className="w-full text-left text-sm text-gray-300 table-fixed min-w-[1000px]">
+                <thead className="uppercase tracking-wider  bg-black/70 backdrop-blur-md border-b border-white/20">
                     <tr>
-                        <th className="py-2 px-4">Recipe Title</th>
-                        <th className="py-2 px-4">Food</th> 
-                        <th className="py-2 px-4">User</th> 
-                        <th className="py-2 px-4">Ingredients</th> 
-                        <th className="py-2 px-4">Step</th> 
-                        <th className="py-2 px-4">ReadyIn</th> 
-                        <th className="py-2 px-4">Date</th> 
-                        <th className="py-2 px-4">Images</th>
-                        <th className="py-2 px-4">Action</th>   
+                        <th scope="col" className="py-2 px-4 w-[10%]">Title</th>
+                        <th scope="col" className="py-2 px-4 w-[8%]">Food</th>
+                        <th scope="col" className="py-2 px-4 w-[8%]">User</th>
+                        <th scope="col" className="py-2 px-4 w-[12%]">Ingradiants</th>
+                        <th scope="col" className="py-2 px-4 w-[25%]">Step</th>
+                        <th scope="col" className="py-2 px-4 w-[8%]">Ready In</th>
+                        <th scope="col" className="py-2 px-4 w-[8%]">Date</th>
+                        <th scope="col" className="py-2 px-4 w-[25%] text-center">Images</th>
+                        <th scope="col" className="py-2 px-4 w-[10%] text-center">Action</th> 
                     </tr>
                 </thead>
                 <tbody>
                     {recipes.map((recipe, index)=>(
-                        <tr key={index} className="border-b border-gray-800 hover:bg-white/5">
+                        <tr key={index} className="border-b border-gray-800 hover:bg-black/25">
                             <td className="py-2 px-4">{recipe.title}</td>
                             <td className="py-2 px-4">{recipe.food?.name}</td>
                             <td className="py-2 px-4">{recipe.user?.name}</td>
@@ -146,7 +147,11 @@ export default function Recipes(){
                                     }
                                 })()}
                             </td>
-                            <td className="py-2 px-4">{recipe.step}</td>
+                            <td className="px-4 py-2 align-top">
+                                        <div className="break-words whitespace-pre-wrap max-h-40 overflow-y-auto pr-1">
+                                            {recipe.step}
+                                        </div>
+                                    </td>
                             <td className="py-2 px-4">{recipe.readyIn}</td>
                             <td className="py-2 px-4">
                                 {new Date(recipe.date).toLocaleDateString()}
@@ -173,7 +178,7 @@ export default function Recipes(){
                                     onClick={()=> handleEditRecipe(recipe)}>
                                     <FaEdit/>
                                 </button>
-                                <button className="text-blue-400 hover:text-blue-600 mx-2"
+                                <button className="text-red-400 hover:text-blue-600 mx-2"
                                     onClick={()=> handleDelete(recipe)}>
                                     <FaTrash/>
                                 </button>
