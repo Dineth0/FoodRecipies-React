@@ -36,7 +36,11 @@ import { error } from "console";
                 await user.save()
         
         
-                res.status(201).json(user);
+                res.status(201).json({
+                    success: true,
+                    data:{user},
+                    message: "User Create Successfully"
+                });
         
     }catch(error){
         res.status(500).json({ message: "Server error" })
@@ -99,7 +103,7 @@ export const getAllUsers = async (req:Request, res:Response, next:NextFunction)=
             const limit = parseInt(req.query.limit as string) || 3
             const skip = (page - 1) * limit
     
-            const foods = await userModel.find()
+            const users = await userModel.find()
                
                 .sort({createdAt: -1})
                 .skip(skip)
@@ -108,7 +112,7 @@ export const getAllUsers = async (req:Request, res:Response, next:NextFunction)=
     
             res.status(200).json({
                 success: true,
-                data: { foods },
+                data: { users },
                 message: "Users fetched successfully",
                 totalPages: Math.ceil(total / limit),
                 totalCount: total,
@@ -122,6 +126,41 @@ export const getAllUsers = async (req:Request, res:Response, next:NextFunction)=
                 error,
         });
     }
+}
+
+export const deleteUser = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+            const {id} = req.params
+    
+            const existingUser = await userModel.findById(id)
+            if(!existingUser){
+                return res.status(404).json({
+                    success: false,
+                    message: "User not found"
+                })
+            }
+    
+            const imageUrl = existingUser.image
+            if(imageUrl){
+                try{
+                    const parts = imageUrl?.split("/")
+                    const filename = parts[parts.length - 1]
+                    const publicId = `users/${filename.split(".")[0]}`
+                    await cloudinary.uploader.destroy(publicId)
+                }catch(error){
+                    console.error(error)
+                }
+            }
+            
+    
+            await userModel.findByIdAndDelete(id)
+            res.status(200).json({
+                success: true,
+                message:"User deleted successfully" 
+            })
+        }catch(error){
+            next(error)
+        }
 }
  
 
