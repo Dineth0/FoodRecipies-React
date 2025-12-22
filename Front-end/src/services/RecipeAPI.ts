@@ -41,3 +41,6 @@ export const rejectedRecipes = (id:string) =>{
 export const getRecipeByUser = () =>{
     return axiosInstance.get('/recipe/myRecipe')
 }
+export const getTotalRecipesCount = () =>{
+    return axiosInstance.get('/recipe/getTotalRecipesCount')
+}

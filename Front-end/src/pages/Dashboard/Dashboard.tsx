@@ -9,6 +9,7 @@ import PendingRecipes from '../../components/dashboard/PendingRecipes';
 import NotificationBell from '../../components/dashboard/NotifyBell';
 import  Review  from '../../components/dashboard/Review';
 import { getTotalFoodsCount } from '../../services/FoodAPI';
+import { getTotalRecipesCount } from '../../services/RecipeAPI';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -40,6 +41,19 @@ export default function Dashboard() {
       }
     }
     loadTotalFoodsCount()
+
+    const loadTotalRecipesCount = async ()=>{
+      try{
+        const res = await getTotalRecipesCount()
+        setStats(prev => ({
+          ...prev,
+          totalRecipies:res.data.data.totalRecipes
+        }))
+      }catch(error){
+        console.error(error)
+      }
+    }
+    loadTotalRecipesCount()
   })
 
 
