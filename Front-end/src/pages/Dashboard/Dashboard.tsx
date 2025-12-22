@@ -10,6 +10,7 @@ import NotificationBell from '../../components/dashboard/NotifyBell';
 import  Review  from '../../components/dashboard/Review';
 import { getTotalFoodsCount } from '../../services/FoodAPI';
 import { getTotalRecipesCount } from '../../services/RecipeAPI';
+import { getTotalReviewsCount } from '../../services/ReviewAPI';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -24,7 +25,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState({
     totalFoods: 30,
     totalRecipies: 30,
-    totalComments: 30,
+    totalReviews: 30,
     totalUsers: 3,
   })
 
@@ -54,6 +55,19 @@ export default function Dashboard() {
       }
     }
     loadTotalRecipesCount()
+
+    const loadTotalReviewsCount = async ()=>{
+      try{
+        const res = await getTotalReviewsCount()
+        setStats(prev => ({
+          ...prev,
+          totalReviews:res.data.data.totalReviews
+        }))
+      }catch(error){
+        console.error(error)
+      }
+    }
+    loadTotalReviewsCount()
   })
 
 
@@ -73,7 +87,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <StatsCard title="Total Foods" value={stats.totalFoods} icon="🍛" />
         <StatsCard title="Total Recipies" value={stats.totalRecipies} icon="📜" />
-        <StatsCard title="Total Comments" value={stats.totalComments} icon="📝" />
+        <StatsCard title="Total Comments" value={stats.totalReviews} icon="📝" />
         <StatsCard title="Total Users" value={stats.totalUsers} icon="👨" />
       </div>
 

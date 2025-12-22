@@ -33,3 +33,6 @@ export const updateReview = (id:string , data:ReviewData) =>{
         }
     })
 }
+export const getTotalReviewsCount = () =>{
+    return axiosInstance.get('/review/getTotalReviewesCount')
+}
