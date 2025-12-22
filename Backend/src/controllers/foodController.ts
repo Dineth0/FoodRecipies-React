@@ -203,3 +203,16 @@ export const getFoodByName = async (req: Request, res:Response, next:NextFunctio
     }
 }
 
+export const getTotalFoodsCount = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const totalFoods = Food.countDocuments()
+        res.status(200).json({
+            success:true,
+            data: {totalFoods},
+            message: "Totals foods count fetched successfully"
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
