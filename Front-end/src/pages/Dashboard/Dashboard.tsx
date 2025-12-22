@@ -11,6 +11,7 @@ import  Review  from '../../components/dashboard/Review';
 import { getTotalFoodsCount } from '../../services/FoodAPI';
 import { getTotalRecipesCount } from '../../services/RecipeAPI';
 import { getTotalReviewsCount } from '../../services/ReviewAPI';
+import { getTotalUsersCount } from '../../services/UserAPI';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -68,6 +69,19 @@ export default function Dashboard() {
       }
     }
     loadTotalReviewsCount()
+
+    const loadTotalUsersCount = async ()=>{
+      try{
+        const res = await getTotalUsersCount()
+        setStats(prev => ({
+          ...prev,
+          totalUsers:res.data.data.totalUsers
+        }))
+      }catch(error){
+        console.error(error)
+      }
+    }
+    loadTotalUsersCount()
   })
 
 

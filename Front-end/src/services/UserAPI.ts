@@ -28,3 +28,6 @@ export const getAllUsers  = (page: number =1, limit: number =100 )=>{
 export const deleteUser  = (id:string )=>{
     return axiosInstance.delete(`/auth/deleteUser/${id}`)
 }
+export const getTotalUsersCount = () =>{
+    return axiosInstance.get('/auth/getTotalUsersCount')
+}
