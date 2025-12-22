@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import  { useEffect, useState } from 'react';
 import StatsCard from '../../components/dashboard/StatsCard';
 import Tab from '../../components/dashboard/Tab'
 import Foods from '../../components/dashboard/Food';
@@ -8,6 +8,7 @@ import User from '../../components/dashboard/User';
 import PendingRecipes from '../../components/dashboard/PendingRecipes';
 import NotificationBell from '../../components/dashboard/NotifyBell';
 import  Review  from '../../components/dashboard/Review';
+import { getTotalFoodsCount } from '../../services/FoodAPI';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -19,13 +20,27 @@ type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending R
 // }
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
-
-  const stats = {
+  const [stats, setStats] = useState({
     totalFoods: 30,
     totalRecipies: 30,
     totalComments: 30,
     totalUsers: 3,
-  };
+  })
+
+  useEffect(()=>{
+    const loadTotalFoodsCount = async ()=>{
+      try{
+        const res = await getTotalFoodsCount()
+        setStats(prev => ({
+          ...prev,
+          totalFoods:res.data.data.totalFoods
+        }))
+      }catch(error){
+        console.error(error)
+      }
+    }
+    loadTotalFoodsCount()
+  })
 
 
   

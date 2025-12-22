@@ -24,3 +24,6 @@ export const deleteFood =  (id: string) =>{
 export const getFoodByName = (name: string) =>{
     return axiosInstance.get(`/food/name/${encodeURIComponent(name)}`)
 }
+export const getTotalFoodsCount = () =>{
+    return axiosInstance.get('/food/getTotalFoodsCount')
+}
