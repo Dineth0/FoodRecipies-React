@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { getAllUsers } from "../../services/UserAPI"
-import { showErrorAlert } from "../../utils/SweetAlerts"
+import { deleteUser, getAllUsers } from "../../services/UserAPI"
+import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
 import { IoMdAdd } from "react-icons/io";
 import { FaTrash } from 'react-icons/fa'
 import { UserForm } from "./UserForm";
@@ -40,15 +40,42 @@ export default function User(){
         setShowForm(true)
     }
 
-    const handleDelete = () =>{
-            
-        }
+    const handleDelete = (userDelete : UserItem) =>{
+        showConfirmDialog(
+            'Are you sure?',
+            `${userDelete.name} Do you want to delete? `,
+            'Yes, Delete id!'
+        ).then(async(result)=>{
+            if(result.isConfirmed){
+                try{
+                    await deleteUser(userDelete._id)
+                    setUsers(prevUsers =>
+                        prevUsers.filter(user => user._id !== userDelete._id)
+                    )
+
+                    showSuccessAlert('Deleted' ,`${userDelete.name} has been Deleted`)
+                }catch(error){
+                    console.error(error)
+                    showErrorAlert('error', 'Faild to delete')
+                }
+            }
+        })
+    }
 
     const handleCloseForm = ()=>{
         setShowForm(false)
     }  
     const handleSavedUser = () =>{
-
+        // if(savedUser._id){
+        //     setUsers(prevUsers => prevUsers.map(user=>
+        //         user._id === savedUser._id ? savedUser : user
+        //     ))
+        // }else{
+        //     setUsers(prevUsers =>[
+        //        ...prevUsers,
+        //        {...savedUser, _id: savedUser._id || Date.now().toString()}
+        //     ])
+        // }
     }
     
     return(
@@ -98,7 +125,7 @@ export default function User(){
                                     <td className='py-2 px-4'>
                                         
                                         <button className='text-red-400 hover:text-red-600 mx-2'
-                                        onClick={()=>handleDelete()}>
+                                        onClick={()=>handleDelete(user)}>
                                             <FaTrash/>
                                         </button>
                                     </td>

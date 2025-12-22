@@ -25,3 +25,6 @@ export const createUser = (data: UserData)=>{
 export const getAllUsers  = (page: number =1, limit: number =100 )=>{
     return axiosInstance.get(`/auth?page=${page}&limit=${limit}`)
 }
+export const deleteUser  = (id:string )=>{
+    return axiosInstance.delete(`/auth/deleteUser/${id}`)
+}
