@@ -371,3 +371,15 @@ export const getRecipeByUser = async (req:AuthRequest, res:Response, next:NextFu
     }
     
 }
+export const getTotalRecipesCount = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const totalRecipes = await Recipe.countDocuments({status: 'Approved'})
+        res.status(200).json({
+            success:true,
+            data: {totalRecipes},
+            message: "Totals recipes count fetched successfully"
+        })
+    }catch(error){
+        next(error)
+    }
+}
