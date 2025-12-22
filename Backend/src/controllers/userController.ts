@@ -163,7 +163,19 @@ export const deleteUser = async (req:Request, res:Response, next:NextFunction)=>
         }
 }
  
+export const getTotalUsersCount = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const totalUsers = await userModel.countDocuments()
+        res.status(200).json({
+            success:true,
+            data: {totalUsers},
+            message: "Totals users count fetched successfully"
+        })
+    }catch(error){
+        next(error)
+    }
 
-
+    
+}
 
 
