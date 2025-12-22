@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticateUser } from "../middleware/authMiddleware";
-import { addReview, deleteReview, getAllReviews, getReviewByRecipe, getReviewByUser, updateReview } from '../controllers/reviewController';
+import { addReview, deleteReview, getAllReviews, getReviewByRecipe, getReviewByUser, getTotalReviewsCount, updateReview } from '../controllers/reviewController';
 
 
 const router = Router()
@@ -23,4 +23,6 @@ router.put(
     authenticateUser,
     updateReview
 )
+ router.get("/getTotalReviewesCount",getTotalReviewsCount)
+
  export default router       

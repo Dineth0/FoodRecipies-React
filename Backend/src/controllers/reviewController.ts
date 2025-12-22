@@ -179,5 +179,18 @@ export const getReviewByUser = async (req:AuthRequest, res:Response, next:NextFu
     }catch(error){
         next(error)
     }
+}
+export const getTotalReviewsCount = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const totalReviews = await Review.countDocuments()
+        res.status(200).json({
+            success:true,
+            data: {totalReviews},
+            message: "Totals reviews count fetched successfully"
+        })
+    }catch(error){
+        next(error)
+    }
+
     
 }
