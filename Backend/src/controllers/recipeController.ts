@@ -419,3 +419,40 @@ export const getRecipesGrowth = async (req:Request, res:Response, next:NextFunct
         next(error)
     }
 }
+export const getTotalStatusAndCompire = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const statusResult = await Recipe.aggregate([
+            {
+                $group:{
+                    _id: "$status",
+                    value: {$sum: 1}
+                }
+            }
+        ])
+
+        const statusData = [
+            {name: "Pending",
+             value: 0   
+            },
+            {name:"Approved",
+            value: 0
+            },
+            {name:"Reject",
+             value: 0   
+            }
+        ]
+
+        statusResult.forEach(item =>{
+            const index = statusData.findIndex(data => data.name === item._id)
+            if(index !== -1){
+                statusData[index].value = item.value
+            }
+        })
+        res.status(200).json({
+            success:true,
+            statusData
+        })
+    }catch(error){
+        next(error)
+    }
+}
