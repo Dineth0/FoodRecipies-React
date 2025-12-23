@@ -383,3 +383,39 @@ export const getTotalRecipesCount = async(req:Request, res:Response, next:NextFu
         next(error)
     }
 }
+
+export const getRecipesGrowth = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const growthData = await Recipe.aggregate([
+            {
+                $match:{
+                    status: "Approved"
+                }
+            },
+            {
+                $group:{
+                    _id:{
+                        $dateToString:{
+                            format : "%Y-%m-%d",
+                            date: "$createdAt"
+                        }
+                    },
+                    count:{$sum: 1}
+                }
+            },
+            {
+                $sort: {_id: 1}
+            }
+        ])
+        const formattedData = growthData.map((item)=>({
+            day: item._id,
+            recipes: item.count
+        }))
+        res.status(200).json({
+            success: true,
+            data: formattedData
+        })
+    }catch(error){
+        next(error)
+    }
+}
