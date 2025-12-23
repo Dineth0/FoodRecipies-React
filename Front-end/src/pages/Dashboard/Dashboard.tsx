@@ -12,6 +12,7 @@ import { getTotalFoodsCount } from '../../services/FoodAPI';
 import { getTotalRecipesCount } from '../../services/RecipeAPI';
 import { getTotalReviewsCount } from '../../services/ReviewAPI';
 import { getTotalUsersCount } from '../../services/UserAPI';
+import Home from '../../components/dashboard/Home';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -123,10 +124,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {activeTab === 'home' && (
-                    <div className="text-center text-gray-300 py-10">Welcome to the Dashboard 👋</div>
-
-        )}
+        {activeTab === 'home' && <Home/>}
 
         {activeTab === 'foods' && <Foods/>}
         {activeTab === 'recipies' && <Recipie/>}

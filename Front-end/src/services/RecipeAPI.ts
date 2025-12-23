@@ -44,3 +44,7 @@ export const getRecipeByUser = () =>{
 export const getTotalRecipesCount = () =>{
     return axiosInstance.get('/recipe/getTotalRecipesCount')
 }
+
+export const getRecipeGrowth = () =>{
+    return axiosInstance.get('/recipe/recipesGrowth')
+}
