@@ -48,3 +48,8 @@ export const getTotalRecipesCount = () =>{
 export const getRecipeGrowth = () =>{
     return axiosInstance.get('/recipe/recipesGrowth')
 }
+
+
+export const getTotalStatusAndCompire = () =>{
+    return axiosInstance.get('/recipe/totalStatusCompire')
+}

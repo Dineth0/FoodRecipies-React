@@ -7,8 +7,8 @@ type tabProps ={
 export default function Tab({label,active,onClick}:tabProps){
     return(
         <button onClick={onClick}
-        className={`px-3 py-1 rounded-md text-sm font-medium transition
-            ${active ? "bg-purple-600 text-white" : "bg-white/10 hover:bg-white/20"}
+        className={`px-3 py-1 rounded-md text-sm font-medium transition justify-center items-center
+            ${active ? "bg-yellow-600 text-white" : "bg-white/10 hover:bg-white/20"}
             `}
         >
             {label}
