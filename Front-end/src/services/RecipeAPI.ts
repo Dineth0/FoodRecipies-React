@@ -53,3 +53,7 @@ export const getRecipeGrowth = () =>{
 export const getTotalStatusAndCompire = () =>{
     return axiosInstance.get('/recipe/totalStatusCompire')
 }
+
+export const searchRecipes = (query: string) =>{
+    return axiosInstance.get(`/recipe/search?query=${encodeURIComponent(query)}`)
+}
