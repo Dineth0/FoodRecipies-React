@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import heroPic from "../../assets/heropic.png";
 import { useNavigate } from "react-router-dom";
 import { searchRecipes } from "../../services/RecipeAPI";
+import { HiMagnifyingGlass } from "react-icons/hi2";
 
 interface searchResult{
 _id: string
@@ -68,16 +69,7 @@ export default function HeroSection() {
     
         <div className="relative w-full md:w-[420px]" ref={dropdown}>
           <div className="bg-white/70 backdrop-blur-sm shadow-lg rounded-xl flex items-center p-4 w-full mt-4 border border-white/50">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              strokeWidth={1.5} 
-              stroke="currentColor" 
-              className="w-6 h-6 text-gray-500 mr-2"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-            </svg>
+            <HiMagnifyingGlass className="text-gray-500 text-2xl mr-3" />
             <input
               type="text"
               value={query}
