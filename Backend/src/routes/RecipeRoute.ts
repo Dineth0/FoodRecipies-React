@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middleware/upload";
-import { addRecipie, approveRecipe, deleteRecipe, getAllRecipes, getPandingRecipes, getRecipeByFood, getRecipeByTitle, getRecipeByUser, getRecipesGrowth, getTotalRecipesCount, getTotalStatusAndCompire, rejectRecipes, updateRecipe } from "../controllers/recipeController";
+import { addRecipie, approveRecipe, deleteRecipe, getAllRecipes, getPandingRecipes, getRecipeByFood, getRecipeByTitle, getRecipeByUser, getRecipesGrowth, getTotalRecipesCount, getTotalStatusAndCompire, rejectRecipes, searchRecipes, updateRecipe } from "../controllers/recipeController";
 import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
 
@@ -55,5 +55,6 @@ router.get(
       authorizeRole(["Admin"]),
       getTotalStatusAndCompire
  )
+ router.get("/search", searchRecipes)
  
 export default router

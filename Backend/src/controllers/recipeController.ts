@@ -456,3 +456,37 @@ export const getTotalStatusAndCompire = async(req:Request, res:Response, next:Ne
         next(error)
     }
 }
+
+export const searchRecipes = async (req:Request, res:Response, next: NextFunction)=>{
+    try{
+        const {query} = req.query
+
+        if(!query){
+            return res.status(400).json({
+                success: false,
+                message : "A word is requires"
+            })
+        }
+
+        const recipes = await Recipe.find({
+            status: 'Approved',
+            $or:[
+                { title : { 
+                    $regex: query,
+                    $options: 'i'
+                }},
+                { ingredients : {
+                    $regex: query,
+                    $options: 'i'
+                }}
+            ]
+        }).select("title image _id").limit(6)
+
+        res.status(200).json({
+            success: true,
+            data: recipes
+        })
+    }catch(error){
+        next(error)
+    }
+}
