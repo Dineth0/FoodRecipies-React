@@ -5,19 +5,10 @@ import bcrypt from 'bcrypt'
 import {Request, Response, NextFunction } from 'express';
 import { AuthRequest } from "../middleware/authMiddleware";
 import nodemailer from 'nodemailer';
+import { generateAccessToken } from '../utils/tokens';
 
-//Generate access Token
-const generateAccessToken = (user: IUser) => {
-  return jwt.sign(
-    {   sub: user._id.toString(), 
-        role: user.role 
-    },
-        config.JWT_SECRET as Secret,
-    { 
-        expiresIn: "4h" 
-    }
-  )
-}
+
+
 // user Signup
 const signup = async (req:Request, res:Response, next:NextFunction) =>{
     try{
@@ -180,4 +171,5 @@ const resetPassword = async (req:Request, res:Response, next:NextFunction) =>{
         next(error)
     }
 }
+
 export {signup, login, getProfile, forgotPassword, resetPassword}

@@ -148,7 +148,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
   return ReactDOM.createPortal (
    
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-start z-50 overflow-y-auto p-6 transition-opacity duration-300">
-      {/* Modal Card */}
+   
       <div className="relative bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-100 hover:scale-[1.01] my-auto">
         <h2 className="text-2xl font-bold text-center mb-6 border-b border-gray-700 pb-2">
           {formTitle}

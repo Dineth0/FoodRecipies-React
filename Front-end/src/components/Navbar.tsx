@@ -55,7 +55,7 @@ export const Navbar: React.FC = () => {
           </Link>
           
           <div className="relative group">
-              <button className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300">
+              <button className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300 cursor-pointer">
                 CATEGORIES
                 </button>
                   <div className="absolute left-0 mt-2 w-40 h-120 bg-white shadow-lg rounded-xl 

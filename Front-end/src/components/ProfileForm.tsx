@@ -74,7 +74,7 @@ export const ProfileForm: React.FC<UserFormProps> = ({onClose,onSave,editUser
         }
         if (!editUser || !editUser.id) {
         setError("User ID not found. Please try again.")
-        console.error("User ID is missing in editUser object:", editUser);
+        console.error(editUser);
         return;
         }
 
@@ -96,7 +96,7 @@ export const ProfileForm: React.FC<UserFormProps> = ({onClose,onSave,editUser
 
         try{
             const response = await updateUser(editUser.id , data)
-            showSuccessAlert('Success','Recipe Successfully Updated')
+            showSuccessAlert('Success','User Successfully Updated')
             onSave(response.data.data.user)
             onClose()
         }catch(error :any){
