@@ -1,4 +1,4 @@
-import { forgotPassword, getProfile, login, resetPassword, signup } from "../controllers/authController";
+import { forgotPassword, getProfile, handleRefreshToken, login, resetPassword, signup } from "../controllers/authController";
 import { Router } from "express";
 import { authenticateUser } from "../middleware/authMiddleware";
 import { createUser, deleteUser, getAllUsers, getTotalUsersCount, updateUser } from "../controllers/userController";
@@ -16,6 +16,7 @@ authRouter.get("/", getAllUsers)
 authRouter.delete("/deleteUser/:id", deleteUser)
 authRouter.post("/createUser", createUser)
 authRouter.get("/getTotalUsersCount",getTotalUsersCount)
+authRouter.post('/refresh', handleRefreshToken)
 
 
 export default authRouter

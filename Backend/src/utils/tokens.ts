@@ -16,3 +16,15 @@ export const generateAccessToken = (user: IUser) => {
     }
   )
 }
+
+export const generateRefreshToken = (user: IUser) =>{
+    return jwt.sign(
+        {
+            sub: user._id.toString()
+        },
+        config.JWT_REFRESH_SECRET as Secret,
+        {
+            expiresIn: "7d"
+        }
+    )
+}

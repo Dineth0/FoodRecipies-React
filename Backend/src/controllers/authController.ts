@@ -5,11 +5,12 @@ import bcrypt from 'bcrypt'
 import {Request, Response, NextFunction } from 'express';
 import { AuthRequest } from "../middleware/authMiddleware";
 import nodemailer from 'nodemailer';
-import { generateAccessToken } from '../utils/tokens';
+import { generateAccessToken, generateRefreshToken } from '../utils/tokens';
+import dotenv from "dotenv"
+dotenv.config()
 
 
-
-// user Signup
+//user Signup
 const signup = async (req:Request, res:Response, next:NextFunction) =>{
     try{
         const { name, email, password } = req.body;
@@ -63,6 +64,7 @@ const login = async (req:Request, res:Response, next:NextFunction) =>{
         }
 
         const token = generateAccessToken(user)
+        const refreshToken = generateRefreshToken(user)
 
         res.status(200).json({
             success: true,
@@ -74,7 +76,8 @@ const login = async (req:Request, res:Response, next:NextFunction) =>{
                 email: user.email,
                 image: user.image,
                 role:user.role,
-                token
+                token,
+                refreshToken
             }
         })
     }catch(error){
@@ -172,4 +175,30 @@ const resetPassword = async (req:Request, res:Response, next:NextFunction) =>{
     }
 }
 
-export {signup, login, getProfile, forgotPassword, resetPassword}
+const handleRefreshToken = async(req:Request, res:Response) =>{
+    try{
+        const {token} = req.body
+        if (!token) {
+            return res.status(400).json({ 
+                message: "Token required" 
+            })
+        }
+        const payload = jwt.verify(token, config.JWT_REFRESH_SECRET as Secret)
+        const user = await userModel.findById(payload.sub)
+        if (!user) {
+            return res.status(403).json({ 
+                message: "Invalid refresh token" 
+            })
+        }
+        const accessToken = generateAccessToken(user)
+        res.status(200).json({
+            accessToken
+        })
+    }catch(error){
+        res.status(403).json({
+            message: "Invalid or expire token"
+        })
+    }
+}
+
+export {signup, login, getProfile, forgotPassword, resetPassword , handleRefreshToken}
