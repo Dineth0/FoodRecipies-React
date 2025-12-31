@@ -56,7 +56,7 @@ const handleCategoryClick = (catName: string) =>{
          spaceBetween={20}
          freeMode={true}
          grabCursor={true}
-         centeredSlides={true}
+         
          autoplay={{
             delay:900,
             disableOnInteraction: false
