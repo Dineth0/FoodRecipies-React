@@ -6,8 +6,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-      <Router/>
-    </AuthProvider>
+        <Router/>
+      </AuthProvider>
     </BrowserRouter>
     
   )

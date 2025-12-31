@@ -43,8 +43,8 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem('token'));
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -53,13 +53,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 }
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken")
+    const token = localStorage.getItem("token")
     if (token) {
+      setToken(token)
       fetchUserProfile()
-        .then((res) => {
-          if (res.data) setUser(res.data)
-          else setUser(null)
-        })
+        // .then((res) => {
+        //   if (res.data && res.user){ 
+        //     setUser(res.data)
+        //   }else{ 
+        //     setUser(null)
+        //   }
+        // })
         .catch((err) => {
           console.error(err)
           setUser(null)
@@ -75,8 +79,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const fetchUserProfile = async () => {
       try {
+        setLoading(true)
         const response = await axiosInstance.get('/auth/me');
         setUser(response.data.user);
+        console.log(response.data.user)
         setIsAuthenticated(true);
         return response.data
       } catch (error: any) {
@@ -89,6 +95,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }
         console.error('Error fetching user profile:', errorMessage, error);
         logout();
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -177,6 +185,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
@@ -195,6 +204,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loading,
     error
   };
+  if (loading) {
+     return (
+        <div className="flex justify-center items-center h-screen bg-[#ffe4c3]">
+            <h1 className="text-2xl font-bold text-[#ff9f1c]">Loading...</h1>
+        </div>
+     );
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
