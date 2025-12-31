@@ -35,8 +35,23 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
             })
         }
 
-        const files = req.files as Express.Multer.File[]
-        const imageUrls = files.map((file)=>(file as any).path)
+        let imageURLs: string[] = [];
+        if (req.files && Array.isArray(req.files)) {
+            for (const file of req.files) {
+                const uploaded: any = await new Promise((resolve, reject) => {
+                const upload_stream = cloudinary.uploader.upload_stream(
+                    { folder: "food" },
+                    (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                    }
+                );
+                upload_stream.end(file.buffer);
+                });
+        
+                imageURLs.push(uploaded.secure_url);
+            }
+        }
         const newResipe = new Recipe({
             user,
             food,
@@ -45,7 +60,7 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
             step,
             readyIn,
             date : new Date(),
-            images: imageUrls,
+            images: imageURLs,
             status: checkStatus
         })
         await newResipe.save()
@@ -149,7 +164,7 @@ export const updateRecipe = async (req:Request, res:Response, next:NextFunction)
     try{
         const {id} = req.params
         const { food, title, ingredients, step, readyIn} = req.body
-        const files = req.files as Express.Multer.File[]
+        const files = req.files as Express.Multer.File[] || []
 
         const existingRecipe = await Recipe.findById(id)
         if(!existingRecipe){
@@ -159,12 +174,23 @@ export const updateRecipe = async (req:Request, res:Response, next:NextFunction)
             })
         }
 
-        let updatedImages = existingRecipe.images 
-        if(files && files.length > 0){
-            const newImagesUrls = files.map((file) => (file as any).path)
-            updatedImages = [...existingRecipe.images ?? [], ...newImagesUrls]
-
-        }
+            let updatedImages = [...existingRecipe.images || []]
+            if(files && Array.isArray(files) && files.length > 0){
+                for(const file of files){
+                    const uploaded: any = await new Promise((resolve, reject)=>{
+                        const upload_stream = cloudinary.uploader.upload_stream(
+                            { folder: "food" },
+                            (error, result) => {
+                            if (error) return reject(error);
+                            resolve(result);
+                            }
+                        );
+                        upload_stream.end(file.buffer);
+                        })
+                    updatedImages.push(uploaded.secure_url)
+                }
+        
+            }
         
         existingRecipe.food = food || existingRecipe.food
         existingRecipe.title = title || existingRecipe.title
