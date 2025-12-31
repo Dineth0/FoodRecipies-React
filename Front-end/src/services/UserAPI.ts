@@ -21,6 +21,10 @@ export const createUser = (data: UserData)=>{
         }
     })
 }
+export const refreshTokens = async (refreshToken: string) => {
+  const res = await axiosInstance.post("/auth/refresh", { token: refreshToken })
+  return res.data
+}
 
 export const getAllUsers  = (page: number =1, limit: number =100 )=>{
     return axiosInstance.get(`/auth?page=${page}&limit=${limit}`)

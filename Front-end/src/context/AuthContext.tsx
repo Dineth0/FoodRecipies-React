@@ -104,6 +104,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     const token = backendData.token;
+    const refreshToken = backendData.refreshToken
     const user = {
       id: backendData.id,
       name: backendData.name,
@@ -117,6 +118,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
       
       localStorage.setItem('token', token);
+      localStorage.setItem('refreshToken', refreshToken)
       setToken(token);
       setUser(user);
       setIsAuthenticated(true);

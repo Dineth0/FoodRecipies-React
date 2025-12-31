@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { refreshTokens } from "./UserAPI";
 
 
 
@@ -16,10 +17,13 @@ export const passwordReset = async (data:{email:string, otp:number, newPassword:
     return axiosInstance.post("/auth/reset-password", data)
 }
 
+const PUBLIC_ENDPOINTS = ["/auth/login" , "/auth/signup"]
+
 axiosInstance.interceptors.request.use(
     (config) =>{
         const token = localStorage.getItem('token')
-        if(token){
+        const isPublic = PUBLIC_ENDPOINTS.some((url)=> config.url?.includes(url))
+        if(token && !isPublic){
             config.headers.Authorization = `Bearer ${token}`
         }
         return config
@@ -33,21 +37,35 @@ axiosInstance.interceptors.response.use(
     (response) =>{
         return response
     },
-    (error)=>{
-        if(error.response){
-            console.error(`API Error [${error.config?.method?.toUpperCase()}] ${error.config?.url}: ${error.response.status}`);
-            if (error.response.status === 401 || error.response.status === 403) {
-                if (typeof window !== 'undefined') {
-                    localStorage.removeItem('token');
-                    window.location.href = '/login';
+    async(error: AxiosError) =>{
+        const originalRequest: any = error.config
+
+        const isPublic = PUBLIC_ENDPOINTS.some((url)=>
+            originalRequest.url?.includes(url)
+        )
+
+        if(error.response?.status === 401 && !isPublic && !originalRequest._retry){
+            originalRequest._retry = true
+            try{
+                const refreshtoken = localStorage.getItem("refreshToken")
+                if(!refreshtoken){
+                   throw new Error("No refresh token vailable") 
                 }
+                const response = await refreshTokens(refreshtoken)
+                localStorage.setItem('token', response.token)
+
+                originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
+
+                return axios(originalRequest)
+            }catch(error){
+                localStorage.removeItem("token")
+                localStorage.removeItem("refreshToken")
+                window.location.href = "/login"
+                console.error(error)
+                return Promise.reject(error)
             }
-        }else if(error.request){
-                  console.error('API Request Error - No Response');
-        }else{
-                  console.error('API Request Setup Error:', error.message);
         }
-        return Promise.reject(error)
+
     }
 )
 export default axiosInstance
