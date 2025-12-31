@@ -56,6 +56,7 @@ const handleCategoryClick = (catName: string) =>{
          spaceBetween={20}
          freeMode={true}
          grabCursor={true}
+         centeredSlides={true}
          autoplay={{
             delay:900,
             disableOnInteraction: false
@@ -67,19 +68,19 @@ const handleCategoryClick = (catName: string) =>{
           1280: { slidesPerView: 6 },
         }}
         modules={[FreeMode, Autoplay]}
-        className="mySwiper"
+        className="mySwiper "
         >
             {categories.map((cat, index)=>(
                 <SwiperSlide 
                  key={index}
                  onClick={()=> handleCategoryClick(cat.name)}>
-                    <div className='text-center cursor-pointer'>
+                    <div className='flex flex-col items-center justify-center cursor-pointer w-full'>
                         <img
                          src={cat.image}
                          alt={cat.name}
-                         className='w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md hover:scale-110 transition-transform duration-300'>
+                         className='mx-auto w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md hover:scale-110 transition-transform duration-300'>
                         </img>
-                        <p className='mt-2 font-semibold text-[#2d1b0b]'>{cat.name}</p>
+                        <p className='mt-2 text-center font-semibold text-[#2d1b0b]'>{cat.name}</p>
                     </div>
                 </SwiperSlide>
             ))}
