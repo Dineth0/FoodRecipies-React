@@ -64,13 +64,13 @@ export default function FoodPage() {
     }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] mt-12 ">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-12 bg-gradient-to-br from-[#fff3e0] via-[#ffd59e] to-[#ffb74d]">
       <div className="max-w-7xl mx-auto">
 
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden lg:flex">
+        <div className="relative rounded-3xl overflow-hidden lg:flex bg-gradient-to-br from-white/95 via-[#fff8ee] to-[#ffefd5] border border-orange-300/40 shadow-[0_25px_60px_rgba(255,152,0,0.18)]">
           
          
-          <div className="lg:w-1/2 p-6 lg:p-10 bg-gray-100 flex flex-col items-center justify-center">
+          <div className="lg:w-1/2 p-6 lg:p-10 flex flex-col items-center justify-center bg-gradient-to-br from-[#ffffff] via-[#ffedd5] to-[#ffc46b] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
           
             <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] mb-6 rounded-2xl overflow-hidden shadow-lg bg-white">
               <img
@@ -98,7 +98,7 @@ export default function FoodPage() {
           </div>
 
          
-          <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col">
+          <div className=" lg:w-1/2 p-8 lg:p-12 flex flex-col bg-gradient-to-b from-[#ffffff] via-[#fffdf8] to-[#ffebc2] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.5)]">
             
           
             <div className="flex flex-wrap gap-3 mb-4">
@@ -125,11 +125,11 @@ export default function FoodPage() {
             <div className="border-t border-gray-200 my-6"></div>
 
             
-              <div className="mt-6 p-6 bg-gray-900 text-white rounded-3xl shadow-lg">
+              <div className=" mt-6 p-6 bg-gradient-to-br from-[#ff9800] to-[#f57c00] text-white rounded-3xl shadow-xl">
           <p className="text-xl mb-4 font-semibold">
             Quick Highlights
           </p>
-          <ul className="space-y-2 text-gray-200">
+          <ul className="space-y-2 text-black/200">
             <li>• Authentic flavor experience</li>
             <li>• Signature texture & aroma</li>
             <li>• Perfect for family meals</li>
