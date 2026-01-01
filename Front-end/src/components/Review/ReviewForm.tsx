@@ -105,7 +105,7 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
     const saveButtonText =  "Save"
     return ReactDOM.createPortal(
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-start z-50 overflow-y-auto p-6 transition-opacity duration-300">
-            <div className="relative bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-100 hover:scale-[1.01] my-auto">
+            <div className="relative bg-gradient-to-br from-[#2a2416]/90 via-[#1a1a1a]/95 to-black/95 border border-yellow-600/30 text-white p-8 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] w-full max-w-md my-auto">
                 <h2 className="text-2xl font-bold text-center mb-6 border-b border-gray-700 pb-2">
                     {formTitle}
                 </h2>
@@ -139,7 +139,7 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
                         name="description"
                         value={description}
                         onChange={(e)=> setDescription(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="w-full px-3 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none"
                         />
                     </div>
 
@@ -164,14 +164,14 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
                         type="button"
                         onClick={onClose}
                            
-                        className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition"
+                        className="px-4 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-gray-300 hover:bg-black/80 transition"
                         >
                         Cancel
                         </button>
                         <button
                         type="submit"
                             
-                        className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 shadow-md transition"
+                        className="px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-500 to-amber-600 text-black font-semibold hover:from-yellow-400 hover:to-amber-500 shadow-lg transition"
                         >
                             {loading ? 'Saving...': saveButtonText}
                         </button>
