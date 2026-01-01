@@ -81,7 +81,7 @@ export default function MyRecipes() {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="p-5">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-12 bg-gradient-to-br from-[#fff3e0] via-[#ffd59e] to-[#ffb74d]">
       <h1 className="text-2xl font-bold mb-5">My Recipes</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

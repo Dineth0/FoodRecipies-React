@@ -140,6 +140,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
         const totalImage = existingImageUrls.length + (files ? files.length : 0)
             if(totalImage > 5){
                 setError("You can only upload 5 Images")
+                return
         }
         setError(null)
         setLoading(true)
@@ -172,7 +173,18 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
                 response = await addRecipe(data)
                 showSuccessAlert('Success','Recipe Successfully Added')
               }
-              onSave(response.data.data.recipe)
+              const savedRecipeData = response?.data?.data?.recipe || response?.data?.recipe;
+
+            if (savedRecipeData) {
+                onSave(savedRecipeData)
+            } else {
+                // Data හරියට return වුනේ නැත්නම් සම්පුර්ණ response එක බලාගන්න console log එකක් දාන්න
+                console.log("Response data structure might be wrong:", response);
+                // තාවකාලිකව හෝ error එක මගහරවා ගන්න:
+                onSave(selectedRecipe || selectedMyRecipe || {} as any); 
+            }
+
+            setLoading(false)
             
         }catch(error: any){
           setLoading(false)
