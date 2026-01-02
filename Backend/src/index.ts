@@ -12,7 +12,8 @@ import http from "http";
 import { Server } from "socket.io";
 dotenv.config();
 
-
+const SERVER_PORT = process.env.SERVER_PORT
+const MONGO_URI = process.env.MONGO_URI as string
 
 const app: Application = express()
 
@@ -51,13 +52,13 @@ app.use("/api/v1/review",ReviewRouter)
 
 
 
-const mongo = mongoose.connect("mongodb://localhost:27017/foodRecipies")
+const mongo = mongoose.connect(MONGO_URI)
 mongo.then(() =>{
     console.log("MongoDb Connected")
 }).catch((error) =>{
     console.error(error)
 })
 
-server.listen(5000, () => {
+server.listen(SERVER_PORT, () => {
     console.log("Server running")
 })
