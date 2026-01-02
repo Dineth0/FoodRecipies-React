@@ -1,4 +1,4 @@
-import AllRecipesCard from "../../components/recipe/AllrecipesCard"
+import AllRecipesCard from "../../components/recipe/AllRecipesCard"
 
 const AllRecipesPage = () =>{
     return(
