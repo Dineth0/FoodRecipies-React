@@ -1,9 +1,10 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import ReactDOM from 'react-dom'
-import { useAuth } from "../../context/AuthContext"
 import { addReview, updateReview } from "../../services/ReviewAPI"
 import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../redux/store"
 
 
 
@@ -43,7 +44,8 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
     const[description, setDescription] = useState<string>("")
     const[loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const {user} = useAuth()
+    const user = useSelector((state: RootState) => state.auth.user)
+
    
     
 
@@ -66,7 +68,7 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
         }
 
         const payload = {
-            user: user?.id,
+            user: user?._id,
             recipe: recipeId,
             rating,
             description

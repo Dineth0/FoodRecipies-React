@@ -1,6 +1,7 @@
 import type React from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+// in Navbar.tsx
+import  { logoutAction } from "../redux/slices/authSlice";
 
 
 import breakfirst from "../assets/braekfirst.png"
@@ -15,6 +16,8 @@ import Meats from "../assets/meats.png"
 import SeaFoods from "../assets/seafoods.png"
 import StreetFood from "../assets/StreetFoods.png"
 import Traditional from "../assets/TraditionalFoods.png"
+import type { RootState, AppDisPatch } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
@@ -34,7 +37,20 @@ const categories = [
 ]
 
 export const Navbar: React.FC = () => {
-  const {user, isAuthenticated, logout} = useAuth()
+  const dispatch = useDispatch<AppDisPatch>();
+  const navigate = useNavigate()
+
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logoutAction());
+    navigate('/login')
+
+  };
+  const handleLogin = () =>{
+    dispatch(logoutAction())
+    navigate('/login')
+  }
   return (
     <nav className="bg-gradient-to-r from-yellow-400 to-orange-400 shadow-md fixed top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
@@ -152,7 +168,7 @@ export const Navbar: React.FC = () => {
                  </Link> 
 
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
                 >
                   Logout
@@ -162,6 +178,7 @@ export const Navbar: React.FC = () => {
           ) : (
             <Link
               to="/login"
+              onClick={handleLogin}
               className="px-5 py-1.5 rounded-full border border-white text-white font-medium hover:bg-white hover:text-yellow-700 transition duration-300"
             >
               Login

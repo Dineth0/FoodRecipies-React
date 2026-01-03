@@ -9,6 +9,7 @@ interface User{
 }
 
 interface UserItem{
+    _id:string
     user:User
     id:string
     name:string
@@ -72,7 +73,7 @@ export const ProfileForm: React.FC<UserFormProps> = ({onClose,onSave,editUser
             setError("Fill All Fields")
             return
         }
-        if (!editUser || !editUser.id) {
+        if (!editUser || !editUser._id) {
         setError("User ID not found. Please try again.")
         console.error(editUser);
         return;
@@ -95,7 +96,7 @@ export const ProfileForm: React.FC<UserFormProps> = ({onClose,onSave,editUser
 
 
         try{
-            const response = await updateUser(editUser.id , data)
+            const response = await updateUser(editUser._id , data)
             showSuccessAlert('Success','User Successfully Updated')
             onSave(response.data.data.user)
             onClose()

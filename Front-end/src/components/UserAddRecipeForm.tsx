@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import { addRecipe } from '../services/RecipeAPI';
 import { showErrorAlert, showSuccessAlert } from '../utils/SweetAlerts';
 import { getAllFoods } from '../services/FoodAPI';
-import { useAuth } from '../context/AuthContext';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../redux/store';
 
 
 interface User {
@@ -57,7 +58,8 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
     const[loading, setLoading] =useState(false)
     const[error, setError] = useState<string | null> (null)
     const [foods, setFoods] = useState<Food[]>([])
-    const {user} = useAuth()
+    const user = useSelector((state: RootState) => state.auth.user);
+
 
     useEffect (()=>{
 
@@ -125,7 +127,7 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
         setLoading(true)
 
         const data = new FormData()
-        data.append('user', user?.id || "")
+        data.append('user', user?._id || "")
         data.append('food', formdata.food)
         data.append('title', formdata.title)
         // const ingredientsArray = formdata.ingredients.split(",").map(i => i.trim())

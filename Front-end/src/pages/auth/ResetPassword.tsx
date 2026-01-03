@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react"
 import {  useLocation, useNavigate } from "react-router-dom"
 import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
-import { passwordReset } from "../../services/axios"
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDisPatch, RootState } from "../../redux/store"
+import { resetPasswordAction } from "../../redux/slices/authSlice"
 
 export default function ResetPassword() {
     const [otp, setOtp] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const[confirmPassword, setConfirmPassword] = useState('')
-    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
-    const [error, setError] = useState<string | null>(null)
     const location = useLocation();
+    const dispatch = useDispatch<AppDisPatch>();
+    const { loading, error } = useSelector((state: RootState) => state.auth);
+
     const email = location.state?.email
 
     useEffect(()=>{
@@ -27,28 +30,21 @@ export default function ResetPassword() {
             return
         }
 
-        setLoading(true)
-        try{
-            await passwordReset({
-                email,
-                otp:parseInt(otp),
-                newPassword
-            })
-            showSuccessAlert('Password Reset Successful! Login Now' )
-            navigate('/login')
-        }catch(error:any){
-            setLoading(false)
-                  let errorMessage = 'Faild to add food. Please try again.';
-                        if (error.response?.data?.message) {
-                          errorMessage = typeof error.response.data.message === 'object'
-                            ? JSON.stringify(error.response.data.message)
-                            : String(error.response.data.message);
-                        }
-                        setError(errorMessage);
-                        showErrorAlert('Food Add Failed', errorMessage);
-                        console.error(' error:', error);
-            
-        }
+        if (!email) return;
+
+        dispatch(resetPasswordAction({
+            email,
+            otp: parseInt(otp),
+            newPassword
+        }))
+        .unwrap()
+        .then(() => {
+            showSuccessAlert('Password reset successful! Login now');
+            navigate('/login');
+        })
+        .catch((err: string) => {
+            showErrorAlert('Reset Failed', err);
+        });
     }
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#ffe4c3] to-[#f8cd96] flex justify-center items-center p-6">

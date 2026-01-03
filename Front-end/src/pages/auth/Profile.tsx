@@ -1,15 +1,18 @@
-import { useAuth } from "../../context/AuthContext"
 import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { useState } from "react";
 import { ProfileForm } from "../../components/ProfileForm";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDisPatch, RootState } from "../../redux/store";
+import { updateUserInfo } from "../../redux/slices/authSlice";
+
 
 
 
 interface UserItem{
   
-    id:string
+    _id:string
     name:string
     email:string
     image?: string
@@ -17,9 +20,11 @@ interface UserItem{
 
 export default function Profile() {
 
-const {user, updateUser} = useAuth()
 const [editUser, setEditUser] = useState<UserItem | null>(null)
 const [showForm, setShowForm] = useState(false)
+const dispatch = useDispatch<AppDisPatch>();
+const user = useSelector((state: RootState) => state.auth.user);
+
 
 
 const handleEditProfile = (user: UserItem)=>{
@@ -28,15 +33,17 @@ const handleEditProfile = (user: UserItem)=>{
     setShowForm(true)
 }
 const handleSavedUser = ( updatedUser: UserItem) =>{
-    if(user)
-    updateUser({
-    ...user,
-    id: updatedUser.id ,
-    name: updatedUser.name,
-    email: updatedUser.email,
-    image: updatedUser.image
+    if (updatedUser) {
+    dispatch(updateUserInfo({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      image: updatedUser.image,
+      role: user?.role || "user"
+    }));
+  }
    
-  });
+
 }
 const handleCloseForm = () =>{
     setEditUser(null)

@@ -1,38 +1,36 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { forgetPassword } from "../../services/axios"
 import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDisPatch, RootState } from "../../redux/store"
+import { resetError, sendOtp } from "../../redux/slices/authSlice"
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const dispatch = useDispatch<AppDisPatch>();
+    const { loading, error } = useSelector((state: RootState) => state.auth);
+
     
     const navigate = useNavigate()
 
+    useEffect(() => {
+     dispatch(resetError());
+    }, [dispatch]);
+
+
     const handleSubmit = async(e: React.FormEvent)=>{
         e.preventDefault()
-        setLoading(true)
-        try{
-            await forgetPassword(email)
-            showSuccessAlert("OPT sent to your Email")
-            navigate('/reset-password', {state:{email}})
-        }catch(error:any){
-            setLoading(false)
-                let errorMessage = 'Faild to Send OPT. Please try again.';
-                    if (error.response?.data?.message) {
-                        errorMessage = typeof error.response.data.message === 'object'
-                        ? JSON.stringify(error.response.data.message)
-                        : String(error.response.data.message);
-                    }
-                    setError(errorMessage);
-                    showErrorAlert('OPT Send Failed', errorMessage);
-                    console.error(' error:', error);  
-        }finally{
-            setLoading(false)
-        }
-
+        dispatch(sendOtp(email))
+            .unwrap()
+            .then(() => {
+                showSuccessAlert("OTP sent to your email");
+                navigate('/reset-password', { state: { email } });
+            })
+            .catch((error) => {
+                showErrorAlert('OTP Send Failed', error);
+            });
     }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#ffe4c3] to-[#f8cd96] flex justify-center items-center p-6">
         <div className="w-[400px] max-w-full bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">

@@ -1,7 +1,6 @@
 
 import { lazy, Suspense, type ReactNode } from "react"
-import {  Navigate, Route, Routes } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
+import {   Route, Routes } from "react-router-dom"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
 import FoodPage from "../pages/food/FoodDetailPage"
@@ -25,18 +24,17 @@ type RequireAuthTypes = { children: ReactNode}
 
 const RequireAuth = ({ children}: RequireAuthTypes) =>{
 
-    const {user, loading} = useAuth()
 
-    if(loading){
-        return(
-            <div className="flex items-center justify-center h-screen bg-gray-100">
-                <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-            </div>
-        )
-    }
-    if(!user){
-        return <Navigate to="/login"/>
-    }
+    // if(loading){
+    //     return(
+    //         <div className="flex items-center justify-center h-screen bg-gray-100">
+    //             <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+    //         </div>
+    //     )
+    // }
+    // if(!user){
+    //     return <Navigate to="/login"/>
+    // }
 
     return<>{children}</>
 }

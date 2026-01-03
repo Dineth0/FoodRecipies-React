@@ -13,8 +13,10 @@ import { getTotalRecipesCount } from '../../services/RecipeAPI';
 import { getTotalReviewsCount } from '../../services/ReviewAPI';
 import { getTotalUsersCount } from '../../services/UserAPI';
 import Home from '../../components/dashboard/Home';
-import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDisPatch, RootState } from '../../redux/store';
+import { logoutAction } from '../../redux/slices/authSlice';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -25,7 +27,10 @@ type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending R
 //   totalUsers: number
 // }
 export default function Dashboard() {
-    const {user, isAuthenticated, logout} = useAuth()
+  const { isAuthenticated, user} = useSelector((state:RootState)=>state.auth)
+  const dispatch = useDispatch<AppDisPatch>()
+
+  
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [stats, setStats] = useState({
     totalFoods: 30,
@@ -33,6 +38,9 @@ export default function Dashboard() {
     totalReviews: 30,
     totalUsers: 3,
   })
+  const logout = () => {
+  dispatch(logoutAction())
+}
 
   useEffect(()=>{
     const loadTotalFoodsCount = async ()=>{
@@ -86,7 +94,7 @@ export default function Dashboard() {
       }
     }
     loadTotalUsersCount()
-  })
+  },[])
 
 
   

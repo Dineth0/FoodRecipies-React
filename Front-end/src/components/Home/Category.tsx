@@ -16,7 +16,8 @@ import Meats from "../../assets/meats.png"
 import SeaFoods from "../../assets/seafoods.png"
 import StreetFood from "../../assets/StreetFoods.png"
 import Traditional from "../../assets/TraditionalFoods.png"
-import { useAuth } from '../../context/AuthContext';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../../redux/store';
 
 
 const categories = [
@@ -37,7 +38,8 @@ const categories = [
 
 export default function Category() {
 const navigate = useNavigate()
-const {isAuthenticated} = useAuth()
+
+const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
 
 const handleCategoryClick = (catName: string) =>{
   if(!isAuthenticated) {

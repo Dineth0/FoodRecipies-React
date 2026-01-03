@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 import { showErrorAlert } from '../../utils/SweetAlerts';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDisPatch, RootState } from '../../redux/store';
+import { signupUser } from '../../redux/slices/authSlice';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -9,7 +11,10 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const { signup, loading, error } = useAuth();
+  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDisPatch>();
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,7 +28,10 @@ const Signup = () => {
     }
     
     setPasswordError('');
-    await signup(name, email, password);
+    dispatch(signupUser({ name, email, password }))
+    .unwrap()
+    .then(() => navigate('/login'))
+    .catch(() => {});
   };
 
   return (

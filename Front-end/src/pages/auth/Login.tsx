@@ -1,17 +1,37 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDisPatch, RootState } from '../../redux/store';
+import { loginUser, resetError } from '../../redux/slices/authSlice';
+import { showToast } from '../../utils/SweetAlerts';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const { login, loading, error } = useAuth();
+  
+  const dispatch = useDispatch<AppDisPatch>()
+  const navigate = useNavigate()
 
+  const {loading, error, isAuthenticated, user} = useSelector((state:RootState)=>state.auth)
+
+  useEffect(()=>{
+    dispatch(resetError())
+  },[dispatch])
+
+  useEffect(()=>{
+    if(isAuthenticated){
+       showToast('Welcome back to FOODIE');
+      if(user?.role === 'Admin'){
+        navigate('/dashboard')
+      } else {
+        navigate('/') 
+      }
+    }
+  },[isAuthenticated, user , navigate])
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await login(email, password);
+    dispatch(loginUser({ email, password }));
   };
 
   return (
@@ -89,8 +109,7 @@ const Login = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
+                  
                   className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 border-gray-300 rounded transition-colors"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
