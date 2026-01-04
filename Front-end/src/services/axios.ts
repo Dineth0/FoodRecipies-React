@@ -1,6 +1,9 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { refreshTokens } from "./UserAPI";
 
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+    _retry?: boolean;
+}
 
 
 const axiosInstance = axios.create({
@@ -38,7 +41,7 @@ axiosInstance.interceptors.response.use(
         return response
     },
     async(error: AxiosError) =>{
-        const originalRequest: any = error.config
+        const originalRequest = error.config as CustomAxiosRequestConfig
 
         const isPublic = PUBLIC_ENDPOINTS.some((url)=>
             originalRequest.url?.includes(url)
