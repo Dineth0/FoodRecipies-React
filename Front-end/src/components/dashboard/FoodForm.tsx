@@ -1,23 +1,25 @@
 
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom'
-import { addFood } from '../../services/FoodAPI';
 import { showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
-import { updateFood } from '../../services/FoodAPI'
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDisPatch, RootState } from '../../redux/store';
+import { addFoodAction, updateFoodAction } from '../../redux/slices/foodSlice';
+import type { AxiosError } from 'axios';
 
-interface FoodItem{
-  _id:string
-  name:string
-  category:string
-  cuisine:string
-  description:string
-  images: string[]
-}
+// interface FoodItem{
+//   _id:string
+//   name:string
+//   category:string
+//   cuisine:string
+//   description:string
+//   images: string[]
+// }
 
 interface FoodsFormProps {
   onClose: () => void;
-  onSave: (food : FoodItem) => void
-  selectedFood:FoodItem | null
+  onSave: () => void
+ 
 }
 
 interface FormData{
@@ -26,8 +28,14 @@ interface FormData{
     cuisine: string;
     description: string;
 }
+interface ApiErrorResponse {
+  message: string;
+}
 
-export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFood }) => {
+export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave }) => {
+
+  const dispatch = useDispatch<AppDisPatch>()
+  const {selectedFood, loading} = useSelector((state:RootState)=> state.food)
   
   const [formData, setFormData] = useState<FormData>({
     name: selectedFood?.name || '',
@@ -38,7 +46,6 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
   const [existingImageUrls, setExsitingImageUrls] = useState<string[]>(selectedFood?.images || [])
   const [files, setFiles] = useState<FileList | null>(null)
 
-  const[loading, setLoading] =useState(false)
   const[error, setError] = useState<string | null> (null)
 
   useEffect(() => {
@@ -99,7 +106,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
       setError("You can only upload 5 Images")
       return
     }
-    setLoading(true)
+    
     setError(null)
 
     const data = new FormData()
@@ -115,24 +122,20 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave, selectedFo
     }
 
     try{
-      let response;
+      
       if(selectedFood) {
-        response = await updateFood(selectedFood._id!, data)
+        await dispatch(updateFoodAction({id:selectedFood._id, data})).unwrap()
         showSuccessAlert('Success','Food Successfully Updated')
       }else{
-        response = await addFood(data)
+        await dispatch(addFoodAction(data)).unwrap()
         showSuccessAlert('success', "Food Added Successfully")
       }
-      onSave(response.data.data.food)
+      onSave()
 
-    }catch(error: any){
-      setLoading(false)
-      let errorMessage = 'Faild to add food. Please try again.';
-            if (error.response?.data?.message) {
-              errorMessage = typeof error.response.data.message === 'object'
-                ? JSON.stringify(error.response.data.message)
-                : String(error.response.data.message);
-            }
+    }catch(error){
+    const err = error as AxiosError<ApiErrorResponse>;
+      const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.';
+            
             setError(errorMessage);
             showErrorAlert('Food Add Failed', errorMessage);
             console.error(' error:', error);

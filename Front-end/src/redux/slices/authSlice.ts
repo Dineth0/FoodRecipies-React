@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import axiosInstance, { forgetPassword, passwordReset } from "../../services/axios";
+import type { AxiosError } from "axios";
 
 
 interface User{
@@ -27,6 +28,14 @@ interface signupPayload {
   email: string;
   password: string;
 }
+interface ResetPasswordPayload {
+  email: string;
+  otp: number;       
+  newPassword: string;
+}
+interface ApiErrorResponse {
+  message: string;
+}
 const initialState: AuthState = {
     user: null,
     token: localStorage.getItem('token'),
@@ -41,8 +50,9 @@ export const signupUser = createAsyncThunk(
     try {
       const response = await axiosInstance.post('/auth/signup', { name, email, password });
       return response.data; 
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Signup Failed');
+    } catch (error) {
+      const err = error as AxiosError<ApiErrorResponse>;
+      return rejectWithValue(err.response?.data?.message || 'Signup Failed');
     }
   }
 );
@@ -56,8 +66,9 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('token', response.data.data.token);
       localStorage.setItem('refreshToken', response.data.data.refreshToken); 
       return response.data.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Login Failed');
+    } catch (error) {
+      const err = error as AxiosError<ApiErrorResponse>;
+      return rejectWithValue(err.response?.data?.message || 'Login Failed');
     }
   }
 );
@@ -68,8 +79,9 @@ export const fetchUserProfile = createAsyncThunk(
     try {
       const response = await axiosInstance.get('/auth/me'); 
       return response.data.user;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message);
+    } catch (error) {
+      const err = error as AxiosError<ApiErrorResponse>;
+      return rejectWithValue(err.response?.data?.message);
     }
   }
 );
@@ -86,20 +98,22 @@ export const sendOtp = createAsyncThunk(
     try {
       const response = await forgetPassword(email);
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to send OTP');
+    } catch (error) {
+      const err = error as AxiosError<ApiErrorResponse>;
+      return rejectWithValue(err.response?.data?.message || 'Failed to send OTP');
     }
   }
 );
 
 export const resetPasswordAction = createAsyncThunk(
   'auth/resetPassword',
-  async (data: any, { rejectWithValue }) => {
+  async (data: ResetPasswordPayload, { rejectWithValue }) => {
     try {
       const response = await passwordReset(data);
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Reset failed');
+    } catch (error) {
+      const err = error as AxiosError<ApiErrorResponse>;
+      return rejectWithValue(err.response?.data?.message || 'Reset failed');
     }
   }
 );

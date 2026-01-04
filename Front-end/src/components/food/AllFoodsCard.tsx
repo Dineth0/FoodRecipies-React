@@ -1,35 +1,28 @@
 import {  useEffect, useState } from "react"
-import { getAllFoods } from "../../services/FoodAPI"
 import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDisPatch, RootState } from "../../redux/store"
+import { fetchAllFoods } from "../../redux/slices/foodSlice"
 
 
-interface Foods{
-  _id: string
-  name: string
-  category: string
-  cuisine: string
-  description: string
-  images: string[]
-}
+// interface Foods{
+//   _id: string
+//   name: string
+//   category: string
+//   cuisine: string
+//   description: string
+//   images: string[]
+// }
 
 export default function AllFoodsCard(){
-    const [foods, setFoods] = useState<Foods[]>([])
     const [page, setPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(1)
+    const dispatch = useDispatch<AppDisPatch>();
+    const { foods, totalPages } = useSelector((state: RootState) => state.food);
      const navigate = useNavigate()
 
      useEffect(() =>{
-        const fetchAllFoods = async () =>{
-            try{
-                const response = await getAllFoods(page, 8)
-                setFoods(response.data.data.foods)
-                setTotalPages(response.data.totalPages)
-            }catch(error){
-                console.error(error)
-            }
-        }
-        fetchAllFoods()
-     },[page])
+        dispatch(fetchAllFoods({ page, limit: 8 }));
+     },[dispatch, page])
 
 
      return(

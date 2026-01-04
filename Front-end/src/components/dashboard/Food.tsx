@@ -2,64 +2,39 @@ import { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { IoMdAdd } from "react-icons/io";
 import FoodForm from "../dashboard/FoodForm"
-import { deleteFood, getAllFoods } from '../../services/FoodAPI';
 import { showConfirmDialog, showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDisPatch, RootState } from '../../redux/store';
+import { deleteFoodAction, fetchAllFoods, setSelectedFood, type Food } from '../../redux/slices/foodSlice';
 
-interface FoodItem{
-    _id:string
-    name:string
-    category:string
-    cuisine:string
-    description:string
-    images:string[]
-}
+type FoodItem = Food
 
 
 export  default function Foods(){
     const [page, setPage] = useState(1)
-    const [totalPages, settotalPages] = useState(1)
-    const [foods,setFoods] =useState<FoodItem[]>([])
+    
     const [showForm,setShowForm] = useState(false)
-    const [selectedFood, setSeletedFood] = useState<FoodItem | null>(null)
+    const dispatch = useDispatch<AppDisPatch>();
+    const { foods, loading, totalPages } = useSelector((state: RootState) => state.food);
 
     useEffect(() =>{
-        const fetchFoods = async () =>{
-            try{
-                const response = await getAllFoods(page, 3)
-                setFoods(response.data.data.foods)
-                settotalPages(response.data.totalPages )
-            }catch(error){
-                console.error(error)
-                showErrorAlert('error', "Can not load data")
-            }
-        }
-        fetchFoods()
-    },[page])
+         dispatch(fetchAllFoods({ page, limit: 3 }));
+    },[dispatch, page])
 
-    const handleSavedFood = (savedFood: FoodItem) =>{
-        if(savedFood._id){
-            setFoods(prevFoods =>prevFoods.map(food=>
-                food._id === savedFood._id ? savedFood : food
-            ))
-        }else{
-            setFoods(prevFoods =>[
-               ...prevFoods,
-               {...savedFood, _id: savedFood._id || Date.now().toString()}
-            ])
-        }
-        setSeletedFood(null)
-        setShowForm(false)
+    const handleSavedFood = () =>{
+        dispatch(fetchAllFoods({ page, limit: 3 }));
+        setShowForm(false);
     }
     const handleEditFood = (food:FoodItem)=>{
-        setSeletedFood(food)
+        dispatch(setSelectedFood(food))
         setShowForm(true)
     }
     const handleAddClick = () =>{
-        setSeletedFood(null)
+        dispatch(setSelectedFood(null))
         setShowForm(true)
     }
     const handleCloseForm = () =>{
-        setSeletedFood(null)
+        dispatch(setSelectedFood(null))
         setShowForm(false)
     }
 
@@ -71,10 +46,8 @@ export  default function Foods(){
         ).then(async(result)=>{
             if(result.isConfirmed){
                 try{
-                    await deleteFood(foodDelete._id)
-                    setFoods(prevFoods =>
-                        prevFoods.filter(food => food._id !== foodDelete._id)
-                    )
+                    dispatch(deleteFoodAction(foodDelete._id));
+                    
 
                     showSuccessAlert('Deleted' ,`${foodDelete.name} has been Deleted`)
                 }catch(error){
@@ -96,6 +69,7 @@ export  default function Foods(){
                     Add Food<IoMdAdd className='text-lg'/>
                 </button>
             </div>
+            {loading && <p className="text-white">Loading...</p>}
             <div className='w-full overflow-x-auto'>
                 <table className="w-full text-left text-sm text-gray-300 table-fixed min-w-[1000px]">
                     <thead className="uppercase tracking-wider  bg-black/70 backdrop-blur-md border-b border-white/20">
@@ -109,7 +83,7 @@ export  default function Foods(){
                         </tr>
                     </thead>
                     <tbody>
-                        {foods.map((food, index)=>(
+                        {foods.map((food: FoodItem, index:number)=>(
                             <tr key={index} className="border-b border-gray-800 hover:bg-black/25">
                                 <td className='py-2 px-4'>{food.name}</td>
                                 <td className='py-2 px-4'>{food.category}</td>
@@ -118,7 +92,7 @@ export  default function Foods(){
 
                                 <td className="py-2 px-4 flex gap-2 justify-center">
                                     {food.images && food.images.length > 0 ? (
-                                        food.images.map((imgUrl, idx) => (
+                                        food.images.map((imgUrl:string, idx:number) => (
                                         <img
                                             key={idx}
                                             src={imgUrl}
@@ -184,7 +158,7 @@ export  default function Foods(){
                 <FoodForm
                 onClose={handleCloseForm}
                 onSave={handleSavedFood}
-                selectedFood = {selectedFood}
+                
                 />
             )}
         </>
