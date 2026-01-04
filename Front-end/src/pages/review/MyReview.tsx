@@ -89,7 +89,7 @@ export default function MyReview() {
             review.map((rev)=>(
 
             
-                <div className="border-b border-gray-100 py-6 bg-white rounded-full ">
+                <div className="border-b border-gray-100 py-6 bg-white rounded-full mt-4 ">
                     <div className="flex gap-4 items-start">
                         <div className="flex-shrink-0">
                             <div className="w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center text-white text-xl font-bold uppercase shadow-sm ml-25">

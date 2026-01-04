@@ -29,13 +29,23 @@ interface Recipe {
   date: Date;
   images?: string[];
 }
+interface ReviewItem {
+  _id: string;
+  user: User;
+  recipe: {
+    _id: string;
+    title: string;
+  };
+  rating: number;
+  description: string;
+}
 
 export default function RecipeDetailsPage() {
   const { title } = useParams<{ title: string }>();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [activeImage, setActiveImage] = useState("");
   const [showForm, setShowForm] = useState(false)
-  const [review, setReview] = useState<any[]>([])
+  const [review, setReview] = useState<ReviewItem[]>([])
  
 
   useEffect(() => {

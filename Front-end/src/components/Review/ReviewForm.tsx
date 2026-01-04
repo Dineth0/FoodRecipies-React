@@ -33,7 +33,7 @@ interface ReviewFormProps{
     onClose: () => void
     onSave: (review: ReviewItem) => void
     recipeId : string
-    selectedReview : ReviewItem | null
+    selectedReview? : ReviewItem | null
 }
 interface ApiErrorResponse {
   message: string;
