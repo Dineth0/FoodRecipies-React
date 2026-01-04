@@ -2,9 +2,14 @@ import { useEffect, useState } from "react"
 import { getTotalStatusAndCompire } from "../../services/RecipeAPI"
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
+interface StatusData {
+  name: string; 
+  value: number; 
+  [key: string]: string | number 
+}
 const COLORS = ["#facc15", "#22c55e", "#ef4444"]
 export default function DashboardPieChart() {
-    const [data, setData] = useState<any[]>([])
+    const [data, setData] = useState<StatusData[]>([])
 
     useEffect(()=>{
         const loadData = async ()=>{
@@ -37,7 +42,7 @@ export default function DashboardPieChart() {
                     outerRadius={80}
                     isAnimationActive={false} 
                 >
-                    {data.map((entry, index) => (
+                    {data.map((_, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                 </Pie>
