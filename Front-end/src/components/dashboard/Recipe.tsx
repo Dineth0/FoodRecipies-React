@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import { deleteRecipes, getAllRecipes } from "../../services/RecipeAPI"
 import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts"
 import { IoMdAdd } from "react-icons/io"
 import { FaEdit, FaTrash } from "react-icons/fa"
 import { RecipeForm } from "./RecipeForm"
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDisPatch, RootState } from "../../redux/store"
+import { deleteRecipeAction, fetchAllRecipess, setSelectedRecipe } from "../../redux/slices/recipeSlice"
 
 
 interface User {
@@ -21,7 +23,7 @@ interface RecipeItem{
     user: User
     food: Food
     title:string
-    ingredients: string
+    ingredients: string 
     step: string
     readyIn : string
     date: Date
@@ -31,50 +33,30 @@ interface RecipeItem{
 
 export default function Recipes(){
     const [page, setPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(1)
-    const [recipes, setRecipes] = useState<RecipeItem[]>([])
     const [showForm, setShoeForm] = useState(false)
-    const [selectedRecipe, setSelectedRecipe] = useState<RecipeItem | null>(null)
+    const dispatch = useDispatch<AppDisPatch>();
+    const { recipes, loading, totalPages } = useSelector((state: RootState) => state.recipe);
 
     useEffect(()=>{
-        const fetchRecipe = async () =>{
-            try{
-                const response = await getAllRecipes(page, 3)
-                setRecipes(response.data.data.recipes)
-                setTotalPages(response.data.totalPages)
-            }catch(error){
-                console.error(error)
-                showErrorAlert('error', "Can not load data")
-            }
-        }
-        fetchRecipe()
-    },[page])
+        dispatch(fetchAllRecipess({ page, limit: 3 }));
+    },[dispatch, page])
 
-    const handleSavedFood = (savedRecipe: RecipeItem) =>{
-        if (selectedRecipe) {
-        setRecipes((prevRecipes) => 
-            prevRecipes.map((recipe) => 
-                recipe._id === savedRecipe._id ? savedRecipe : recipe
-            )
-        );
-    } else {
-        setRecipes((prevRecipes) => [savedRecipe, ...prevRecipes]);
-    }
-
+    const handleSavedRecipe = () =>{
+    dispatch(fetchAllRecipess({ page, limit: 3 }));
     handleCloseForm();
     }
 
     const handleEditRecipe = (recipe: RecipeItem) =>{
-        setSelectedRecipe(recipe)
+        dispatch(setSelectedRecipe(recipe))
         setShoeForm(true)
     }
 
     const handleAddClick = () =>{
-        setSelectedRecipe(null)
+        dispatch(setSelectedRecipe(null))
         setShoeForm(true)
     }
     const handleCloseForm = () =>{
-        setSelectedRecipe(null)
+        dispatch(setSelectedRecipe(null))
         setShoeForm(false)
     }
 
@@ -86,10 +68,8 @@ export default function Recipes(){
         ).then(async(result)=>{
             if(result.isConfirmed){
                 try{
-                    await deleteRecipes(recipeDelete._id)
-                    setRecipes(prevRecipes =>
-                        prevRecipes.filter(recipe => recipe._id !== recipeDelete._id)
-                    )
+                     dispatch(deleteRecipeAction(recipeDelete._id));
+                    
                     showSuccessAlert('Deleted' ,`${recipeDelete.title} has been Deleted`)
                 }catch(error){
                     console.error(error)
@@ -113,6 +93,7 @@ export default function Recipes(){
                     Add Recipe<IoMdAdd className="text-lg"/>
                 </button>
             </div>
+            {loading && <p className="text-white">Loading...</p>}
             <div className="w-full overflow-auto">
             <table className="w-full text-left text-sm text-gray-300 table-fixed min-w-[1000px]">
                 <thead className="uppercase tracking-wider  bg-black/70 backdrop-blur-md border-b border-white/20">
@@ -224,8 +205,8 @@ export default function Recipes(){
             showForm && (
                 <RecipeForm
                     onClose={handleCloseForm}
-                    onSave={handleSavedFood}
-                    selectedRecipe={selectedRecipe}
+                    onSave={handleSavedRecipe}
+                    
                 />
             )
         }

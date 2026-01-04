@@ -3,21 +3,36 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { deleteRecipes, getRecipeByUser } from "../../services/RecipeAPI";
 import { showConfirmDialog, showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
 import { RecipeForm } from "../../components/dashboard/RecipeForm";
+import { useDispatch } from "react-redux";
+import type { AppDisPatch } from "../../redux/store";
+import { setSelectedMyRecipe } from "../../redux/slices/recipeSlice";
 
-interface Recipe {
+interface User {
   _id: string;
-  title: string;
-  ingredients: string[];
-  step: string;
-  readyIn: string;
-  images?: string[];
+  name: string;
+}
+
+interface Food {
+  _id: string;
+  name: string;
+}
+interface Recipe {
+ _id: string
+    user: User
+    food: Food
+    title:string
+    ingredients: string
+    step: string
+    readyIn : string
+    date: Date
+    images?: string[]
 }
 
 export default function MyRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false)
-      const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+  const dispatch = useDispatch<AppDisPatch>();
   
 
   useEffect(() => {
@@ -36,23 +51,17 @@ export default function MyRecipes() {
   };
 
   const handleEdit = (recipe: Recipe)=>{
-    setSelectedRecipe(recipe)
+    dispatch(setSelectedMyRecipe(recipe))
     setShowForm(true)
   }
 
   const handleCloseForm = () =>{
-        setSelectedRecipe(null)
+        dispatch(setSelectedMyRecipe(null))
         setShowForm(false)
   }
 
-  const handleMyRecipesaved = (updatedRecipe: Recipe) =>{
-    setRecipes((prev) =>{
-      const existing = prev.find(rec => rec._id === updatedRecipe._id)
-      if(existing){
-        return prev.map(rec => rec._id === updatedRecipe._id ? updatedRecipe : rec)
-      }
-      return [updatedRecipe, ...prev]
-    })
+  const handleMyRecipesaved = () =>{
+   
     handleCloseForm()
   }
 
@@ -81,7 +90,7 @@ export default function MyRecipes() {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-12 bg-gradient-to-br from-[#fff3e0] via-[#ffd59e] to-[#ffb74d]">
+    <div className="p-5">
       <h1 className="text-2xl font-bold mb-5">My Recipes</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -104,7 +113,7 @@ export default function MyRecipes() {
             <div className="p-4">
               <h2 className="text-lg font-semibold mb-2">{recipe.title}</h2>
               <p className="text-sm text-gray-600 mb-2">
-                Ingredients: {recipe.ingredients.join(", ")}
+                Ingredients: {recipe.ingredients}
               </p>
               <p className="text-gray-700 text-sm mb-2">
                STEPS: {recipe.step.length > 100 ? recipe.step.slice(0, 100) + "..." : recipe.step}
@@ -133,7 +142,7 @@ export default function MyRecipes() {
         <RecipeForm
         onClose={handleCloseForm}
         onSave={handleMyRecipesaved}
-        selectedMyRecipe={selectedRecipe}/>
+        />
       )}
     </div>
   );

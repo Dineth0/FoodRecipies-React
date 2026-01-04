@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { addRecipe, updateRecipe } from '../../services/RecipeAPI';
 import { showErrorAlert, showSuccessAlert } from '../../utils/SweetAlerts';
 import { getAllFoods } from '../../services/FoodAPI';
-import {  useSelector } from 'react-redux';
-import type {  RootState } from '../../redux/store';
+import {  useDispatch, useSelector } from 'react-redux';
+import type {  AppDisPatch, RootState } from '../../redux/store';
+import { addRecipeAction, updateRecipeAction } from '../../redux/slices/recipeSlice';
+import type { AxiosError } from 'axios';
 
 
-interface User {
-  _id: string;
-  name: string;
-}
+// interface User {
+//   _id: string;
+//   name: string;
+// }
 
 interface Food {
   _id: string;
   name: string;
 }
-interface RecipeItem{
-    _id: string
-    user: User
-    food: Food
-    title:string
-    ingredients: string
-    step: string
-    readyIn : string
-    date: Date
-    images?: string[]
+// interface RecipeItem{
+//     _id: string
+//     user: User
+//     food: Food
+//     title:string
+//     ingredients: string
+//     step: string
+//     readyIn : string
+//     date: Date
+//     images?: string[]
 
-}
+// }
 interface FormData{
     food: string
     title:string
@@ -39,12 +40,14 @@ interface FormData{
 }
 interface RecipeFormProps{
     onClose: () => void
-    onSave: (recipe: RecipeItem) => void
-    selectedRecipe : RecipeItem | null
-    selectedMyRecipe? : RecipeItem | null
+    onSave: () => void
 }
-export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selectedRecipe , selectedMyRecipe}) =>{
-
+interface ApiErrorResponse {
+  message: string;
+}
+export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave}) =>{
+const dispatch = useDispatch<AppDisPatch>()
+    const {selectedRecipe,selectedMyRecipe, loading} = useSelector((state:RootState)=> state.recipe)
     const [formdata, setFormdata] = useState<FormData>({
         food: selectedRecipe?.food._id || selectedMyRecipe?.food._id || '' ,
         title: selectedRecipe?.title || selectedMyRecipe?.title ||'',
@@ -57,10 +60,10 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
     const [files, setFiles] = useState<FileList | null>(null)
     const [existingImageUrls, setExsitingImageUrls] = useState<string[]>(selectedRecipe?.images || [])
     
-    const[loading, setLoading] =useState(false)
     const[error, setError] = useState<string | null> (null)
     const [foods, setFoods] = useState<Food[]>([])
     const { user } = useSelector((state: RootState) => state.auth);
+    
 
 
     useEffect (()=>{
@@ -145,7 +148,7 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
                 return
         }
         setError(null)
-        setLoading(true)
+       
 
         const data = new FormData()
         data.append('user', user?._id || "")
@@ -164,33 +167,30 @@ export  const RecipeForm: React.FC<RecipeFormProps> =({onClose, onSave, selected
         }
 
         try{
-            let response;
+           
             if(selectedRecipe){
-              response = await updateRecipe(selectedRecipe._id! , data)
+                await dispatch(updateRecipeAction({id:selectedRecipe._id, data})).unwrap()
                 showSuccessAlert('Success','Recipe Successfully Updated')
               }else if(selectedMyRecipe){
-                 response = await updateRecipe(selectedMyRecipe._id! , data)
+                await dispatch(updateRecipeAction({id: selectedMyRecipe._id! , data})).unwrap()
                 showSuccessAlert('Success','Your Recipe Successfully Updated')
               }else{
-                response = await addRecipe(data)
+                await dispatch(addRecipeAction(data)).unwrap()
                 showSuccessAlert('Success','Recipe Successfully Added')
               }
-              onSave(response.data.data.recipe)
-              setLoading(false)
+              onSave()
+          
               onClose()
             
-        }catch(error: any){
-          setLoading(false)
-                let errorMessage = 'Faild to add food. Please try again.';
-                      if (error.response?.data?.message) {
-                        errorMessage = typeof error.response.data.message === 'object'
-                          ? JSON.stringify(error.response.data.message)
-                          : String(error.response.data.message);
-                      }
+        }catch(error){
+          const err = error as AxiosError<ApiErrorResponse>;
+                const errorMessage = typeof err === 'string' ? err:'Faild to add Recipe. Please try again.';
+                      
                       setError(errorMessage);
-                      showErrorAlert('Food Add Failed', errorMessage);
-                      console.error(' error:', error);  
-        }
+                      showErrorAlert('Recipe Add Failed', errorMessage);
+                      console.error(' error:', error);
+          
+              }
     }
 
     const formTitle = selectedRecipe ? "Edit Recipe" : "Add Recipe"
