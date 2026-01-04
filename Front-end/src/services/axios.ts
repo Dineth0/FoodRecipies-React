@@ -4,7 +4,7 @@ import { refreshTokens } from "./UserAPI";
 
 
 const axiosInstance = axios.create({
-    baseURL : "http://localhost:8000/api/v1",
+    baseURL :"https://incredible-carlie-dinethnakandala-d9594667.koyeb.app/api/v1",
     headers :{
         "Content-Type":"application/json"
     }
