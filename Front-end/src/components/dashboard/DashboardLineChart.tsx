@@ -2,8 +2,12 @@ import { useEffect, useState } from "react"
 import { getRecipeGrowth } from "../../services/RecipeAPI"
 import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts"
 
+interface RecipeGrowth {
+  day: string;
+  recipes: number;
+}
 export default function DashboardLineChart() {
-    const [data, setData] = useState<any[]>([])
+    const [data, setData] = useState<RecipeGrowth[]>([])
     useEffect(()=>{
         const loadData = async () =>{
             const res = await getRecipeGrowth()
