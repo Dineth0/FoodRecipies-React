@@ -108,7 +108,7 @@ export default function RecipeDetailsPage() {
 
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-[#fff3e4] via-[#ffd8b5] to-[#ffba7a]">
-        <div className="max-w-6xl mx-auto mt-4">
+        <div className="max-w-6xl mx-auto mt-10">
             
 
             <div className="flex justify-between items-center mt-3">
@@ -230,9 +230,9 @@ export default function RecipeDetailsPage() {
                     <p className="text-gray-500 text-lg">No Review available for this Recipe yet.</p>
                   </div>
                 ):(
-                  <div>
+                  <div className="mb-4 space-y-4">
                     {review.map((rev)=>(
-                      <ReviewCard key={rev._id} review={rev}/>
+                      <ReviewCard key={rev._id} review={rev} />
                     ))}
                   </div>
                 )}
