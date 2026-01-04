@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getRecipeByName } from "../../services/RecipeAPI";
+import { downloadRecipePDF, getRecipeByName } from "../../services/RecipeAPI";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { ReviewForm } from "../../components/Review/ReviewForm";
 import { getReviewByRecipe } from "../../services/ReviewAPI";
 import ReviewCard from "../../components/Review/ReviewCard";
+import { FaFilePdf } from "react-icons/fa";
 
 
 interface User {
@@ -62,6 +63,31 @@ export default function RecipeDetailsPage() {
     fetchRecipe();
   }, [title]);
 
+  const handleDownloadPDF = async () => {
+    if (!recipe) return;
+
+    try {
+      const response = await downloadRecipePDF(recipe._id);
+      
+      // Blob එකක් මගින් download link එකක් තාවකාලිකව සාදා ගැනීම
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // File name එක ලබා දීම
+      link.setAttribute('download', `${recipe.title.replace(/\s+/g, '_')}.pdf`);
+      
+      document.body.appendChild(link);
+      link.click();
+      
+      // අවසානයේ link එක ඉවත් කිරීම
+      link.parentNode?.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      alert("Failed to download PDF");
+    }
+  };
+
   const handleAddClick = () =>{
     setShowForm(true)
   }
@@ -77,9 +103,20 @@ export default function RecipeDetailsPage() {
         <div className="max-w-6xl mx-auto">
             
 
-            <h1 className="text-4xl sm:text-5xl font-bold text-[#3a2f2a] tracking-tight mt-3">
-                {recipe?.title}
-            </h1>
+            <div className="flex justify-between items-center mt-3">
+                <h1 className="text-4xl sm:text-5xl font-bold text-[#3a2f2a]">
+                    {recipe?.title}
+                </h1>
+                
+                {/* PDF Download Button එක */}
+                <button 
+                    onClick={handleDownloadPDF}
+                    className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full shadow-lg transition-all"
+                >
+                    <FaFilePdf /> Download PDF
+                </button>
+            </div>
+
 
             <div className="flex flex-wrap gap-4 mb-10 text-[#7a6e67] mt-6">
                 <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">

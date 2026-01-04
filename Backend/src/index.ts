@@ -12,7 +12,7 @@ import http from "http";
 import { Server } from "socket.io";
 dotenv.config();
 
-const SERVER_PORT = process.env.SERVER_PORT
+const PORT = process.env.PORT
 const MONGO_URI = process.env.MONGO_URI as string
 
 const app: Application = express()
@@ -64,6 +64,6 @@ mongo.then(() =>{
     console.error(error)
 })
 
-server.listen(SERVER_PORT, () => {
+server.listen(PORT, () => {
     console.log("Server running")
 })

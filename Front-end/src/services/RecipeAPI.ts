@@ -57,3 +57,9 @@ export const getTotalStatusAndCompire = () =>{
 export const searchRecipes = (query: string) =>{
     return axiosInstance.get(`/recipe/search?query=${encodeURIComponent(query)}`)
 }
+
+export const downloadRecipePDF = (id:string)=>{
+    return axiosInstance.get(`/recipe/downloadPDF/${id}`,{
+        responseType: 'blob',
+    })
+}

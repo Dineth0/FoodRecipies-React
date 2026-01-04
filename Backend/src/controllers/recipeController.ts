@@ -8,6 +8,7 @@ import cloudinary from "../config/cloudinary";
 import { Email } from '../models/EmailModel';
 import { sendApprovalemail } from "./emailController";
 import { AuthRequest } from "../middleware/authMiddleware";
+import PDFDocument from 'pdfkit';
 
 
 export const addRecipie = async (req:Request, res:Response, next: NextFunction)=>{
@@ -512,6 +513,47 @@ export const searchRecipes = async (req:Request, res:Response, next: NextFunctio
             success: true,
             data: recipes
         })
+    }catch(error){
+        next(error)
+    }
+}
+
+export const downloadRecipePDF = async (req:Request, res:Response,next:NextFunction)=>{
+    try{
+        const {id} = req.params
+        const recipe = await Recipe.findById(id)
+        .populate("food", "name")
+        .populate("user", "name")
+        
+        if(!recipe){
+            return res.status(404).json({
+                success:false,
+                message: "Recipe Not found"
+            })
+        }  
+        const document = new PDFDocument ({margin:50})
+
+        res.setHeader('Content-Type', 'application/pdf')
+        res.setHeader('Content-Disposition', `attachment; filename=${recipe.title.replace(/\s+/g, '_')}.pdf`);
+        document.pipe(res)
+
+        document.fontSize(25).fillColor('#E44D26').text(recipe.title, {align:'center'})
+        document.moveDown()
+
+        document.fontSize(14).fillColor('black').text(`Food Category: ${(recipe.food as any)?.name}`)
+        document.text(`Created by: ${(recipe.user as any)?.name}`);
+        document.text(`Ready in: ${recipe.readyIn}`);
+        document.moveDown()
+
+        document.fontSize(18).fillColor('#333').text('Ingredients')
+        recipe.ingredients.forEach((ing, index)=>{
+            document.fontSize(12).text(`${index +1}. ${ing}`)
+        })
+        document.moveDown()
+        document.fontSize(18).text('Preparation Steps:')
+        document.fontSize(12).text(recipe.step)
+        document.end()
+        
     }catch(error){
         next(error)
     }
