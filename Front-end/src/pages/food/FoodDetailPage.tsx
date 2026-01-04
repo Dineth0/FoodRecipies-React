@@ -15,11 +15,32 @@ interface Food{
   description: string
   images: string[]
 }
+interface User {
+  _id: string;
+  name: string;
+}
+
+interface FoodData {
+  _id: string;
+  name: string;
+}
+interface Recipe{
+    _id: string
+    user: User
+    food: FoodData
+    title:string
+    ingredients: string
+    step: string
+    readyIn : string
+    images?: string[]
+    status:string
+
+}
 export default function FoodPage() {
     const {name} = useParams<{name : string}>()
     const [food , setFood] = useState<Food| null>(null)
     const [activeImage, setActiveImage] = useState<string>("")
-    const [recipes, setRecipes] = useState<any[]>([]);
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
     const [showForm, setShowForm] = useState(false)
 
     useEffect(() =>{
@@ -45,7 +66,7 @@ export default function FoodPage() {
       if (!food) {
       return <p className="p-10">Loading...</p>  
     }
-     const handleSavedFood = (newRecipe: any) =>{
+     const handleSavedRecipe = (newRecipe: Recipe) =>{
         setShowForm(false); 
 
         if (newRecipe.status === 'Approved') {
@@ -171,7 +192,7 @@ export default function FoodPage() {
         showForm && (
           <UserAddRecipeForm
               onClose={handleCloseForm}
-              onSave={handleSavedFood}
+              onSave={handleSavedRecipe}
               />
         )
       }

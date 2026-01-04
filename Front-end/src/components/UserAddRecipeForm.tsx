@@ -5,6 +5,7 @@ import { showErrorAlert, showSuccessAlert } from '../utils/SweetAlerts';
 import { getAllFoods } from '../services/FoodAPI';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
+import type { AxiosError } from 'axios';
 
 
 interface User {
@@ -25,7 +26,7 @@ interface RecipeItem{
     step: string
     readyIn : string
     images?: string[]
-
+    status:string
 }
 interface FormData{
     food: string
@@ -40,6 +41,9 @@ interface UserAddRecipeFormProps{
     onClose: () => void
     onSave: (recipe: RecipeItem) => void
     // selectedRecipe : RecipeItem | null
+}
+interface ApiErrorResponse {
+  message: string;
 }
 export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, onSave}) =>{
 
@@ -148,17 +152,13 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
               
               onSave(response.data.data.recipe)
             
-        }catch(error: any){
+        }catch(error){
           setLoading(false)
-                let errorMessage = 'Faild to add food. Please try again.';
-                      if (error.response?.data?.message) {
-                        errorMessage = typeof error.response.data.message === 'object'
-                          ? JSON.stringify(error.response.data.message)
-                          : String(error.response.data.message);
-                      }
-                      setError(errorMessage);
-                      showErrorAlert('Food Add Failed', errorMessage);
-                      console.error(' error:', error);  
+          const err = error as AxiosError<ApiErrorResponse>;
+          const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.'; 
+          setError(errorMessage);
+          showErrorAlert('Food Add Failed', errorMessage);
+          console.error(' error:', error);  
         }
     }
 
