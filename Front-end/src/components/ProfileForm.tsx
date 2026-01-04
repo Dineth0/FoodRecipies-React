@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import ReactDOM from 'react-dom'
 import { updateUser } from "../services/UserAPI"
 import { showSuccessAlert, showErrorAlert } from '../utils/SweetAlerts';
+import type { AxiosError } from "axios";
 
 interface User{
     _id: string
@@ -26,6 +27,10 @@ interface UserFormProps{
     onSave:(user:UserItem) => void
     editUser : UserItem | null
 
+}
+
+interface ApiErrorResponse {
+  message: string;
 }
 
 export const ProfileForm: React.FC<UserFormProps> = ({onClose,onSave,editUser
@@ -100,17 +105,13 @@ export const ProfileForm: React.FC<UserFormProps> = ({onClose,onSave,editUser
             showSuccessAlert('Success','User Successfully Updated')
             onSave(response.data.data.user)
             onClose()
-        }catch(error :any){
+        }catch(error){
             setLoading(false)
-                let errorMessage = 'Faild to add food. Please try again.';
-                    if (error.response?.data?.message) {
-                        errorMessage = typeof error.response.data.message === 'object'
-                            ? JSON.stringify(error.response.data.message)
-                            : String(error.response.data.message);
-                                }
-                                setError(errorMessage);
-                                showErrorAlert('Food Add Failed', errorMessage);
-                                console.error(' error:', error);  
+            const err = error as AxiosError<ApiErrorResponse>;
+            const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.';     
+            setError(errorMessage);
+            showErrorAlert('Food Add Failed', errorMessage);
+            console.error(' error:', error);  
                     
         }
     }
