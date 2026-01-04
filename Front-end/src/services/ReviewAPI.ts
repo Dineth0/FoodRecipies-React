@@ -1,7 +1,7 @@
 import axiosInstance from "./axios"
 
 interface ReviewData{
-    user:any
+    user:string
     recipe:string
     rating:number
     description: string
