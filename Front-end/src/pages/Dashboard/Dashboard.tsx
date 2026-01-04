@@ -8,7 +8,6 @@ import User from '../../components/dashboard/User';
 import PendingRecipes from '../../components/dashboard/PendingRecipes';
 import NotificationBell from '../../components/dashboard/NotifyBell';
 import  Review  from '../../components/dashboard/Review';
-import { getTotalFoodsCount } from '../../services/FoodAPI';
 import { getTotalRecipesCount } from '../../services/RecipeAPI';
 import { getTotalReviewsCount } from '../../services/ReviewAPI';
 import { getTotalUsersCount } from '../../services/UserAPI';
@@ -17,6 +16,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDisPatch, RootState } from '../../redux/store';
 import { logoutAction } from '../../redux/slices/authSlice';
+import { fetchTotalFoodsCount } from '../../redux/slices/foodSlice';
 
 type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
 
@@ -29,32 +29,36 @@ type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending R
 export default function Dashboard() {
   const { isAuthenticated, user} = useSelector((state:RootState)=>state.auth)
   const dispatch = useDispatch<AppDisPatch>()
+    const totalResults = useSelector((state:RootState)=>state.food.totalResults)
+
 
   
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [stats, setStats] = useState({
-    totalFoods: 30,
-    totalRecipies: 30,
-    totalReviews: 30,
-    totalUsers: 3,
+    totalFoods: 0,
+    totalRecipies: 0,
+    totalReviews: 0,
+    totalUsers: 0,
   })
   const logout = () => {
   dispatch(logoutAction())
 }
-
   useEffect(()=>{
-    const loadTotalFoodsCount = async ()=>{
-      try{
-        const res = await getTotalFoodsCount()
-        setStats(prev => ({
-          ...prev,
-          totalFoods:res.data.data.totalFoods
-        }))
-      }catch(error){
-        console.error(error)
-      }
-    }
-    loadTotalFoodsCount()
+    dispatch(fetchTotalFoodsCount())
+  },[dispatch])
+  useEffect(()=>{
+    // const loadTotalFoodsCount = async ()=>{
+    //   try{
+    //     const res = await getTotalFoodsCount()
+    //     setStats(prev => ({
+    //       ...prev,
+    //       totalFoods:res.data.data.totalFoods
+    //     }))
+    //   }catch(error){
+    //     console.error(error)
+    //   }
+    // }
+    // loadTotalFoodsCount()
 
     const loadTotalRecipesCount = async ()=>{
       try{
@@ -179,7 +183,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <StatsCard title="Total Foods" value={stats.totalFoods} icon="🍛" />
+        <StatsCard title="Total Foods" value={totalResults} icon="🍛" />
         <StatsCard title="Total Recipies" value={stats.totalRecipies} icon="📜" />
         <StatsCard title="Total Comments" value={stats.totalReviews} icon="📝" />
         <StatsCard title="Total Users" value={stats.totalUsers} icon="👨" />
