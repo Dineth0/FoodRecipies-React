@@ -4,15 +4,12 @@ import { updateUser } from "../services/UserAPI"
 import { showSuccessAlert, showErrorAlert } from '../utils/SweetAlerts';
 import type { AxiosError } from "axios";
 
-interface User{
-    _id: string
-    name:string
-}
+
 
 interface UserItem{
     _id:string
-    user:User
-    id:string
+    
+   
     name:string
     email:string
     image?: string
