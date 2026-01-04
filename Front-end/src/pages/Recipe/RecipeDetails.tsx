@@ -69,18 +69,16 @@ export default function RecipeDetailsPage() {
     try {
       const response = await downloadRecipePDF(recipe._id);
       
-      // Blob එකක් මගින් download link එකක් තාවකාලිකව සාදා ගැනීම
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
       
-      // File name එක ලබා දීම
+  
       link.setAttribute('download', `${recipe.title.replace(/\s+/g, '_')}.pdf`);
       
       document.body.appendChild(link);
       link.click();
       
-      // අවසානයේ link එක ඉවත් කිරීම
       link.parentNode?.removeChild(link);
     } catch (error) {
       console.error("Error downloading PDF:", error);
@@ -100,7 +98,7 @@ export default function RecipeDetailsPage() {
 
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-[#fff3e4] via-[#ffd8b5] to-[#ffba7a]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto mt-4">
             
 
             <div className="flex justify-between items-center mt-3">
@@ -108,7 +106,7 @@ export default function RecipeDetailsPage() {
                     {recipe?.title}
                 </h1>
                 
-                {/* PDF Download Button එක */}
+               
                 <button 
                     onClick={handleDownloadPDF}
                     className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full shadow-lg transition-all"

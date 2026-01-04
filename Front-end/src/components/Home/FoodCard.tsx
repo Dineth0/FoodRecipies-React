@@ -24,17 +24,23 @@ export default function FoodCard({selectedCategory}:Props) {
   useEffect(() =>{
     const fetchFoods = async () =>{
       try{
-        const response = await getAllFoods()
+        const response = await getAllFoods(1,8)
+        console.log("API response:", response)
         console.log(response.data)
-        let allFoods = response.data.data.foods
 
-        if(selectedCategory){
-          allFoods = allFoods.filter(
-            (f: Food) =>
-            f.category.toLowerCase() === selectedCategory.toLowerCase()
-          )
+        if (response && response.data && response.data.data) {
+          let allFoods = response.data.data.foods;
+
+          if (selectedCategory) {
+            allFoods = allFoods.filter(
+              (f: Food) =>
+                f.category.toLowerCase() === selectedCategory.toLowerCase()
+            );
+          }
+          
+          // කාඩ්පත් 8ක් පමණක් ලබාගැනීම (Backend එකෙන් 8ක් එන්නේ නැතිනම් පමණක් මෙය වැදගත් වේ)
+          setFoods(allFoods.slice(0, 8));
         }
-        setFoods(allFoods)
 
       }catch(error){
         console.error(error)
@@ -48,7 +54,7 @@ export default function FoodCard({selectedCategory}:Props) {
 
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
 
-          {foods.slice(0,8).map((food) =>(
+          {foods.map((food) =>(
             <div 
               key={food._id}
               onClick={()=> navigate(`/foodpage/${food.name}`)}

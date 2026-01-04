@@ -40,8 +40,19 @@ io.on("connection",(socket)=>{
 
 app.use(cors({origin:"*"}))
 const FRONTEND_URL = process.env.FRONTEND_URL ;
+const allowedOrigins = [
+  FRONTEND_URL,             
+  "http://localhost:5173"   
+];
+
 app.use(cors({
-  origin: FRONTEND_URL,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 app.use(express.json({limit: '50mb'}))
