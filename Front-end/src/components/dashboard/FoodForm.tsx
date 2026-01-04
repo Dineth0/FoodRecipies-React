@@ -133,12 +133,11 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave }) => {
       onSave()
 
     }catch(error){
-    const err = error as AxiosError<ApiErrorResponse>;
-      const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.';
-            
-            setError(errorMessage);
-            showErrorAlert('Food Add Failed', errorMessage);
-            console.error(' error:', error);
+      const err = error as AxiosError<ApiErrorResponse>;
+      const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.'; 
+      setError(errorMessage);
+      showErrorAlert('Food Add Failed', errorMessage);
+      console.error(' error:', error);
 
     }
 
