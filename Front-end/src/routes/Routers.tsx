@@ -30,10 +30,10 @@ const { isAuthenticated, loading , token} = useSelector((state: RootState) => st
 const location = useLocation()
 
     useEffect(() => {
-        if (!loading && (!isAuthenticated || !token)) {
-            showErrorAlert("Access Denied", "Please login to view food and recipe details!");
+        if (!loading && (!isAuthenticated || !token) && location.pathname !== "/login") {
+            showErrorAlert("Access Denied", "Please login first for get access");
         }
-    }, [loading, isAuthenticated, token]);
+    }, [loading, isAuthenticated, token, location.pathname]);
     if(loading){
         return(
             <div className="flex items-center justify-center h-screen bg-gray-100">
