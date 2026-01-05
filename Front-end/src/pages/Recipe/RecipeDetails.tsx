@@ -6,6 +6,8 @@ import { ReviewForm } from "../../components/Review/ReviewForm";
 import { getReviewByRecipe } from "../../services/ReviewAPI";
 import ReviewCard from "../../components/Review/ReviewCard";
 import { FaFilePdf } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/store";
 
 
 interface User {
@@ -46,6 +48,7 @@ export default function RecipeDetailsPage() {
   const [activeImage, setActiveImage] = useState("");
   const [showForm, setShowForm] = useState(false)
   const [review, setReview] = useState<ReviewItem[]>([])
+  const currentUser = useSelector((state: RootState) => state.auth.user);
  
 
   useEffect(() => {
@@ -102,8 +105,27 @@ export default function RecipeDetailsPage() {
   const handleCloseform = () =>{
     setShowForm(false)
   }
-  const handleSave  =() =>{
-    
+  const handleSave  = (newReview: ReviewItem) =>{
+    const reviewWithUser = {
+      ...newReview,
+      user: typeof newReview.user === 'string' 
+            ? { _id: newReview.user, name: currentUser?.name || "Me" } 
+            : newReview.user
+    };
+
+    setReview((prevReviews) => {
+      // කලින් තිබුන logic එකමයි, හැබැයි දැන් පාවිච්චි කරන්නේ reviewWithUser
+      const existingIndex = prevReviews.findIndex((r) => r._id === reviewWithUser._id);
+
+      if (existingIndex >= 0) {
+        const updatedReviews = [...prevReviews];
+        updatedReviews[existingIndex] = reviewWithUser as ReviewItem;
+        return updatedReviews;
+      } else {
+        return [...prevReviews, reviewWithUser as ReviewItem];
+      }
+    });
+        setShowForm(false);
   } 
 
   return (

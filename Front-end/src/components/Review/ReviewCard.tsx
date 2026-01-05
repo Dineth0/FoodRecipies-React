@@ -40,13 +40,13 @@ export default function ReviewCard({review} : ReviewCardProps){
             <div className="flex gap-4 items-start">
                 <div className="flex-shrink-0">
                     <div className="w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center text-white text-xl font-bold uppercase shadow-sm ml-25">
-                        {review.user.name.charAt(0)}
+                        {review.user?.name?.charAt(0)}
                     </div>
                 </div>
 
                 <div className="flex-1">
                     <h4 className="text-sm font-bold text-gray-900 tracking-wider uppercase mb-1 ml-1">
-                        {review.user.name}
+                        {review.user?.name}
                     </h4>
                 
                     <div className="flex gap-1 mb-3 ml-1">
