@@ -66,6 +66,10 @@ export const ReviewForm : React.FC<ReviewFormProps> = ({onClose, onSave, recipeI
     const handlesubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
 
+        if (!user?._id) {
+        setError("You must be logged in to post a review.");
+        return;
+        }
         if(rating === 0|| !description.trim()){
             setError("Please enter Rating and Your Review")
             return
