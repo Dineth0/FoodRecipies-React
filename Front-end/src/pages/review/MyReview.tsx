@@ -83,12 +83,16 @@ export default function MyReview() {
     }
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] mt-12 ">
+        <h1 className="text-2xl font-bold mb-5 ">My Reviews</h1>
         {review.length === 0 ? (
-            <p>No Your Reviews Yet</p>
-        ):(
+            <div className="flex flex-col items-center justify-center text-center py-20 text-gray-600">
+                
+                <p className="text-xl font-semibold mb-2">No reviews yet</p>
+                <p className="mb-4">You haven’t reviewed any recipes yet.</p>
+    
+            </div>
+        ) : (
             review.map((rev)=>(
-
-            
                 <div className="border-b border-gray-100 py-6 bg-white rounded-full mt-4 ">
                     <div className="flex gap-4 items-start">
                         <div className="flex-shrink-0">
