@@ -58,12 +58,12 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="min-h-[100vh] flex flex-col md:flex-row items-start justify-between px-8 md:px-20 py-7 relative">
+    <section className="min-h-screen flex flex-col md:flex-row items-start justify-between px-8 md:px-20 pt-32 md:pt-15 relative">
       
    
-      <div className="flex flex-col justify-start mt-10 md:mt-20 z-10">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-[#2d1b0b] leading-tight mb-6">
-          Discover and <br /> Cook Amazing <br /> Recipes
+      <div className="flex flex-col justify-start  md:mt-20 z-10">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#2d1b0b] text-center leading-tight mb-6">
+          Discover and <br className="hidden md:block text-center" /> Cook Amazing <br className="hidden md:block text-center" /> Recipes
         </h1>
 
     
@@ -115,11 +115,11 @@ export default function HeroSection() {
       </div>
 
   
-      <div className="flex md:justify-end w-full md:w-auto mt-7 md:mt-0">
+      <div className="flex justify-center md:justify-end w-full md:w-1/2 mt-12 md:mt-0">
         <img
           src={heroPic}
           alt="Delicious food"
-          className="w-[380px] md:w-[480px] lg:w-[520px] rounded-full shadow-2xl border-[10px] border-[#f8e1b8]"
+          className="w-[300px] sm:w-[350px] md:w-[450px] lg:w-[520px] rounded-full shadow-2xl border-[8px] md:border-[10px] border-[#f8e1b8]"
         />
       </div>
     </section>
