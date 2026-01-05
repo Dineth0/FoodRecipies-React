@@ -1,6 +1,6 @@
 
-import { lazy, Suspense, type ReactNode } from "react"
-import {   Route, Routes } from "react-router-dom"
+import { lazy, Suspense, useEffect, type ReactNode } from "react"
+import {   Navigate, Route, Routes, useLocation } from "react-router-dom"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
 import FoodPage from "../pages/food/FoodDetailPage"
@@ -12,6 +12,9 @@ import AllFoods from "../pages/food/AllFoods"
 import AllRecipesPage from "../pages/Recipe/AllRecipesPage"
 import ForgotPassword from "../pages/auth/ForgotPassword"
 import ResetPassword from "../pages/auth/ResetPassword"
+import { useSelector } from "react-redux"
+import type { RootState } from "../redux/store"
+import { showErrorAlert } from "../utils/SweetAlerts"
 
 
 
@@ -23,18 +26,24 @@ const CategoryPage = lazy(() => import("../pages/Category/CategoryPage"))
 type RequireAuthTypes = { children: ReactNode}
 
 const RequireAuth = ({ children}: RequireAuthTypes) =>{
+const { isAuthenticated, loading , token} = useSelector((state: RootState) => state.auth);
+const location = useLocation()
 
-
-    // if(loading){
-    //     return(
-    //         <div className="flex items-center justify-center h-screen bg-gray-100">
-    //             <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
-    //         </div>
-    //     )
-    // }
-    // if(!user){
-    //     return <Navigate to="/login"/>
-    // }
+    useEffect(() => {
+        if (!loading && (!isAuthenticated || !token)) {
+            showErrorAlert("Access Denied", "Please login to view food and recipe details!");
+        }
+    }, [loading, isAuthenticated, token]);
+    if(loading){
+        return(
+            <div className="flex items-center justify-center h-screen bg-gray-100">
+                <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </div>
+        )
+    }
+    if(!isAuthenticated || !token){
+        return <Navigate to="/login" state={{from: location}} replace/>
+    }
 
     return<>{children}</>
 }

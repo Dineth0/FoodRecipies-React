@@ -47,7 +47,7 @@ const Login = () => {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-[#3b2f2f]">Welcome back</h2>
+            <h2 className="text-2xl font-bold text-[#3b2f2f]">Login First</h2>
             <p className="text-sm text-gray-600 ">Login to continue cooking 🤤</p>
           </div>
 

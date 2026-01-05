@@ -38,7 +38,6 @@ export default function FoodCard({selectedCategory}:Props) {
             );
           }
           
-          // කාඩ්පත් 8ක් පමණක් ලබාගැනීම (Backend එකෙන් 8ක් එන්නේ නැතිනම් පමණක් මෙය වැදගත් වේ)
           setFoods(allFoods.slice(0, 8));
         }
 

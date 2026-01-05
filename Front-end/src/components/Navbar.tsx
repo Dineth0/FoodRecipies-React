@@ -39,7 +39,7 @@ export const Navbar: React.FC = () => {
   const dispatch = useDispatch<AppDisPatch>();
   const navigate = useNavigate();
   
-  // 2. Mobile Menu එක සහ Mobile Categories සඳහා States
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false);
 
@@ -47,20 +47,18 @@ export const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutAction());
-    setIsMobileMenuOpen(false); // Logout වුණාම menu එක වැහෙනවා
+    setIsMobileMenuOpen(false); 
     navigate("/login");
   };
 
   const handleLogin = () => {
-    // dispatch(logoutAction()); // Login page යද්දි logout කරන්න අවශ්‍ය නැහැ
     setIsMobileMenuOpen(false);
     navigate("/login");
   };
 
-  // Menu එක toggle කරන function එක
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    setIsMobileCategoryOpen(false); // Menu එක වහද්දි categories ත් වැහෙනවා
+    setIsMobileCategoryOpen(false); 
   };
 
   return (
@@ -68,14 +66,14 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
           
-          {/* Logo Section */}
+     
           <div className="flex items-center space-x-2">
             <Link to="/" className="text-2xl font-extrabold text-white tracking-wide">
               DON Food<span className="text-yellow-950">ie</span>
             </Link>
           </div>
 
-          {/* Desktop Menu (Hidden on Mobile) */}
+         
           <div className="hidden md:flex space-x-8 items-center">
             <Link to="/" className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300">
               HOME
@@ -107,7 +105,7 @@ export const Navbar: React.FC = () => {
               RECIPES
             </Link>
 
-            {/* User Profile Section (Desktop) */}
+           
             <div>
               {isAuthenticated && user ? (
                 <div className="relative group">
@@ -149,7 +147,7 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* 3. Hamburger Button (Visible only on Mobile) */}
+        
           <div className="md:hidden flex items-center">
             <button onClick={toggleMobileMenu} className="text-white focus:outline-none">
               {isMobileMenuOpen ? (
@@ -162,12 +160,12 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Mobile Menu Dropdown (Visible only when state is true) */}
+    
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white shadow-xl rounded-b-2xl overflow-hidden transition-all duration-300">
           <div className="px-4 pt-2 pb-6 space-y-2">
             
-            {/* User Info in Mobile Menu */}
+    
             {isAuthenticated && user && (
                 <div className="flex items-center space-x-3 mb-4 p-3 bg-yellow-50 rounded-lg">
                     <div className="w-10 h-10 rounded-full overflow-hidden border border-yellow-500">
@@ -190,7 +188,7 @@ export const Navbar: React.FC = () => {
               HOME
             </Link>
 
-            {/* Mobile Categories Toggle */}
+          
             <div>
                 <button 
                     onClick={() => setIsMobileCategoryOpen(!isMobileCategoryOpen)}
