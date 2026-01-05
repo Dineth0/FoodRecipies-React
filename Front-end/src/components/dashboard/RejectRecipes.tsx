@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { approvedRecipe, getPendingRecipes, rejectedRecipes } from "../../services/RecipeAPI";
-import { FaCheckCircle } from 'react-icons/fa'
-import { IoCloseCircle } from "react-icons/io5";
-import { showErrorAlert, showSuccessAlert } from "../../utils/SweetAlerts";
+import {  getRejectRecipes } from "../../services/RecipeAPI";
+
 
 interface Recipe{
     _id: string;
@@ -17,56 +15,35 @@ interface Recipe{
     images: string[]
 }
 
-export default function PendingRecipes(){
+export default function RejectRecipes(){
 
-    const [pendingRecipes, setPendingRecipes] = useState<Recipe[]>([])
+    const [rejectRecipes, setRejectRecipes] = useState<Recipe[]>([])
     const [page, setPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
 
     useEffect(()=>{
-        const loadPendingRecipes =  async ()=>{
+        const loadRejectRecipes =  async ()=>{
             try{
-                const response = await getPendingRecipes(page, 3)
-                setPendingRecipes(response.data.data.recipes)
+                const response = await getRejectRecipes(page, 3)
+                setRejectRecipes(response.data.data.recipes)
                 setTotalPages(response.data.totalPages)
             }catch(error){
                 console.error(error)
             }
 
         }
-        loadPendingRecipes()
+        loadRejectRecipes()
     },[page])
 
-    const handleApproved = async (id: string)=>{
-        try{
-            await approvedRecipe(id)
-            showSuccessAlert('Approved' , "Recipe has been approved and is now public")
-            setPendingRecipes(pendingRecipes.filter(rec => rec._id !== id))
-        }catch(error){
-            console.error(error)
-            showErrorAlert('Error' , "Failed to approve recipe")
-        }
-    }
-
-    const handleReject = async (id:string) =>{
-        try{
-            console.log("Reject clicked:", id)
-
-            await rejectedRecipes(id)
-            showSuccessAlert('Reject' , "Recipe has been Rejected ")
-            setPendingRecipes(prev => prev.filter(rec => rec._id !== id));
-        }catch(error){
-            console.error(error)
-            showErrorAlert('Error' , "Failed to reject recipe")
-        }
-    }
+   
+  
 
 
 
     return(
         <div className="bg-white/10 p-6 rounded-lg backdrop-blur-md">
             <h2 className="text-2xl font-bold mb-4 text-white">Pending Recipes</h2>
-            {pendingRecipes.length === 0 ? (
+            {rejectRecipes.length === 0 ? (
                 <p className="text-gray-300">No Pending Recipes</p>
             ):(
                 <div className="w-full overflow-x-auto">
@@ -81,11 +58,11 @@ export default function PendingRecipes(){
                                 <th scope="col" className="py-2 px-4 w-[8%]">Date</th>
                                 <th scope="col" className="py-2 px-4 w-[25%]">Step</th>
                                 <th scope="col" className="py-2 px-4 w-[12%]">Images</th>
-                                <th scope="col" className="py-2 px-4 w-[9%]">Action</th>
+                              
                             </tr>
                         </thead>
                         <tbody>
-                            {pendingRecipes.map((recipe)=>(
+                            {rejectRecipes.map((recipe)=>(
                                 <tr key={recipe._id} className="border-b border-gray-700 hover:bg-black/25">
                                     <td className="px-4 py-2 font-medium text-white align-top">{recipe.title}</td>
                                     <td className="px-4 py-2 align-top">{recipe.food?.name || <span className="text-red-400">Unknown Food</span>}</td>
@@ -127,28 +104,7 @@ export default function PendingRecipes(){
                                             <span>No Images</span>
                                         )}
                                     </td>
-                                    <td className="px-4 py-2 align-top">
-                                        
-                                       <div className="flex items-center justify-center gap-3">
-        
-                                            <button 
-                                                className="text-green-400 hover:text-green-600 transition-colors"
-                                                onClick={() => handleApproved(recipe._id)}
-                                                title="Approve"
-                                            >
-                                                <FaCheckCircle size={20} />
-                                            </button>
-
-                                            <button 
-                                                className="text-red-400 hover:text-red-600 transition-colors"
-                                                title="Reject"
-                                                onClick={() => handleReject(recipe._id)}>
-                                                <IoCloseCircle size={22} /> {/* size eka poddak wadi kala lassanata penanna */}
-                                            </button>
-                                            
-                                        </div>
-                                        
-                                    </td>
+                                    
                                 </tr>
                             ))}
                         </tbody>

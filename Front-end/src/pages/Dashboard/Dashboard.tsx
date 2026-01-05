@@ -17,8 +17,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDisPatch, RootState } from '../../redux/store';
 import { logoutAction } from '../../redux/slices/authSlice';
 import { fetchTotalFoodsCount } from '../../redux/slices/foodSlice';
+import RejectRecipes from '../../components/dashboard/RejectRecipes';
 
-type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes"
+type TabType = "home" | "foods" | "recipies" | "users" | "reviews" | "Peending Recipes" | "Reject Recipes"
 
 // interface Stats 
 //   totalFoods = number
@@ -192,7 +193,7 @@ export default function Dashboard() {
       <div className="bg-white/10 rounded-lg p-6 backdrop-blur-sm">
         <div className="flex justify-between items-center mb-6">
           <div className="flex space-x-3">
-            {(["home","foods","recipies","users","reviews","Peending Recipes"]as TabType[]).map((tab)=>(
+            {(["home","foods","recipies","users","reviews","Peending Recipes","Reject Recipes"]as TabType[]).map((tab)=>(
               <Tab
               key={tab}
               label={tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -214,6 +215,7 @@ export default function Dashboard() {
         {activeTab === 'users' && <User/>}
         {activeTab === 'reviews' && <Review/>}
         {activeTab === 'Peending Recipes' && <PendingRecipes/>}
+        {activeTab === 'Reject Recipes' && <RejectRecipes/>}
 
       </div>
 

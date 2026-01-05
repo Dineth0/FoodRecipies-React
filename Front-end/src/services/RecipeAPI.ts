@@ -32,11 +32,14 @@ export const getRecipeByName = (title : string) =>{
 export const getPendingRecipes = (page: number = 1, limit: number = 3 ) =>{
     return axiosInstance.get(`/recipe/pending?page=${page}&limit=${limit}`)
 }
+export const getRejectRecipes = (page: number = 1, limit: number = 3 ) =>{
+    return axiosInstance.get(`/recipe/rejectRecipes?page=${page}&limit=${limit}`)
+}
 export const approvedRecipe = (id: string) =>{
     return axiosInstance.put(`/recipe/approved/${id}`)
 }
 export const rejectedRecipes = (id:string) =>{
-    return axiosInstance.put(`/recipe/rejected/${id}`)
+    return axiosInstance.put(`/recipe/reject/${id}`)
 }
 export const getRecipeByUser = () =>{
     return axiosInstance.get('/recipe/myRecipe')

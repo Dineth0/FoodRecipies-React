@@ -114,7 +114,6 @@ export default function RecipeDetailsPage() {
     };
 
     setReview((prevReviews) => {
-      // කලින් තිබුන logic එකමයි, හැබැයි දැන් පාවිච්චි කරන්නේ reviewWithUser
       const existingIndex = prevReviews.findIndex((r) => r._id === reviewWithUser._id);
 
       if (existingIndex >= 0) {

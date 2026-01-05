@@ -6,7 +6,7 @@ import { Notification } from "../models/NotificationModel";
 import { error } from 'console';
 import cloudinary from "../config/cloudinary";
 import { Email } from '../models/EmailModel';
-import { sendApprovalemail } from "./emailController";
+import { sendApprovalemail, sendRejectEmail } from "./emailController";
 import { AuthRequest } from "../middleware/authMiddleware";
 import PDFDocument from 'pdfkit';
 
@@ -290,6 +290,33 @@ export const getPandingRecipes = async (req:Request, res:Response, next:NextFunc
     }
 }
 
+export const getRejectRecipes = async (req:Request, res:Response, next:NextFunction)=>{
+    try{
+        const page = parseInt(req.query.page as string) || 1
+        const limit  = parseInt(req.query.limit as string) || 3
+        const skip = (page -1) * limit
+        const recipes = await Recipe.find({ status: 'Reject' })
+        .populate("user", "name")
+        .populate("food", "name")
+        .sort({createdAt: -1})
+        .skip(skip)
+        .limit(limit)
+        const total = await Recipe.countDocuments({status : 'Reject'})
+
+
+        res.status(200).json({
+            success:true,
+            data:{recipes},
+            message: "Get Reject Recipes",
+            totalPages: Math.ceil(total / limit),
+            totalCount: total,
+            page
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
 export const approveRecipe = async (req:Request, res:Response, next:NextFunction)=>{
     try{
         const {id} = req.params
@@ -349,18 +376,44 @@ export const approveRecipe = async (req:Request, res:Response, next:NextFunction
 export const rejectRecipes = async (req:Request, res:Response, next:NextFunction) =>{
     try{
         const {id} = req.params
-
+         console.log("Reject ID:", req.params.id)
         const recipe = await Recipe.findByIdAndUpdate(
             id,
             {status : 'Reject'},
             {new: true}
-        )
+        ).populate("user","name email")
         if(!recipe){
            return res.status(404).json({
                 success:false,
                
                 message: "Recipe not found"
             }) 
+
+        }
+        const recipeUser = recipe.user as any
+        if(recipeUser && recipeUser.email){
+            console.log(recipeUser.email)
+            try{
+                await sendRejectEmail(recipeUser.email, recipeUser.name, recipe.title)
+
+                const emailDeatils = new Email({
+                    recipe: recipe._id,
+                    user: recipeUser._id,
+                    userEmail: recipeUser.email,
+                    subject: "Recipe Rejected!",
+                    message: "Recipe Rejected!",
+                    status: "Success",
+                    sendAt: new Date()
+                })
+
+                await emailDeatils.save()
+                console.log("send mail")
+
+            }catch(error){
+                console.error("Failed to send email", error)
+
+            }
+
         }
         res.status(200).json({
              success:true,
