@@ -12,7 +12,7 @@ export const generateAccessToken = (user: IUser) => {
     },
         config.JWT_SECRET as Secret,
     { 
-        expiresIn: "4h" 
+        expiresIn: "1m" 
     }
   )
 }
