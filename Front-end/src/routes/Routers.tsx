@@ -12,9 +12,10 @@ import AllFoods from "../pages/food/AllFoods"
 import AllRecipesPage from "../pages/Recipe/AllRecipesPage"
 import ForgotPassword from "../pages/auth/ForgotPassword"
 import ResetPassword from "../pages/auth/ResetPassword"
-import { useSelector } from "react-redux"
-import type { RootState } from "../redux/store"
+import { useDispatch, useSelector } from "react-redux"
+import type { AppDisPatch, RootState } from "../redux/store"
 import { showErrorAlert } from "../utils/SweetAlerts"
+import { fetchUserProfile } from "../redux/slices/authSlice"
 
 
 
@@ -28,12 +29,18 @@ type RequireAuthTypes = { children: ReactNode}
 const RequireAuth = ({ children}: RequireAuthTypes) =>{
 const { isAuthenticated, loading , token} = useSelector((state: RootState) => state.auth);
 const location = useLocation()
+const dispatch = useDispatch<AppDisPatch>();
 
     useEffect(() => {
-        if (!loading && (!isAuthenticated || !token) && location.pathname !== "/login") {
+        if (!loading && (!isAuthenticated && !token) && location.pathname !== "/login") {
             showErrorAlert("Access Denied", "Please login first for get access");
         }
     }, [loading, isAuthenticated, token, location.pathname]);
+    useEffect(() => {
+    if (token) {
+        dispatch(fetchUserProfile());
+    }
+}, [dispatch, token]);
     if(loading){
         return(
             <div className="flex items-center justify-center h-screen bg-gray-100">
