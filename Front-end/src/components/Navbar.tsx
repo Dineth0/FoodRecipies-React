@@ -62,25 +62,26 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-yellow-400 to-orange-400 shadow-md fixed top-0 left-0 w-full z-50">
+    <nav className="bg-gradient-to-r from-[#2A1A10] to-[#6B3E1E] shadow-md fixed top-0 left-0 w-full z-50 ">
       <div className="max-w-7xl mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
           
      
           <div className="flex items-center space-x-2">
             <Link to="/" className="text-2xl font-extrabold text-white tracking-wide">
-              DON Food<span className="text-yellow-950">ie</span>
+              DON Food<span className="text-amber-400">ie</span>
             </Link>
+
           </div>
 
          
           <div className="hidden md:flex space-x-8 items-center">
-            <Link to="/" className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300">
+            <Link to="/" className="text-white text-lg font-semibold hover:text-amber-300 transition duration-300">
               HOME
             </Link>
 
             <div className="relative group">
-              <button className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300 cursor-pointer">
+              <button className="text-white text-lg font-semibold hover:text-amber-300 transition duration-300 cursor-pointer">
                 CATEGORIES
               </button>
               <div className="absolute left-0 mt-2 w-48 max-h-96 overflow-y-auto bg-white shadow-lg rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-2 z-50">
@@ -97,11 +98,11 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            <Link to="/all-foods" className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300">
+            <Link to="/all-foods" className="text-white text-lg font-semibold hover:text-amber-300 transition duration-300">
               FOODS
             </Link>
 
-            <Link to="/all-recipes" className="text-white text-lg font-semibold hover:text-yellow-950 transition duration-300">
+            <Link to="/all-recipes" className="text-white text-lg font-semibold hover:text-amber-300 transition duration-300">
               RECIPES
             </Link>
 
@@ -117,25 +118,25 @@ export const Navbar: React.FC = () => {
                     )}
                   </button>
 
-                  <div className="absolute right-0 mt-3 w-60 bg-white shadow-lg rounded-xl text-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-4 z-50">
+                  <div className="absolute right-0 mt-3 w-60 bg-[#674636] shadow-lg rounded-xl text-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 py-4 z-50">
                     <div className="flex flex-col items-center justify-center mb-2">
-                       <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-yellow-500 mb-2">
+                       <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-amber-400 mb-2">
                           {user.image ? (
                             <img src={user.image} alt="profile" className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full bg-yellow-100 flex items-center justify-center text-2xl font-bold text-yellow-800">
+                            <div className="w-full h-full bg-white flex items-center justify-center text-2xl font-bold text-yellow-800">
                                 {user?.name?.charAt(0).toUpperCase()}
                             </div>
                           )}
                        </div>
-                       <p className="px-4 text-sm text-center font-bold text-gray-700">{user.name}</p>
+                       <p className="px-4 text-sm text-center font-bold text-white">{user.name}</p>
                     </div>
                     
                     <hr className="border-gray-200 my-1"/>
                     
-                    <Link to="/my-recipes" className="block px-4 py-2 text-sm hover:bg-gray-100 transition">My Recipes</Link>
-                    <Link to="/my-review" className="block px-4 py-2 text-sm hover:bg-gray-100 transition">My Reviews</Link>
-                    <Link to="/profile" className="block px-4 py-2 text-sm hover:bg-gray-100 transition">Profile</Link>
+                    <Link to="/my-recipes" className="block px-4 py-2 text-sm hover:bg-[#B99470] text-white transition">My Recipes</Link>
+                    <Link to="/my-review" className="block px-4 py-2 text-sm hover:bg-[#B99470] text-white transition">My Reviews</Link>
+                    <Link to="/profile" className="block px-4 py-2 text-sm hover:bg-[#B99470] text-white transition">Profile</Link>
                     <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">Logout</button>
                   </div>
                 </div>

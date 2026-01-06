@@ -51,10 +51,10 @@ const handleCloseForm = () =>{
 }
 
   return (
-    <div className="mt-2 min-h-screen bg-fixed  bg-cover bg-center bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a]  py-10 ">
-        <div className="max-w-6xl mx-auto bg-gradient-to-b from-[#ffffff] via-[#fffdf8] to-[#ffebc2] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.5)] rounded-lg flex mt-13">
+    <div className="mt-2 min-h-screen bg-fixed  bg-cover bg-center bg-gradient-to-br from-[#A27B5C]  to-[#23120b]   py-10 ">
+        <div className="max-w-6xl mx-auto bg-gradient-to-b from-[#B99470]  to-[#674636] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.5)] rounded-lg flex mt-13">
 
-            <div className="w-64 border-r p-6 bg-white">
+            <div className="w-64 border-r p-6 bg-[#C4A484]">
                
                 <h2 className="text-lg font-semibold mb-4">
                     Hello {user?.name}

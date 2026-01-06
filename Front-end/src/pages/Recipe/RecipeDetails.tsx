@@ -128,7 +128,7 @@ export default function RecipeDetailsPage() {
   } 
 
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-[#fff3e4] via-[#ffd8b5] to-[#ffba7a]">
+    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10  bg-gradient-to-br from-[#A27B5C] via-[#AB886D] to-[#23120b]   ">
         <div className="max-w-6xl mx-auto mt-10">
             
 
@@ -237,7 +237,7 @@ export default function RecipeDetailsPage() {
                
                     <button 
                         onClick={handleAddClick}    
-                        className="bg-orange-500 w-55 h-10 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md mb-6"
+                        className="bg-[#7B4019] w-55 h-10 hover:bg-[#954C2E] text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md mb-6"
                     >
                       <MdOutlinePostAdd size={24}/>
                           Add Your Review

@@ -85,13 +85,13 @@ export default function FoodPage() {
     }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-12 bg-gradient-to-br from-[#fff3e0] via-[#ffd59e] to-[#ffb74d]">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-12 bg-gradient-to-br from-[#A27B5C] via-[#AB886D] to-[#23120b]  ">
       <div className="max-w-7xl mx-auto">
 
         <div className="relative rounded-3xl overflow-hidden lg:flex bg-gradient-to-br from-white/95 via-[#fff8ee] to-[#ffefd5] border border-orange-300/40 shadow-[0_25px_60px_rgba(255,152,0,0.18)]">
           
          
-          <div className="lg:w-1/2 p-6 lg:p-10 flex flex-col items-center justify-center bg-gradient-to-br from-[#ffffff] via-[#ffedd5] to-[#ffc46b] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
+          <div className="lg:w-1/2 p-6 lg:p-10 flex flex-col items-center justify-center bg-gradient-to-br from-[#AB886D] via-[#ffedd5] to-[#9A7E6F] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
           
             <div className="w-full h-[300px] sm:h-[400px] lg:h-[500px] mb-6 rounded-2xl overflow-hidden shadow-lg bg-white">
               <img
@@ -119,7 +119,7 @@ export default function FoodPage() {
           </div>
 
          
-          <div className=" lg:w-1/2 p-8 lg:p-12 flex flex-col bg-gradient-to-b from-[#ffffff] via-[#fffdf8] to-[#ffebc2] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.5)]">
+          <div className=" lg:w-1/2 p-8 lg:p-12 flex flex-col bg-gradient-to-b from-[#C2A68C] via-[#fffdf8] to-[#715A5A] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.5)]">
             
           
             <div className="flex flex-wrap gap-3 mb-4">
@@ -146,23 +146,23 @@ export default function FoodPage() {
             <div className="border-t border-gray-200 my-6"></div>
 
             
-              <div className=" mt-6 p-6 bg-gradient-to-br from-[#ff9800] to-[#f57c00] text-white rounded-3xl shadow-xl">
-          <p className="text-xl mb-4 font-semibold">
-            Quick Highlights
-          </p>
-          <ul className="space-y-2 text-black/200">
-            <li>• Authentic flavor experience</li>
-            <li>• Signature texture & aroma</li>
-            <li>• Perfect for family meals</li>
-            <li>• Easy to prepare at home</li>
-          </ul>
-        </div>
+            <div className=" mt-6 p-6 bg-[#4B352A] text-white rounded-3xl shadow-xl">
+              <p className="text-xl mb-4 font-semibold">
+                Quick Highlights
+              </p>
+              <ul className="space-y-2 text-black/200">
+                <li>• Authentic flavor experience</li>
+                <li>• Signature texture & aroma</li>
+                <li>• Perfect for family meals</li>
+                <li>• Easy to prepare at home</li>
+              </ul>
+            </div>
       </div>
         </div>
         <div className="mt-10 flex justify-center">
           <button 
             onClick={handleAddClick}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md"
+            className="bg-[#4E1F00] hover:bg-[#854836] text-white px-6 py-3 rounded-full text-lg flex items-center gap-2 shadow-md"
           >
             <MdOutlinePostAdd size={24}/>
             Add Your Recipe

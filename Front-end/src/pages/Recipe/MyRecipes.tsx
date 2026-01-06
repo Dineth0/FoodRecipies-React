@@ -90,81 +90,93 @@ export default function MyRecipes() {
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10 bg-gradient-to-br from-[#fff3e4] via-[#ffd8b5] to-[#ffba7a]">
-      <h1 className="text-2xl font-bold mb-5 mt-6">My Recipes</h1>
+    <div className="min-h-screen py-12 px-6 md:px-12 bg-gradient-to-br from-[#A27B5C]  to-[#23120b] to-[#23120b]">
+      
+
+      <div className="flex justify-between items-center mb-10 mt-6 border-b border-white/10 pb-4">
+        <h1 className="text-3xl font-extrabold text-[#f3e8dd] tracking-tight">
+          My <span className="text-[#f59e0b]">Reviews</span>
+        </h1>
+        <button
+          onClick={() => setShowForm(true)}
+          className="px-6 py-2 bg-[#f59e0b] text-[#2d1b0b] font-bold rounded-full hover:bg-[#d97706] transition-all transform hover:scale-105 shadow-lg"
+        >
+          + Add New
+        </button>
+      </div>
 
       {recipes.length === 0 ? (
-  <div className="col-span-full flex flex-col items-center justify-center text-center py-20 text-gray-500">
-    <p className="text-xl font-semibold mb-2">No recipes yet</p>
-    <p className="mb-4">You haven’t added any recipes yet.</p>
-    <button
-      onClick={() => setShowForm(true)}
-      className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition"
-    >
-      Add your first recipe
-    </button>
-  </div>
-) : (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {recipes.map((recipe) => (
-      <div
-        key={recipe._id}
-        className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
-      >
-        {/* Image */}
-        {recipe.images && recipe.images.length > 0 ? (
-          <img
-            src={recipe.images[0]}
-            alt={recipe.title}
-            className="w-full h-48 object-cover"
-          />
-        ) : (
-          <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-            No Image
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="p-4">
-          <h2 className="text-lg font-semibold mb-2">{recipe.title}</h2>
-          <p className="text-sm text-gray-600 mb-2">
-            Ingredients: {recipe.ingredients}
-          </p>
-          <p className="text-gray-700 text-sm mb-2">
-            STEPS: {recipe.step.length > 100
-              ? recipe.step.slice(0, 100) + "..."
-              : recipe.step}
-          </p>
-
-          <p className="text-sm text-gray-600 mb-2">
-            Ready In: {recipe.readyIn}
-          </p>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3 mt-3">
-            <button
-              className="text-blue-500 hover:text-blue-700"
-              onClick={() => handleEdit(recipe)}
-            >
-              <FaEdit />
-            </button>
-            <button
-              onClick={() => handleDelete(recipe)}
-              className="text-red-500 hover:text-red-700"
-            >
-              <FaTrash />
-            </button>
-          </div>
+        <div className="col-span-full flex flex-col items-center justify-center text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/20">
+          <p className="text-xl font-semibold mb-2 text-[#f3e8dd]">No recipes yet</p>
+          <p className="mb-6 text-[#ab886d]">You haven’t added any recipes yet. Start cooking!</p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="px-8 py-3 bg-gradient-to-r from-[#b45309] to-[#d97706] text-white rounded-full font-bold hover:shadow-[0_0_20px_rgba(217,119,6,0.4)] transition"
+          >
+            Add your first recipe
+          </button>
         </div>
-      </div>
-    ))}
-  </div>
-)}
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {recipes.map((recipe) => (
+            <div
+              key={recipe._id}
+              className="group bg-[#2d1b0b]/40 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:border-[#f59e0b]/50 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(0,0,0,0.6)] hover:-translate-y-2"
+            >
+            
+              <div className="h-52 overflow-hidden relative">
+                {recipe.images && recipe.images.length > 0 ? (
+                  <img
+                    src={recipe.images[0]}
+                    alt={recipe.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#1a0d08] flex items-center justify-center text-[#ab886d]">
+                    No Image
+                  </div>
+                )}
+                
+              </div>
+
+            
+              <div className="p-6">
+                <h2 className="text-xl font-bold text-[#f3e8dd] mb-2 group-hover:text-[#f59e0b] transition-colors line-clamp-1">
+                  {recipe.title}
+                </h2>
+                
+                
+
+               
+                <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                  
+                  <div className="flex gap-2">
+                    <button
+                      className="p-3 bg-blue-500/10 text-blue-400 rounded-xl hover:bg-blue-500 hover:text-white transition-all duration-300"
+                      onClick={() => handleEdit(recipe)}
+                      title="Edit Recipe"
+                    >
+                      <FaEdit size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(recipe)}
+                      className="p-3 bg-red-500/10 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all duration-300"
+                      title="Delete Recipe"
+                    >
+                      <FaTrash size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {showForm && (
         <RecipeForm
-        onClose={handleCloseForm}
-        onSave={handleMyRecipesaved}
+          onClose={handleCloseForm}
+          onSave={handleMyRecipesaved}
         />
       )}
     </div>

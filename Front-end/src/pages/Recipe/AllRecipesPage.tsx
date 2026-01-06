@@ -2,7 +2,7 @@ import AllRecipesCard from "../../components/recipe/AllRecipesCard"
 
 const AllRecipesPage = () =>{
     return(
-        <div className=" bg-fixed  bg-cover bg-center bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] ">
+        <div className=" bg-fixed  bg-cover bg-center  min-h-screen bg-gradient-to-br from-[#A27B5C]  to-[#23120b] ">
             <AllRecipesCard/>
                
            

@@ -57,16 +57,29 @@ export default function FoodCard({selectedCategory}:Props) {
             <div 
               key={food._id}
               onClick={()=> navigate(`/foodpage/${food.name}`)}
-              className='cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-transform transform hover:-translate-y-2'>
+              className='group cursor-pointer bg-[#2d1b0b]/40 backdrop-blur-md 
+                       border border-white/10
+                       rounded-2xl overflow-hidden 
+                       hover:border-[#f59e0b]/50
+                       transition-all duration-300 ease-in-out
+                       hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] 
+                       hover:-translate-y-2'>
 
-              <img
+              <div className='overflow-hidden h-48'>
+                <img
                   src={food.images?.[0]}
                   alt={food.name}
-                  className='h-48 w-full object-cover'>
-              </img>
+                  className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-110'
+                />
+              </div>
 
-              <div className='p-4'>
-                <h3 className='text-lg font-semibold text-[#2d1b0b]'>{food.name}</h3>
+              <div className='p-5'>
+                <h3 className='text-lg font-bold text-[#f3e8dd] group-hover:text-[#f59e0b] transition-colors duration-300 line-clamp-1'>
+                  {food.name}
+                </h3>
+                <p className='text-xs text-[#ab886d] mt-1 uppercase tracking-widest font-medium'>
+                  {food.category}
+                </p>
               </div>
             </div>
           ))}

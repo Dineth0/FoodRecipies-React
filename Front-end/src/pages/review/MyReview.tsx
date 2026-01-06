@@ -82,63 +82,90 @@ export default function MyReview() {
         })
     }
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#fde7c5] via-[#f9d29d] to-[#f6c07a] mt-12 ">
-        <h1 className="text-2xl font-bold mb-5 ">My Reviews</h1>
-        {review.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-20 text-gray-600">
-                
-                <p className="text-xl font-semibold mb-2">No reviews yet</p>
-                <p className="mb-4">You haven’t reviewed any recipes yet.</p>
-    
+        <div className="min-h-screen py-20 px-4 sm:px-10 lg:px-20 bg-gradient-to-br from-[#A27B5C]  to-[#23120b] to-[#23120b]">
+            
+        
+            <div className="flex items-center justify-between mb-10 border-b border-white/10 pb-5">
+                <h1 className="text-3xl font-extrabold text-[#f3e8dd] tracking-tight">
+                    My <span className="text-[#f59e0b]">Reviews</span>
+                </h1>
+                <p className="text-[#ab886d] text-sm hidden sm:block">You have shared {review.length} experiences</p>
             </div>
-        ) : (
-            review.map((rev)=>(
-                <div className="border-b border-gray-100 py-6 bg-white rounded-full mt-4 ">
-                    <div className="flex gap-4 items-start">
-                        <div className="flex-shrink-0">
-                            <div className="w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center text-white text-xl font-bold uppercase shadow-sm ml-25">
-                                {rev.user.name.charAt(0)}
-                            </div>
-                        </div>
 
-                        <div className="flex-1">
-                            <h4 className="text-sm font-bold text-gray-900 tracking-wider uppercase mb-1 ml-1">
-                                {rev.user.name}
-                            </h4>
-                        
-                            <div className="flex gap-1 mb-3 ml-1">
-                                {renderStar(rev.rating)}
-                            </div>
-                            <p className="text-gray-700 leading-relaxed text-[15px] mr-4">
-                                {rev.description}
-
-                            </p>
-                        </div>
-                        <div className="flex flex-center gap-4 ml-4 pr-6">
-                            <button className='p-2 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-500 hover:text-blue-700 shadow-sm transition '
-                                 onClick={() =>handleEdit(rev)}>
-                                    <FaEdit size={18}/>
-                        </button>
-                        <button className='p-2 rounded-full bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 shadow-sm transition'
-                                onClick={()=>handleDelete(rev)}>
-                                    <FaTrash size={18}/>
-                        </button> 
-                        </div>
-                           
-                    </div>
+            {review.length === 0 ? (
+                <div className="flex flex-col items-center justify-center text-center py-24 bg-[#2d1b0b]/20 rounded-3xl border border-dashed border-white/10">
+                    <p className="text-xl font-semibold mb-2 text-[#f3e8dd]">No reviews yet</p>
+                    <p className="text-[#ab886d]">You haven’t reviewed any recipes yet. Start sharing your taste! 🍲</p>
                 </div>
-            ))
-        )}
-        {showForm &&(
+            ) : (
+                <div className="space-y-6">
+                    {review.map((rev) => (
+                        <div 
+                            key={rev._id}
+                            className="bg-[#2d1b0b]/40 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:border-[#f59e0b]/30 transition-all duration-300 shadow-xl"
+                        >
+                            <div className="flex flex-col md:flex-row gap-6 items-start">
+                              
+                                <div className="flex-shrink-0">
+                                    <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#b45309] to-[#f59e0b] flex items-center justify-center text-[#2d1b0b] text-xl font-black uppercase shadow-lg border-2 border-white/10">
+                                        {rev.user.name.charAt(0)}
+                                    </div>
+                                </div>
+
+                            
+                                <div className="flex-1">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                        <div>
+                                            <h4 className="text-lg font-bold text-[#f3e8dd] tracking-wide uppercase">
+                                                {rev.user.name}
+                                            </h4>
+                                            <p className="text-xs text-[#f59e0b] font-medium mt-1">
+                                                Recipe: <span className="text-[#f3e8dd] italic">{rev.recipe.title}</span>
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-1">
+                                            {renderStar(rev.rating)}
+                                        </div>
+                                    </div>
+
+                                    <div className="relative">
+                                        <p className="text-[#ab886d] leading-relaxed text-[15px] italic bg-[#1a0d08]/40 p-4 rounded-xl border border-white/5">
+                                            "{rev.description}"
+                                        </p>
+                                    </div>
+                                </div>
+
+                              
+                                <div className="flex md:flex-col gap-3 ml-auto">
+                                    <button 
+                                        className='p-3 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white transition-all shadow-md'
+                                        onClick={() => handleEdit(rev)}
+                                        title="Edit Review"
+                                    >
+                                        <FaEdit size={16}/>
+                                    </button>
+                                    <button 
+                                        className='p-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-md'
+                                        onClick={() => handleDelete(rev)}
+                                        title="Delete Review"
+                                    >
+                                        <FaTrash size={16}/>
+                                    </button> 
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {showForm && (
                 <ReviewForm
-                onClose={handleCloseForm}
-                onSave={handleSaved}
-                
-                selectedReview = {selectedReview}
-                recipeId={selectedReview!.recipe._id}
+                    onClose={handleCloseForm}
+                    onSave={handleSaved}
+                    selectedReview={selectedReview}
+                    recipeId={selectedReview!.recipe._id}
                 />
             )}
-    </div>
-    
-  )
+        </div>
+    )
 }

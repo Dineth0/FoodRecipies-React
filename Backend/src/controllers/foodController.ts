@@ -216,3 +216,12 @@ export const getTotalFoodsCount = async(req:Request, res:Response, next:NextFunc
     }
 }
 
+export const searchByCategory = async(req:Request, res:Response, next:NextFunction)=>{
+    try{
+        
+    }catch(error){
+     next(error)
+
+    }
+}
+

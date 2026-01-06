@@ -19,7 +19,6 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Check if passwords match
     if (password !== confirmPassword) {
       const errorMessage = 'Passwords do not match';
       setPasswordError(errorMessage);
@@ -35,8 +34,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#ffe4c3] to-[#f8cd96] flex justify-center items-center p-6">
-      <div className="w-[400px] max-w-full bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
+    <div className="min-h-screen bg-gradient-to-br from-[#A27B5C]  to-[#23120b] flex justify-center items-center p-6">
+      <div className="w-[400px] max-w-full bg-[#AB886D] backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
         
 
           <div className="flex items-center justify-center mb-5">
@@ -45,13 +44,13 @@ const Signup = () => {
             </h1>
           </div>
 
-          {/* Header */}
+        
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-[#3b2f2f]">Create your account</h2>
             <p className="text-sm text-gray-600 mt-1">Join the Foodie community 🍽️</p>
           </div>
 
-          {/* Error Messages */}
+        
           {(error || passwordError) && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
               <div className="flex">
@@ -67,7 +66,7 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Form */}
+    
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-[#3b2f2f] mb-1">

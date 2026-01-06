@@ -32,8 +32,8 @@ export default function ForgotPassword() {
     }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#ffe4c3] to-[#f8cd96] flex justify-center items-center p-6">
-        <div className="w-[400px] max-w-full bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
+    <div className="min-h-screen bg-gradient-to-br from-[#A27B5C]  to-[#23120b]  flex justify-center items-center p-6">
+        <div className="w-[400px] max-w-full bg-[#AB886D] backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
             <div className="flex items-center justify-center mb-6">
                 <h1 className="text-3xl font-extrabold text-[#ff9f1c] tracking-wide">
                     DON Food<span className="text-[#3b2f2f]">ie</span>

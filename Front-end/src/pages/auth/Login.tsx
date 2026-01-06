@@ -35,8 +35,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#ffe4c3] to-[#f8cd96] flex justify-center items-center p-6">
-      <div className="w-[400px] max-w-full bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
+    <div className="min-h-screen bg-gradient-to-br from-[#A27B5C]  to-[#23120b] flex justify-center items-center p-6">
+      <div className="w-[400px] max-w-full bg-[#AB886D] backdrop-blur-xl shadow-2xl rounded-3xl p-10 border border-white/40">
        
 
           <div className='flex items-center justify-center mb-6'>
@@ -45,13 +45,13 @@ const Login = () => {
             </h1>
           </div>
 
-          {/* Header */}
+     
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-[#3b2f2f]">Login First</h2>
-            <p className="text-sm text-gray-600 ">Login to continue cooking 🤤</p>
+            <p className="text-sm text-gray-600 ">Login to continue cooking</p>
           </div>
 
-          {/* Error Message */}
+       
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
               <div className="flex">
@@ -67,7 +67,7 @@ const Login = () => {
             </div>
           )}
 
-          {/* Form */}
+     
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-[#3b2f2f] mb-1">
@@ -104,18 +104,7 @@ const Login = () => {
             </div>
 
             <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center text-sm text-gray-700">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  
-                  className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 border-gray-300 rounded transition-colors"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
-                  Remember me
-                </label>
-              </div>
+              
 
               <div className="text-sm">
                 <a href="/forgot-password" className="text-sm text-[#ff9f1c] hover:text-[#ff8a00] font-medium">
