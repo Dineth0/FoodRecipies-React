@@ -1,7 +1,5 @@
 import {Request, Response, NextFunction } from "express";
 import { Food } from "../models/FoodModel";
-import bucket from "../config/firebase";
-import { error } from 'console';
 import cloudinary from "../config/cloudinary";
 
 

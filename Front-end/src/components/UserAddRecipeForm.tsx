@@ -155,7 +155,10 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
         }catch(error){
           setLoading(false)
           const err = error as AxiosError<ApiErrorResponse>;
-          const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.'; 
+          const errorMessage =
+    err.response?.data?.message ||
+    err.message ||
+    'Failed to add recipe. Please try again.';
           setError(errorMessage);
           showErrorAlert('Food Add Failed', errorMessage);
           console.error(' error:', error);  

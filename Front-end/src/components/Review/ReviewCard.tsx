@@ -63,7 +63,7 @@ export default function ReviewCard({review} : ReviewCardProps){
             </p>
           </div>
           
-          {/* Subtle branding or date could go here */}
+        
           <div className="mt-4 border-t border-white/5 pt-2">
              <span className="text-[10px] text-[#634832] font-bold uppercase tracking-widest">Verified Foodie</span>
           </div>
