@@ -39,7 +39,9 @@ const NotifyBell = () =>{
         }
         fetchNotifications()
 
-        socket.current = io("https://incredible-carlie-dinethnakandala-d9594667.koyeb.app")
+        socket.current = io("https://incredible-carlie-dinethnakandala-d9594667.koyeb.app", {
+             transports: ["websocket"],
+        })
 
         socket.current.on("connect", ()=>{
             socket.current?.emit("join_admin_room")

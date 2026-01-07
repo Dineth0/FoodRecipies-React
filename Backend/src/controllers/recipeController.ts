@@ -12,69 +12,102 @@ import PDFDocument from 'pdfkit';
 import mongoose from "mongoose";
 
 
-export const addRecipie = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { user, food, title, ingredients, step, readyIn } = req.body;
-    const userId = (req as any).user?._id || req.body.user;
+export const addRecipie = async (req:Request, res:Response, next: NextFunction)=>{
+    try{
+        const {user, food, title, ingredients, step, readyIn, date} = req.body
+        
+        const exstingUser = await userModel.findById(user)
+        const userRole = exstingUser?.role
+        const checkStatus = userRole === 'Admin' ? 'Approved' : 'Pending' 
 
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-        return res.status(400).json({ success: false, message: "Invalid User ID" });
-    }
+        if(!exstingUser){
+            return res.status(404).json({
+                success: false,
+                data:null,
+                message:"User Not Found"
+            })
+        }
 
-    const existingUser = await userModel.findById(userId);
-    if (!existingUser) return res.status(404).json({ success: false, message: "User Not Found" });
+        const exstingFood = await Food.findById(food)
+        if(!exstingFood){
+            return res.status(404).json({
+                success: false,
+                data:null,
+                message:"Food Not Found"
+            })
+        }
 
-    const existingFood = await Food.findById(food);
-    if (!existingFood) return res.status(404).json({ success: false, message: "Food Not Found" });
-
-    const userRole = (req as any).user?.role || "User";
-    const checkStatus = userRole === "Admin" ? "Approved" : "Pending";
-
-    let imageURLs: string[] = [];
-    const files = req.files as Express.Multer.File[];
-
-    if (files && files.length > 0) {
-      for (const file of files) {
-        const uploaded: any = await new Promise((resolve, reject) => {
-          const upload_stream = cloudinary.uploader.upload_stream(
-            { folder: "food" },
-            (error, result) => {
-              if (error) return reject(error);
-              resolve(result);
+        let imageURLs: string[] = [];
+        if (req.files && Array.isArray(req.files)) {
+            for (const file of req.files) {
+                const uploaded: any = await new Promise((resolve, reject) => {
+                const upload_stream = cloudinary.uploader.upload_stream(
+                    { folder: "food" },
+                    (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                    }
+                );
+                upload_stream.end(file.buffer);
+                });
+        
+                imageURLs.push(uploaded.secure_url);
             }
-          );
-          upload_stream.end(file.buffer);
-        });
+        }
+        const newResipe = new Recipe({
+            user,
+            food,
+            title,
+            ingredients : ingredients.split(","),
+            step,
+            readyIn,
+            date : new Date(),
+            images: imageURLs,
+            status: checkStatus
+        })
+        await newResipe.save()
 
-        imageURLs.push(uploaded.secure_url);
-      }
+        if(userRole === 'User'){
+            const foodData = await Food.findById(food)
+            const userData = await userModel.findById(user)
+            const notification = new Notification({
+                recipeId : newResipe._id,
+                userId : user,
+                recipeTitle : title,
+                foodName :  foodData?.name,
+                userName : userData?.name,
+                message : `New Recipe '${title}' submitted for approval`,
+                read: false,
+                createdAt : new Date()
+                
+            })
+            console.log("REQ USER:", (req as any).user);
+
+            await notification.save()
+
+            const io = req.app.get("io")
+            io.emit("New Pending Recipe", {
+                message: "New Recipe Submitted",
+                data:{
+                    recipeId: newResipe._id,
+                    recipeTitle: title,
+                    foodName : foodData?.name,
+                    userName : userData?.name,
+                    createdAt : new Date()
+                }
+            })
+        }
+
+        const message = userRole === 'Admin' ? "Recipe Added Successfully" : "Recipes Submitted for Approval"
+        res.status(201).json({
+            success:true,
+            data: {recipe: newResipe},
+            message: message
+        })
+    }catch(error){
+        next(error)
     }
-
-    const newRecipe = new Recipe({
-      user:userId,
-      food,
-      title,
-      ingredients: Array.isArray(ingredients) ? ingredients : ingredients.split(","),
-      step,
-      readyIn,
-      date: new Date(),
-      images: imageURLs,
-      status: checkStatus,
-    });
-
-    await newRecipe.save();
-
-    return res.status(201).json({
-      success: true,
-      data: { recipe: newRecipe },
-      message: userRole === "Admin" ? "Recipe Added Successfully" : "Recipe Submitted for Approval",
-    });
-
-  } catch (error) {
-    console.error("Add Recipe Error:", error);
-    next(error);
-  }
-};
+}
 
 
 export const getAllRecipes = async(req:Request, res:Response, next:NextFunction)=>{
