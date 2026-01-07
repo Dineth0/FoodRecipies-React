@@ -22,7 +22,6 @@ export const passwordReset = async (data:{email:string, otp:number, newPassword:
 }
 
 const PUBLIC_ENDPOINTS = ["/auth/login" , "/auth/signup"]
-// axiosInstance නිර්මාණය කළ පසු මෙය එක් කරන්න
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -63,15 +62,12 @@ axiosInstance.interceptors.response.use(
 
     const response = await refreshTokens(refreshtoken);
     
-    // මෙහි response.token හෝ response.accessToken ඔබේ API එක අනුව නිවැරදිව යොදන්න
     const newToken = response.token || response.accessToken; 
     
     localStorage.setItem('token', newToken);
 
-    // වැදගත්: මුල් request එකේ header එක අලුත් token එකෙන් update කරන්න
     originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-    // axiosInstance(originalRequest) ලෙස භාවිතා කරන්න (axios පමණක් නොව)
     return axiosInstance(originalRequest);
             }catch(error){
                 console.error("Token refresh failed:", error);

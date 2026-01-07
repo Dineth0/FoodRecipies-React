@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { getAllNotifications, markAsRead } from "../../services/NotifyAPI";
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 
 interface NotificationItem{
@@ -11,12 +11,21 @@ interface NotificationItem{
     createdAt: string;
     read: boolean;
 }
+interface NewNotifyPayload {
+  data: {
+    recipeId: string;
+    recipeTitle: string;
+    foodName: string;
+    userName: string;
+  };
+}
+
 
 const NotifyBell = () =>{
     const [notifications, setNotifications] = useState<NotificationItem[]>([])
     const[unReadCount, setUnReadCount] = useState(0)
     const[isOpen, setIsOpen] = useState(false)
-    const socket = useRef<any>(null)
+    const socket = useRef<Socket>(null)
 
     useEffect(()=>{
         const fetchNotifications = async ()=>{
@@ -30,13 +39,13 @@ const NotifyBell = () =>{
         }
         fetchNotifications()
 
-        socket.current = io("http://localhost:8000")
+        socket.current = io("https://incredible-carlie-dinethnakandala-d9594667.koyeb.app/api/v1")
 
         socket.current.on("connect", ()=>{
-            socket.current.emit("join_admin_room")
+            socket.current?.emit("join_admin_room")
         })
 
-        socket.current.on("New Pending Recipe", (payload:any) =>{
+        socket.current.on("New Pending Recipe", (payload:NewNotifyPayload) =>{
             const newNotification ={
                 _id: payload.data.recipeId,
                 recipeTitle: payload.data.recipeTitle,
@@ -49,7 +58,7 @@ const NotifyBell = () =>{
             setUnReadCount((prev)=> prev + 1)
         })
         return () =>{
-            socket.current.disconnect()
+            socket.current?.disconnect()
         }
     },[])
 

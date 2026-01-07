@@ -1,5 +1,5 @@
 
-import { lazy, Suspense,  type ReactNode } from "react"
+import { lazy, Suspense, type ReactNode } from "react"
 import {   Navigate, Route, Routes, useLocation } from "react-router-dom"
 import Dashboard from "../pages/Dashboard/Dashboard"
 import Layout from "../components/Layout"
