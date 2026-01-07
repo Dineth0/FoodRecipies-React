@@ -124,8 +124,13 @@ const dispatch = useDispatch<AppDisPatch>()
         }
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
+
+        if (!user?._id) {
+        showErrorAlert("Error", "User session expired. Please login again.");
+        return;
+    }
 
         if(
             !formdata.food ||
@@ -192,7 +197,6 @@ const dispatch = useDispatch<AppDisPatch>()
           
               }
     }
-
     const formTitle = selectedRecipe ? "Edit Recipe" : "Add Recipe"
     const saveButtonText = selectedRecipe ? "Update" : "Save"
 

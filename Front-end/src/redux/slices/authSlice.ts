@@ -38,9 +38,9 @@ interface ApiErrorResponse {
 }
 const initialState: AuthState = {
     user: null,
-    token: null,
-    isAuthenticated: false,
-    loading: !!localStorage.getItem('token'),
+    token: localStorage.getItem('token'),
+    isAuthenticated: !!localStorage.getItem('token'),
+    loading: false,
     error: null
 }
 
@@ -126,13 +126,14 @@ const authSlice = createSlice({
     resetError: (state) => {
       state.error = null;
     },
+    // Profile එක update කරන්න ඕන නම් මේ reducer එක පාවිච්චි කරන්න පුළුවන්
     updateUserInfo: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     }
   },
   extraReducers: (builder) => {
     builder
-     
+      // --- Login Cases ---
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -154,18 +155,21 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
+      // --- Signup Cases (අලුතින් එක් කළා) ---
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(signupUser.fulfilled, (state) => {
         state.loading = false;
+        // Signup එකේදී user log කරන්නේ නැත්නම් මෙතන මුකුත් කරන්න ඕන නෑ
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
 
+      // --- Fetch Profile Cases ---
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthenticated = true;
@@ -178,6 +182,7 @@ const authSlice = createSlice({
         localStorage.removeItem('token');
       })
 
+      // --- Forgot Password / OTP Cases (අලුතින් එක් කළා) ---
       .addCase(sendOtp.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -190,6 +195,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
+      // --- Reset Password Cases (අලුතින් එක් කළා) ---
       .addCase(resetPasswordAction.pending, (state) => {
         state.loading = true;
       })
@@ -201,6 +207,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       })
 
+      // --- Logout Case ---
       .addCase(logoutAction.fulfilled, (state) => {
         state.user = null;
         state.token = null;

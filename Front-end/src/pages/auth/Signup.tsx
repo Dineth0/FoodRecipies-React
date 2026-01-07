@@ -47,7 +47,7 @@ const Signup = () => {
         
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-[#3b2f2f]">Create your account</h2>
-            <p className="text-sm text-gray-600 mt-1">Join the Foodie community 🍽️</p>
+            <p className="text-sm text-gray-600 mt-1">Join the Foodie community</p>
           </div>
 
         

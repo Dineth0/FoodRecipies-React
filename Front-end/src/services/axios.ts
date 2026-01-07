@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
     headers :{
         "Content-Type":"application/json"
     }
+    
 })
 
 export const forgetPassword = async (email : string) =>{
@@ -21,54 +22,66 @@ export const passwordReset = async (data:{email:string, otp:number, newPassword:
 }
 
 const PUBLIC_ENDPOINTS = ["/auth/login" , "/auth/signup"]
-
+// axiosInstance නිර්මාණය කළ පසු මෙය එක් කරන්න
 axiosInstance.interceptors.request.use(
-    (config) =>{
-        const token = localStorage.getItem('token')
-        const isPublic = PUBLIC_ENDPOINTS.some((url)=> config.url?.includes(url))
-        if(token && !isPublic){
-            config.headers.Authorization = `Bearer ${token}`
-        }
-        return config
-    },
-    (error) =>{
-        return Promise.reject(error)
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-)
-
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 axiosInstance.interceptors.response.use(
     (response) =>{
-        return response
+        console.log("=== AXIOS RESPONSE SUCCESS ===");
+        console.log("URL:", response.config.url);
+        console.log("Status:", response.status);
+        return response;
     },
     async(error: AxiosError) =>{
-        const originalRequest = error.config as CustomAxiosRequestConfig
+        console.error("=== AXIOS RESPONSE ERROR ===");
+        console.error("URL:", error.config?.url);
+        console.error("Status:", error.response?.status);
+        console.error("Response data:", error.response?.data);
+        
+        const originalRequest = error.config as CustomAxiosRequestConfig;
 
         const isPublic = PUBLIC_ENDPOINTS.some((url)=>
             originalRequest.url?.includes(url)
-        )
+        );
 
         if(error.response?.status === 401 && !isPublic && !originalRequest._retry){
-            originalRequest._retry = true
+            console.log("401 Unauthorized - Attempting token refresh...");
+            originalRequest._retry = true;
             try{
-                const refreshtoken = localStorage.getItem("refreshToken")
-                if(!refreshtoken){
-                   throw new Error("No refresh token vailable") 
-                }
-                const response = await refreshTokens(refreshtoken)
-                localStorage.setItem('token', response.token)
+                const refreshtoken = localStorage.getItem("refreshToken");
+    if (!refreshtoken) throw new Error("No refresh token");
 
-                originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
+    const response = await refreshTokens(refreshtoken);
+    
+    // මෙහි response.token හෝ response.accessToken ඔබේ API එක අනුව නිවැරදිව යොදන්න
+    const newToken = response.token || response.accessToken; 
+    
+    localStorage.setItem('token', newToken);
 
-                return axios(originalRequest)
+    // වැදගත්: මුල් request එකේ header එක අලුත් token එකෙන් update කරන්න
+    originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
+    // axiosInstance(originalRequest) ලෙස භාවිතා කරන්න (axios පමණක් නොව)
+    return axiosInstance(originalRequest);
             }catch(error){
-                localStorage.removeItem("token")
-                localStorage.removeItem("refreshToken")
-                window.location.href = "/login"
-                console.error(error)
-                return Promise.reject(error)
+                console.error("Token refresh failed:", error);
+                localStorage.removeItem("token");
+                localStorage.removeItem("refreshToken");
+                window.location.href = "/login";
+                return Promise.reject(error);
             }
         }
-
+        return Promise.reject(error);
     }
-)
+);
 export default axiosInstance

@@ -9,13 +9,19 @@ import { Email } from '../models/EmailModel';
 import { sendApprovalemail, sendRejectEmail } from "./emailController";
 import { AuthRequest } from "../middleware/authMiddleware";
 import PDFDocument from 'pdfkit';
+import mongoose from "mongoose";
 
 
 export const addRecipie = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { user, food, title, ingredients, step, readyIn } = req.body;
+    const userId = (req as any).user?._id || req.body.user;
 
-    const existingUser = await userModel.findById(user);
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ success: false, message: "Invalid User ID" });
+    }
+
+    const existingUser = await userModel.findById(userId);
     if (!existingUser) return res.status(404).json({ success: false, message: "User Not Found" });
 
     const existingFood = await Food.findById(food);
@@ -45,7 +51,7 @@ export const addRecipie = async (req: Request, res: Response, next: NextFunction
     }
 
     const newRecipe = new Recipe({
-      user,
+      user:userId,
       food,
       title,
       ingredients: Array.isArray(ingredients) ? ingredients : ingredients.split(","),

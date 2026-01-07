@@ -29,7 +29,6 @@ interface FormData{
     description: string;
 }
 interface ApiErrorResponse {
-  success?: boolean
   message: string;
 }
 
@@ -135,7 +134,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave }) => {
 
     }catch(error){
       const err = error as AxiosError<ApiErrorResponse>;
-      const errorMessage =  err.response?.data?.message ||err.message || "Food add karanna bari una. Please try again."
+      const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.'; 
       setError(errorMessage);
       showErrorAlert('Food Add Failed', errorMessage);
       console.error(' error:', error);

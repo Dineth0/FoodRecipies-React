@@ -30,7 +30,7 @@ const NotifyBell = () =>{
         }
         fetchNotifications()
 
-        socket.current = io("http://localhost:5000")
+        socket.current = io("http://localhost:8000")
 
         socket.current.on("connect", ()=>{
             socket.current.emit("join_admin_room")
