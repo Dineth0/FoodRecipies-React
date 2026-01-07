@@ -32,7 +32,7 @@ const location = useLocation()
 const dispatch = useDispatch<AppDisPatch>();
 
     useEffect(() => {
-        if (!loading && (!isAuthenticated && !token) && location.pathname !== "/login") {
+        if (!loading && (!isAuthenticated || !token) && location.pathname !== "/login") {
             showErrorAlert("Access Denied", "Please login first for get access");
         }
     }, [loading, isAuthenticated, token, location.pathname]);
