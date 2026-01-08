@@ -170,7 +170,7 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
           err.message ||
           'Failed to add recipe. Please try again.';
           setError(errorMessage);
-          showErrorAlert('Food Add Failed', errorMessage);
+          showErrorAlert('Food Add Failed');
           console.error(' error:', error);  
         }
     }
