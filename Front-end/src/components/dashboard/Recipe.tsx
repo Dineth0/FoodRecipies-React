@@ -28,6 +28,8 @@ interface RecipeItem{
     readyIn : string
     date: Date
     images?: string[]
+    videos?: string[]
+    youtubeLink: string
 
 }
 
@@ -102,10 +104,10 @@ export default function Recipes(){
                         <th scope="col" className="py-2 px-4 w-[8%]">Food</th>
                         <th scope="col" className="py-2 px-4 w-[8%]">User</th>
                         <th scope="col" className="py-2 px-4 w-[12%]">Ingradiants</th>
-                        <th scope="col" className="py-2 px-4 w-[25%]">Step</th>
                         <th scope="col" className="py-2 px-4 w-[8%]">Ready In</th>
                         <th scope="col" className="py-2 px-4 w-[8%]">Date</th>
-                        <th scope="col" className="py-2 px-4 w-[25%] text-center">Images</th>
+                        <th scope="col" className="py-2 px-4 w-[20%] text-center">Images</th>
+                        <th scope="col" className="py-2 px-4 w-[20%] text-center">Videos</th>
                         <th scope="col" className="py-2 px-4 w-[10%] text-center">Action</th> 
                     </tr>
                 </thead>
@@ -128,11 +130,7 @@ export default function Recipes(){
                                     }
                                 })()}
                             </td>
-                            <td className="px-4 py-2 align-top">
-                                        <div className="break-words whitespace-pre-wrap max-h-40 overflow-y-auto pr-1">
-                                            {recipe.step}
-                                        </div>
-                                    </td>
+                            
                             <td className="py-2 px-4">{recipe.readyIn}</td>
                             <td className="py-2 px-4">
                                 {new Date(recipe.date).toLocaleDateString()}
@@ -153,7 +151,21 @@ export default function Recipes(){
                                     <span>No Images</span>
                                 )}
                             </td>
-
+                            
+                            <td className="py-2 px-4 text-center">
+                            {recipe.youtubeLink ? (
+                                <a
+                                    href={recipe.youtubeLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-400 hover:underline"
+                                >
+                                    Watch
+                                </a>
+                            ) : (
+                            <span>—</span>
+                            )}
+                        </td>
                             <td className="py-2 px-4">
                                 <button className="text-blue-400 hover:text-blue-600 mx-2"
                                     onClick={()=> handleEditRecipe(recipe)}>

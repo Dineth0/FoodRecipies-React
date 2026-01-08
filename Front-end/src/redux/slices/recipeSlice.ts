@@ -21,6 +21,8 @@ export interface Recipe{
     readyIn : string
     date: Date
     images?: string[]
+    videos?: string[]
+    youtubeLink : string
 }
 
 interface RecipeState{

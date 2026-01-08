@@ -35,7 +35,7 @@ interface FormData{
     ingredients: string
     step: string
     readyIn : string
- 
+    
    
 }
 interface RecipeFormProps{
@@ -53,13 +53,14 @@ const dispatch = useDispatch<AppDisPatch>()
         title: selectedRecipe?.title || selectedMyRecipe?.title ||'',
         ingredients: selectedRecipe?.ingredients ||  selectedMyRecipe?.ingredients ||'',
         step: selectedRecipe?.step || selectedMyRecipe?.step ||'',
-        readyIn: selectedRecipe?.readyIn || selectedMyRecipe?.readyIn ||''
+        readyIn: selectedRecipe?.readyIn || selectedMyRecipe?.readyIn ||'',
     
 
     })
     const [files, setFiles] = useState<FileList | null>(null)
     const [existingImageUrls, setExsitingImageUrls] = useState<string[]>(selectedRecipe?.images || [])
-    
+    const [videoFiles, setVideoFiles] = useState<FileList | null>(null);
+    const [existingVideoUrls, setExistingVideoUrls] = useState<string[]>(selectedRecipe?.videos || []);
     const[error, setError] = useState<string | null> (null)
     const [foods, setFoods] = useState<Food[]>([])
     const { user } = useSelector((state: RootState) => state.auth);
@@ -74,27 +75,31 @@ const dispatch = useDispatch<AppDisPatch>()
             title: selectedRecipe.title,
             ingredients: selectedRecipe.ingredients ,
             step: selectedRecipe.step ,
-            readyIn: selectedRecipe.readyIn 
+            readyIn: selectedRecipe.readyIn,
           })
           setExsitingImageUrls(selectedRecipe.images || [])
+          setExistingVideoUrls(selectedRecipe.images || [])
         }else if(selectedMyRecipe) {
           setFormdata({
             food: selectedMyRecipe.food._id ,
             title: selectedMyRecipe.title,
             ingredients: selectedMyRecipe.ingredients ,
             step: selectedMyRecipe.step ,
-            readyIn: selectedMyRecipe.readyIn 
+            readyIn: selectedMyRecipe.readyIn ,
           })
           setExsitingImageUrls(selectedMyRecipe.images || [])
+          setExistingVideoUrls(selectedMyRecipe.videos || [])
         }else{
           setFormdata({
           food: '',
           title: '',
           ingredients: '',
           step: '',
-          readyIn: ''
+          readyIn: '',
+         
           })
           setExsitingImageUrls([])
+          setExistingVideoUrls([])
         }
         const loadFoods = async () =>{
             try{
@@ -116,6 +121,12 @@ const dispatch = useDispatch<AppDisPatch>()
             ...prevData,
             [name] : value
         }))
+    }
+
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if(e.target.files){
+          setVideoFiles(e.target.files)
+      }
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
@@ -143,10 +154,7 @@ const dispatch = useDispatch<AppDisPatch>()
             setError("Fill All Fields")
             return
         }
-        if (existingImageUrls.length === 0 && (!files || files.length === 0)) {
-            setError("Please add at least one image");
-            return;
-        }
+        
         const totalImage = existingImageUrls.length + (files ? files.length : 0)
             if(totalImage > 5){
                 setError("You can only upload 5 Images")
@@ -169,6 +177,11 @@ const dispatch = useDispatch<AppDisPatch>()
             for(let i= 0; i < files.length; i++){
                 data.append('images', files[i])
             }
+        }
+        if(videoFiles){
+          for(let i=0; i<videoFiles.length; i++){
+              data.append('videos', videoFiles[i]);
+          }
         }
 
         try{
@@ -271,7 +284,7 @@ const dispatch = useDispatch<AppDisPatch>()
               className="w-full px-3 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none"
             />
           </div>
- 
+          
           {existingImageUrls.length > 0 &&(
              <div className="flex flex-col space-y-1">
             <label className="text-gray-300 text-sm">Current Images</label>
@@ -302,6 +315,31 @@ const dispatch = useDispatch<AppDisPatch>()
               className="w-full px-3 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none"
             />
           </div> 
+          {existingVideoUrls.length > 0 && (
+            <div>
+              <label className="text-gray-300 text-sm">Current Videos</label>
+              <div className="flex flex-wrap gap-2 p-2 bg-black/50 rounded-lg border border-yellow-600/20">
+                {existingVideoUrls.map((url, index) => (
+                  <video key={index} src={url} controls className="w-32 h-32 rounded-md" />
+                ))}
+              </div>
+              <p className="text-xs text-gray-400">You can add more videos below.</p>
+            </div>
+          )}
+
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Videos</label>
+            <input
+              name="videos"
+              type="file"
+              onChange={handleVideoChange}
+              multiple
+              accept="video/*"
+              className="w-full px-3 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none"
+            />
+          </div>
+
+        
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
               <div className="flex">

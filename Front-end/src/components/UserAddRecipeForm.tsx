@@ -26,6 +26,7 @@ interface RecipeItem{
     step: string
     readyIn : string
     images?: string[]
+    videos?: string[]
     status:string
 }
 interface FormData{
@@ -58,7 +59,8 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
     })
     const [files, setFiles] = useState<FileList | null>(null)
     const [existingImageUrls, setExsitingImageUrls] = useState<string[]>( [])
-    
+    const [videoFiles, setVideoFiles] = useState<FileList | null>(null);
+    const [existingVideoUrls, setExistingVideoUrls] = useState<string[]>([]);
     const[loading, setLoading] =useState(false)
     const[error, setError] = useState<string | null> (null)
     const [foods, setFoods] = useState<Food[]>([])
@@ -76,6 +78,7 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
           readyIn: ''
           })
           setExsitingImageUrls([])
+          setExistingVideoUrls([])
         
         const loadFoods = async () =>{
             try{
@@ -104,6 +107,11 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
             setFiles(e.target.files)
         }
     }
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          if(e.target.files){
+              setVideoFiles(e.target.files)
+          }
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -119,10 +127,7 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
             setError("Fill All Fields")
             return
         }
-        if (existingImageUrls.length === 0 && (!files || files.length === 0)) {
-            setError("Please add at least one image");
-            return;
-        }
+        
         const totalImage = existingImageUrls.length + (files ? files.length : 0)
             if(totalImage > 5){
                 setError("You can only upload 5 Images")
@@ -145,6 +150,11 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
                 data.append('images', files[i])
             }
         }
+        if(videoFiles){
+          for(let i=0; i<videoFiles.length; i++){
+              data.append('videos', videoFiles[i]);
+          }
+        }
 
         try{
             const response = await addRecipe(data)
@@ -156,9 +166,9 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
           setLoading(false)
           const err = error as AxiosError<ApiErrorResponse>;
           const errorMessage =
-    err.response?.data?.message ||
-    err.message ||
-    'Failed to add recipe. Please try again.';
+          err.response?.data?.message ||
+          err.message ||
+          'Failed to add recipe. Please try again.';
           setError(errorMessage);
           showErrorAlert('Food Add Failed', errorMessage);
           console.error(' error:', error);  
@@ -269,6 +279,29 @@ export  const UserAddRecipeForm: React.FC<UserAddRecipeFormProps> =({onClose, on
               className="w-full px-3 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none"
             />
           </div> 
+          {existingVideoUrls.length > 0 && (
+            <div>
+              <label className="text-gray-300 text-sm">Current Videos</label>
+              <div className="flex flex-wrap gap-2 p-2 bg-black/50 rounded-lg border border-yellow-600/20">
+                {existingVideoUrls.map((url, index) => (
+                  <video key={index} src={url} controls className="w-32 h-32 rounded-md" />
+                ))}
+              </div>
+              <p className="text-xs text-gray-400">You can add more videos below.</p>
+            </div>
+          )}
+
+          <div className="flex flex-col space-y-1">
+            <label className="text-gray-300 text-sm">Videos</label>
+            <input
+              name="videos"
+              type="file"
+              onChange={handleVideoChange}
+              multiple
+              accept="video/*"
+              className="w-full px-3 py-2 rounded-lg bg-black/60 border border-yellow-600/30 text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none"
+            />
+          </div>
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
               <div className="flex">

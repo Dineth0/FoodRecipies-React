@@ -10,8 +10,10 @@ interface IRecipe extends Document{
     step: string
     readyIn : string
     date: Date
-    images?: string[]
+    images?: string[],
+    videos?:string[],
     status: 'Pending' | 'Approved' | 'Reject'
+    
 }
 
 const recipeSchema = new Schema<IRecipe>({
@@ -54,6 +56,11 @@ const recipeSchema = new Schema<IRecipe>({
                 type:String, 
                 required:false
     }],
+    videos:[{
+                type:String, 
+                required:false
+    }],
+   
     status:{
         type:String,
         enum: ['Pending','Approved', 'Reject'],

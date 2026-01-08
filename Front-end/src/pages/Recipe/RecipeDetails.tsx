@@ -30,6 +30,7 @@ interface Recipe {
   readyIn: string;
   date: Date;
   images?: string[];
+  videos?: string[]
 }
 interface ReviewItem {
   _id: string;
@@ -45,7 +46,7 @@ interface ReviewItem {
 export default function RecipeDetailsPage() {
   const { title } = useParams<{ title: string }>();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [activeImage, setActiveImage] = useState("");
+  const [activeMedia, setActiveMedia] = useState<string>("");
   const [showForm, setShowForm] = useState(false)
   const [review, setReview] = useState<ReviewItem[]>([])
   const currentUser = useSelector((state: RootState) => state.auth.user);
@@ -65,8 +66,10 @@ export default function RecipeDetailsPage() {
         setReview(reviewResponse.data.data.review)
 
 
-        if (recipeDetails.images?.length > 0) {
-          setActiveImage(recipeDetails.images[0]);
+        if (recipeDetails.images && recipeDetails.images.length > 0) {
+        setActiveMedia(recipeDetails.images[0]);
+        } else if (recipeDetails.videos && recipeDetails.videos.length > 0) {
+          setActiveMedia(recipeDetails.videos[0]);
         }
       } catch (error) {
         console.log(error);
@@ -126,6 +129,9 @@ export default function RecipeDetailsPage() {
     });
         setShowForm(false);
   } 
+  const isVideo = (url: string) => {
+    return url.match(/\.(mp4|webm|ogg|mov)$/i) || recipe?.videos?.includes(url);
+  };
 
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10  bg-gradient-to-br from-[#A27B5C] via-[#AB886D] to-[#23120b]   ">
@@ -170,27 +176,53 @@ export default function RecipeDetailsPage() {
 
             <div className="grid lg:grid-cols-2 gap-10">
               <div>
-                <div className="w-full h-[350px] rounded-3xl  shadow-[0_4px_20px_rgba(0,0,0,0.1)] overflow-hidden mb-4">
-                  <img
-                    src={activeImage}
-                    className="object-cover w-full h-full">
-                      
-                  </img>
+                <div className="w-full h-[350px] rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] overflow-hidden mb-4 bg-black">
+                  {isVideo(activeMedia) ? (
+                    <video 
+                      src={activeMedia} 
+                      controls 
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <img
+                      src={activeMedia}
+                      className="object-cover w-full h-full"
+                      alt="Recipe"
+                    />
+                  )}
                 </div>
 
-                <div className="flex gap-3 overflow-x-auto scrollbar-hide">
+              
+                <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">
+            
                   {recipe?.images?.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImage(img)}
-                    className={`w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 ${
-                      activeImage === img
-                        ? "border-black"
-                        : "border-transparent opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <img src={img} className="w-full h-full object-cover" />
-                  </button>
+                    <button
+                      key={`img-${i}`}
+                      onClick={() => setActiveMedia(img)}
+                      className={`w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                        activeMedia === img ? "border-[#ff8a00] scale-95" : "border-transparent opacity-70"
+                      }`}
+                    >
+                      <img src={img} className="w-full h-full object-cover" alt={`Thumbnail ${i}`} />
+                    </button>
+                  ))}
+
+                 
+                  {recipe?.videos?.map((vid, i) => (
+                    <button
+                      key={`vid-${i}`}
+                      onClick={() => setActiveMedia(vid)}
+                      className={`relative w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                        activeMedia === vid ? "border-[#ff8a00] scale-95" : "border-transparent opacity-70"
+                      }`}
+                    >
+                      <video src={vid} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                        <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                          <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1"></div>
+                        </div>
+                      </div>
+                    </button>
                   ))}
                 </div>
 

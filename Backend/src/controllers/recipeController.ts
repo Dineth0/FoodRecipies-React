@@ -38,20 +38,24 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
         }
 
         let imageURLs: string[] = [];
-        if (req.files && Array.isArray(req.files)) {
-            for (const file of req.files) {
-                const uploaded: any = await new Promise((resolve, reject) => {
-                const upload_stream = cloudinary.uploader.upload_stream(
-                    { folder: "food" },
-                    (error, result) => {
-                    if (error) return reject(error);
-                    resolve(result);
-                    }
-                );
-                upload_stream.end(file.buffer);
-                });
+        let videoURLs: string[] = [];
         
-                imageURLs.push(uploaded.secure_url);
+        if(req.files && Array.isArray(req.files)){
+            for(const file of req.files){
+                const isVideo = file.mimetype.startsWith("video/")
+                const uploaded: any = await new Promise((resolve, reject) => {
+                    const upload_stream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: isVideo ? "recipe_videos" : "recipe",
+                            resource_type: isVideo ? "video" : "image"
+                        },
+                        (error, result) => error ? reject(error) : resolve(result)
+                    )
+                    upload_stream.end(file.buffer)
+                })
+
+                if(isVideo) videoURLs.push(uploaded.secure_url)
+                else imageURLs.push(uploaded.secure_url)
             }
         }
         const newResipe = new Recipe({
@@ -63,6 +67,8 @@ export const addRecipie = async (req:Request, res:Response, next: NextFunction)=
             readyIn,
             date : new Date(),
             images: imageURLs,
+            videos: videoURLs,
+          
             status: checkStatus
         })
         await newResipe.save()
@@ -168,7 +174,7 @@ export const getRecipeByFood = async (req:Request, res:Response, next:NextFuncti
 export const updateRecipe = async (req:Request, res:Response, next:NextFunction) =>{
     try{
         const {id} = req.params
-        const { food, title, ingredients, step, readyIn} = req.body
+        const { food, title, ingredients, step, readyIn,youtubeLink} = req.body
         const files = req.files as Express.Multer.File[] || []
 
         const existingRecipe = await Recipe.findById(id)
@@ -180,33 +186,42 @@ export const updateRecipe = async (req:Request, res:Response, next:NextFunction)
         }
 
             let updatedImages = [...existingRecipe.images || []]
-            if(files && Array.isArray(files) && files.length > 0){
-                for(const file of files){
-                    const uploaded: any = await new Promise((resolve, reject)=>{
-                        const upload_stream = cloudinary.uploader.upload_stream(
-                            { folder: "food" },
-                            (error, result) => {
-                            if (error) return reject(error);
-                            resolve(result);
-                            }
-                        );
-                        upload_stream.end(file.buffer);
-                        })
-                    updatedImages.push(uploaded.secure_url)
-                }
-        
+            let updatedVideos = [...existingRecipe.videos || []];
+            if (files.length > 0) {
+            for (const file of files) {
+                const isVideo = file.mimetype.startsWith("video/");
+                const uploaded: any = await new Promise((resolve, reject) => {
+                    const upload_stream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: isVideo ? "recipe_videos" : "food",
+                            resource_type: isVideo ? "video" : "image"
+                        },
+                        (error, result) => error ? reject(error) : resolve(result)
+                    );
+                    upload_stream.end(file.buffer);
+                });
+
+                if (isVideo) updatedVideos.push(uploaded.secure_url);
+                else updatedImages.push(uploaded.secure_url);
             }
+        }
         
         existingRecipe.food = food || existingRecipe.food
         existingRecipe.title = title || existingRecipe.title
         existingRecipe.ingredients = ingredients || existingRecipe.ingredients
         existingRecipe.step = step || existingRecipe.step
         existingRecipe.readyIn = readyIn || existingRecipe.readyIn
-        existingRecipe.images = updatedImages
+        existingRecipe.images = updatedImages.length ? updatedImages : undefined;
+        existingRecipe.videos = updatedVideos.length ? updatedVideos : undefined;
+        
 
         await existingRecipe.save()
 
-       
+       res.status(200).json({
+            success: true,
+            message: "Recipe updated successfully",
+            data: { recipe: existingRecipe }
+        });
     }catch(error){
         next(error)
     }
