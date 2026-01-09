@@ -38,7 +38,7 @@ io.on("connection",(socket)=>{
     })
 })
 
-app.use(cors({origin:"*"}))
+
 const FRONTEND_URL = process.env.FRONTEND_URL ;
 const allowedOrigins = [
   FRONTEND_URL,             

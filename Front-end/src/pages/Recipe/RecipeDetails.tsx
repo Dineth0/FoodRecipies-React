@@ -13,6 +13,7 @@ import type { RootState } from "../../redux/store";
 interface User {
   _id: string;
   name: string;
+  role?: string
 }
 
 interface Food {
@@ -155,11 +156,11 @@ export default function RecipeDetailsPage() {
 
             <div className="flex flex-wrap gap-4 mb-10 text-[#7a6e67] mt-6">
                 <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
-                    Food: <span className="font-semibold text-[#3a2f2a]">{recipe?.food.name}</span>
+                    Food: <span className="font-semibold text-[#3a2f2a]">{recipe?.food?.name}</span>
                 </span>
 
                 <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
-                    Posted By: <span className="font-semibold text-[#3a2f2a]">{recipe?.user.name}</span>
+                    Posted By: <span className="font-semibold text-[#3a2f2a]">{recipe?.user.role === "Admin" ? "Admin" : recipe?.user.name}</span>
                 </span>
 
                 <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">

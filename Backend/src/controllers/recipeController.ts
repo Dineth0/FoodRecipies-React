@@ -262,10 +262,11 @@ export const deleteRecipe = async (req:Request, res:Response, next:NextFunction)
 export const getRecipeByTitle = async (req:Request, res: Response, next:NextFunction) =>{
     try{
         const {title} = req.params
-
+        const {food} = req.params
         const decodedTitle = decodeURIComponent(title)
-        const recipe = await Recipe.findOne({title: decodedTitle})
-
+        const recipe = await Recipe.findOne({food: food, title: decodedTitle})
+            .populate("food", "name")
+            .populate({ path: "user", select: "name role" })
         if(!recipe){
              return res.status(404).json({
                 success: false,

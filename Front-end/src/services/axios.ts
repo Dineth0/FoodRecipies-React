@@ -36,17 +36,9 @@ axiosInstance.interceptors.request.use(
 );
 axiosInstance.interceptors.response.use(
     (response) =>{
-        console.log("=== AXIOS RESPONSE SUCCESS ===");
-        console.log("URL:", response.config.url);
-        console.log("Status:", response.status);
         return response;
     },
     async(error: AxiosError) =>{
-        console.error("=== AXIOS RESPONSE ERROR ===");
-        console.error("URL:", error.config?.url);
-        console.error("Status:", error.response?.status);
-        console.error("Response data:", error.response?.data);
-        
         const originalRequest = error.config as CustomAxiosRequestConfig;
 
         const isPublic = PUBLIC_ENDPOINTS.some((url)=>
@@ -54,23 +46,21 @@ axiosInstance.interceptors.response.use(
         );
 
         if(error.response?.status === 401 && !isPublic && !originalRequest._retry){
-            console.log("401 Unauthorized - Attempting token refresh...");
             originalRequest._retry = true;
             try{
                 const refreshtoken = localStorage.getItem("refreshToken");
-    if (!refreshtoken) throw new Error("No refresh token");
+                if (!refreshtoken) throw new Error("No refresh token");
 
-    const response = await refreshTokens(refreshtoken);
-    
-    const newToken = response.token || response.accessToken; 
-    
-    localStorage.setItem('token', newToken);
+                const response = await refreshTokens(refreshtoken);
+                
+                const newToken = response.token || response.accessToken; 
+                
+                localStorage.setItem('token', newToken);
 
-    originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-    return axiosInstance(originalRequest);
+                return axiosInstance(originalRequest);
             }catch(error){
-                console.error("Token refresh failed:", error);
                 localStorage.removeItem("token");
                 localStorage.removeItem("refreshToken");
                 window.location.href = "/login";
