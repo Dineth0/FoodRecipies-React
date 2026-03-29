@@ -10,7 +10,6 @@ import dotenv from "dotenv"
 dotenv.config()
 
 
-//user Signup
 const signup = async (req:Request, res:Response, next:NextFunction) =>{
     try{
         const { name, email, password } = req.body;
@@ -34,7 +33,7 @@ const signup = async (req:Request, res:Response, next:NextFunction) =>{
 
         res.status(201).json({
             success: true,
-            message: 'Librarian registered successfully',
+            message: 'User registered successfully',
             data: {
                 id: newUser.id,
                 name: newUser.name,
@@ -46,13 +45,12 @@ const signup = async (req:Request, res:Response, next:NextFunction) =>{
     }
 }
 
-//user Login
 const login = async (req:Request, res:Response, next:NextFunction) =>{
     try{
         const { email, password } = req.body;
         const user = await userModel.findOne({email})
         if(!user){
-            const error = new Error('Invalid credentials');
+            const error = new Error('User Not Found');
             (error as any).statusCode = 401;
             throw error;
         }

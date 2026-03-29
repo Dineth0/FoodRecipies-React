@@ -79,7 +79,7 @@ export default function Router(){
                                 </RequireAuth>
                         }/>
                         <Route
-                            path="/recipe/:title"
+                            path="/recipe/:id"
                             element={
                                 <RequireAuth>
                                     <RecipeDeatilsPage/>
@@ -132,6 +132,14 @@ export default function Router(){
                         element={
                             <RequireAuth>
                                 <Dashboard/>
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/about"
+                        element={
+                            <RequireAuth>
+                                <AllRecipesPage/>
                             </RequireAuth>
                         }
                     />

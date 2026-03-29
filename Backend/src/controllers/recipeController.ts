@@ -259,29 +259,28 @@ export const deleteRecipe = async (req:Request, res:Response, next:NextFunction)
     }
 }
 
-export const getRecipeByTitle = async (req:Request, res: Response, next:NextFunction) =>{
-    try{
-        const {title} = req.params
-        const {food} = req.params
-        const decodedTitle = decodeURIComponent(title)
-        const recipe = await Recipe.findOne({food: food, title: decodedTitle})
-            .populate("food", "name")
-            .populate({ path: "user", select: "name role" })
-        if(!recipe){
-             return res.status(404).json({
+export const getRecipeById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+
+        const recipe = await Recipe.findById(id)
+
+        if (!recipe) {
+            return res.status(404).json({
                 success: false,
                 message: "Recipe not found",
-            })
+            });
         }
+
         res.status(200).json({
             success: true,
             data: { recipe },
             message: "Recipe fetched successfully",
-        })
-    }catch(error){
-        next(error)
+        });
+    } catch (error) {
+        next(error);
     }
-}
+};
 
 export const getPandingRecipes = async (req:Request, res:Response, next:NextFunction)=>{
     try{

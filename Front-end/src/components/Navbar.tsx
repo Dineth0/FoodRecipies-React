@@ -105,6 +105,7 @@ export const Navbar: React.FC = () => {
             <Link to="/all-recipes" className="text-white text-lg font-semibold hover:text-amber-300 transition duration-300">
               RECIPES
             </Link>
+           
 
            
             <div>
@@ -223,6 +224,7 @@ export const Navbar: React.FC = () => {
             <Link to="/all-recipes" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-yellow-600 hover:bg-gray-50 rounded-md">
               RECIPES
             </Link>
+            
 
             <hr className="my-2 border-gray-200" />
 

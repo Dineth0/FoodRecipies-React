@@ -38,7 +38,7 @@ interface ApiErrorResponse {
 }
 const initialState: AuthState = {
     user: null,
-    token: null,
+    token: localStorage.getItem('token'),
     isAuthenticated: !!localStorage.getItem('token'),
     loading: false,
     error: null

@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className='bg-[#1a0d08] text-[#f3e8dd] py-12 shadow-inner border-t border-[#3e2418]'>
         <div className='max-w-6xl mx-auto px-6 grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-10'>
             <div>
-                {/* Logo color matches the orange accent */}
+             
                 <h2 className='text-3xl font-extrabold text-[#f59e0b] tracking-tight'>
                     DON Foodie
                 </h2>

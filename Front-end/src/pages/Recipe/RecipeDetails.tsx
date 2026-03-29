@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { downloadRecipePDF, getRecipeByName } from "../../services/RecipeAPI";
+import { downloadRecipePDF, getRecipeById } from "../../services/RecipeAPI";
 import { MdOutlinePostAdd } from "react-icons/md";
 import { ReviewForm } from "../../components/Review/ReviewForm";
 import { getReviewByRecipe } from "../../services/ReviewAPI";
@@ -13,7 +13,6 @@ import type { RootState } from "../../redux/store";
 interface User {
   _id: string;
   name: string;
-  role?: string
 }
 
 interface Food {
@@ -45,7 +44,7 @@ interface ReviewItem {
 }
 
 export default function RecipeDetailsPage() {
-  const { title } = useParams<{ title: string }>();
+  const { id } = useParams<{ id: string }>();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [activeMedia, setActiveMedia] = useState<string>("");
   const [showForm, setShowForm] = useState(false)
@@ -54,14 +53,15 @@ export default function RecipeDetailsPage() {
  
 
   useEffect(() => {
-    if (!title) return;
-
+    if (!id) return;
+    console.log(id)
     const fetchRecipe = async () => {
       try {
-        const response = await getRecipeByName(title);
+        const response = await getRecipeById(id);
         const recipeDetails = response.data.data.recipe;
 
         setRecipe(recipeDetails);
+        console.log(recipeDetails)
 
         const reviewResponse = await getReviewByRecipe(recipeDetails._id)
         setReview(reviewResponse.data.data.review)
@@ -78,7 +78,7 @@ export default function RecipeDetailsPage() {
     };
 
     fetchRecipe();
-  }, [title]);
+  }, [id]);
 
   const handleDownloadPDF = async () => {
     if (!recipe) return;
@@ -133,6 +133,7 @@ export default function RecipeDetailsPage() {
   const isVideo = (url: string) => {
     return url.match(/\.(mp4|webm|ogg|mov)$/i) || recipe?.videos?.includes(url);
   };
+  
 
   return (
     <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-10  bg-gradient-to-br from-[#A27B5C] via-[#AB886D] to-[#23120b]   ">
@@ -155,13 +156,13 @@ export default function RecipeDetailsPage() {
 
 
             <div className="flex flex-wrap gap-4 mb-10 text-[#7a6e67] mt-6">
-                <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
-                    Food: <span className="font-semibold text-[#3a2f2a]">{recipe?.food?.name}</span>
+                {/* <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
+                    Food: <span className="font-semibold text-[#3a2f2a]">{recipe?.food.name}</span>
                 </span>
 
                 <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
-                    Posted By: <span className="font-semibold text-[#3a2f2a]">{recipe?.user.role === "Admin" ? "Admin" : recipe?.user.name}</span>
-                </span>
+                    Posted By: <span className="font-semibold text-[#3a2f2a]">{recipe?.user.name}</span>
+                </span> */}
 
                 <span className="px-4 py-1 bg-[#fff5eb] border border-[#ffe1c4] rounded-full text-sm">
                     Ready In: <span className="font-semibold text-[#3a2f2a]">{recipe?.readyIn}</span>

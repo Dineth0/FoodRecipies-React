@@ -1,6 +1,6 @@
 import { Router } from "express";
 import upload from "../middleware/upload";
-import { addRecipie, approveRecipe, deleteRecipe, downloadRecipePDF, getAllRecipes, getPandingRecipes, getRecipeByFood, getRecipeByTitle, getRecipeByUser, getRecipesGrowth, getRejectRecipes, getTotalRecipesCount, getTotalStatusAndCompire, rejectRecipes, searchRecipes, updateRecipe } from "../controllers/recipeController";
+import { addRecipie, approveRecipe, deleteRecipe, downloadRecipePDF, getAllRecipes, getPandingRecipes, getRecipeByFood, getRecipeById, getRecipeByUser, getRecipesGrowth, getRejectRecipes, getTotalRecipesCount, getTotalStatusAndCompire, rejectRecipes, searchRecipes, updateRecipe } from "../controllers/recipeController";
 import { authenticateUser, authorizeRole } from "../middleware/authMiddleware";
 
 
@@ -16,8 +16,7 @@ router.get("/", getAllRecipes)
 router.get("/byfood/:food", getRecipeByFood)     
 router.put("/updateRecipe/:id", upload.array("images", 5), updateRecipe)
 router.delete("/deleteRecipe/:id", deleteRecipe)
-router.get("/title/:title", getRecipeByTitle)
-
+router.get("/getRecipeById/:id" , getRecipeById)
 router.get(
         "/pending",
         authenticateUser,

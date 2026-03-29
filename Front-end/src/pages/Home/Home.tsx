@@ -22,7 +22,7 @@ const Home = () =>{
                 <h2 className="text-3xl font-bold text-[#f3e8dd] tracking-wide">
                     Some of our Foods
                 </h2>
-                <div className="w-20 h-1 bg-[#f59e0b] mt-2 rounded-full"></div> {/* පොඩි underline එකක් */}
+                <div className="w-20 h-1 bg-[#f59e0b] mt-2 rounded-full"></div> 
             </div>
 
             <FoodCard />

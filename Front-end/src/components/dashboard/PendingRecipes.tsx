@@ -143,7 +143,7 @@ export default function PendingRecipes(){
                                                 className="text-red-400 hover:text-red-600 transition-colors"
                                                 title="Reject"
                                                 onClick={() => handleReject(recipe._id)}>
-                                                <IoCloseCircle size={22} /> {/* size eka poddak wadi kala lassanata penanna */}
+                                                <IoCloseCircle size={22} />
                                             </button>
                                             
                                         </div>

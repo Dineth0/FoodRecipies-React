@@ -76,3 +76,30 @@ This platform promotes community-driven cooking knowledge while ensuring quality
 - Secure JWT token handling
 - Modular folder structure
 
+##  Screenshots
+
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1156).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1157).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1158).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1159).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1160).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1161).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1162).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1163).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1164).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1165).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1166).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1167).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1168).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1169).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1170).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1171).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1172).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1173).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1174).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1175).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1176).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1177).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1178).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1179).png)
+![Screenshot](./Front-end/src/assets/screenshots/Screenshot%20(1180).png)

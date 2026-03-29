@@ -25,8 +25,9 @@ export const updateRecipe = ( id: string ,data: FormData)=>{
 export const deleteRecipes = (id: string) =>{
     return axiosInstance.delete(`/recipe/deleteRecipe/${id}`)
 }
-export const getRecipeByName = (title : string) =>{
-    return axiosInstance.get(`/recipe/title/${encodeURIComponent(title)}`)
+
+export const getRecipeById = (id:string) =>{
+    return axiosInstance.get(`/recipe/getRecipeById/${id}`)
 }
 
 export const getPendingRecipes = (page: number = 1, limit: number = 3 ) =>{

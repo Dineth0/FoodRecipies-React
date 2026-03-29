@@ -18,7 +18,7 @@ export default function RecipeCard({recipe}:RecipeCardProps){
   return(
     <div 
       key={recipe._id}
-      onClick={()=> navigate(`/recipe/${recipe.title}`)}
+      onClick={()=> navigate(`/recipe/${recipe._id}`)}
       className='group cursor-pointer bg-[#2d1b0b]/40 backdrop-blur-md 
                        border border-white/10
                        rounded-2xl overflow-hidden 

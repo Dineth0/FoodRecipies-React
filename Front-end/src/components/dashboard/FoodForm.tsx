@@ -116,9 +116,9 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave }) => {
     data.append('description', formData.description)
 
     if(files){
-    for(let i= 0; i < files.length; i++){
-      data.append('images', files[i])
-    }
+      for(let i= 0; i < files.length; i++){
+        data.append('images', files[i])
+      }
     }
 
     try{
@@ -136,7 +136,7 @@ export const FoodForm: React.FC<FoodsFormProps> = ({ onClose, onSave }) => {
       const err = error as AxiosError<ApiErrorResponse>;
       const errorMessage = typeof err === 'string' ? err:'Faild to add food. Please try again.'; 
       setError(errorMessage);
-      showErrorAlert('Food Add Failed', errorMessage);
+      showErrorAlert('Food Add Failed');
       console.error(' error:', error);
 
     }
